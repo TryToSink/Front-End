@@ -84,8 +84,8 @@ class _CreateListState extends State<CreateList> {
             backgroundColor: Colors.blue[900],
             child: Icon(Icons.arrow_forward_ios),
             onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Home_Gabriel()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Home_Gabriel()));
             }));
   }
 
@@ -104,7 +104,6 @@ class _CreateListState extends State<CreateList> {
       });
       _nameController.text = '';
       _pswdController.text = '';
-
     }
   }
 }

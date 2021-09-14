@@ -96,8 +96,8 @@ class _Homepagestate extends State<Body> {
                   Center(
                     child: ListView.builder(
                       shrinkWrap: true,
-                      scrollDirection: Axis
-                          .vertical, // Axis.horizontal for horizontal list view.
+                      scrollDirection: Axis.vertical,
+                      // Axis.horizontal for horizontal list view.
                       itemCount: 10,
                       itemBuilder: (ctx, index) {
                         return Align(child: Text('Text'));
@@ -124,7 +124,9 @@ class _Homepagestate extends State<Body> {
               ),
               FloatingActionButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Home_Gabriel())
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Home_Gabriel()),
                     // navega para mainFelipe.dart
                   );
                 },
@@ -143,6 +145,7 @@ class RoundedButton extends StatelessWidget {
   final String text;
   final Function press;
   final Color color, textColor;
+
   const RoundedButton({
     Key key,
     this.text,
