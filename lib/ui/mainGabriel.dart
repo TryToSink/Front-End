@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:front_main/ui/mainFelipe.dart';
+import 'package:front_main/ui/mainLucas.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Home_Gabriel extends StatefulWidget {
@@ -140,7 +142,7 @@ class _HomeState extends State<Home_Gabriel> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Home_Gabriel()));
+                MaterialPageRoute(builder: (context) => Myapp()));
           },
           tooltip: 'Next Page',
           child: const Icon(Icons.navigate_next),

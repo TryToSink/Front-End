@@ -2,7 +2,7 @@
 import 'mainGabriel.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(Myapp());
+//void main() => runApp(Myapp());
 
 class Myapp extends StatelessWidget {
   //raiz da aplicação.
