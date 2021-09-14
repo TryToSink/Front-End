@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front_main/ui/mainGabriel.dart';
 
 void main() {
-  runApp(MaterialApp(
-    home: HomeMain()
-  ));
+  runApp(MaterialApp(home: HomeMain()));
 }
 
 class HomeMain extends StatefulWidget {
@@ -23,19 +21,18 @@ class _HomeMainState extends State<HomeMain> {
         backgroundColor: Colors.blue,
         centerTitle: true,
       ),
-      body: Center(child:Text("Avance para próxima tela"),),
-      floatingActionButton:  FloatingActionButton(
+      body: Center(
+        child: Text("Avance para próxima tela"),
+      ),
+      floatingActionButton: FloatingActionButton(
         tooltip: "Next Page",
         backgroundColor: Colors.blue,
         child: const Icon(Icons.navigate_next),
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Home_Gabriel())
-
-          );
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Home_Gabriel()));
         },
       ),
     );
   }
 }
-
-
