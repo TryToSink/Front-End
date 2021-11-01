@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testeteste30_09/home.dart';
+// import 'package:testeteste30_09/home.dart';
 
 class LoadPage extends StatefulWidget {
   const LoadPage({Key? key}) : super(key: key);

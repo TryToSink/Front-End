@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:testeteste30_09/load.dart';
-import 'package:testeteste30_09/perfil.dart';
+import 'package:front_main/ui/load.dart';
+import 'package:front_main/ui/perfil.dart';
+
+import 'gameMode.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,9 +24,8 @@ class _MyHomePageState extends State<HomePage> {
         home: Scaffold(
           appBar: AppBar(
             actionsIconTheme: IconThemeData(size: 30.0, color: Colors.white),
-            title: Center(
-              child: (Text('                Batalha naval')),
-            ),
+            title: Text('Batalha naval'),
+            centerTitle: true,
             actions: <Widget>[
               Padding(
                 padding: EdgeInsets.all(10),
@@ -240,7 +241,7 @@ class _MyHomePageState extends State<HomePage> {
                                                           MaterialPageRoute(
                                                             builder:
                                                                 (context) =>
-                                                                    LoadPage(),
+                                                                    GameMode(),
                                                           ),
                                                         );
                                                       },
@@ -279,7 +280,7 @@ class _MyHomePageState extends State<HomePage> {
                                                           MaterialPageRoute(
                                                             builder:
                                                                 (context) =>
-                                                                    LoadPage(),
+                                                                    GameMode(),
                                                           ),
                                                         );
                                                       },
@@ -330,7 +331,7 @@ class _MyHomePageState extends State<HomePage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => LoadPage(),
+                                        builder: (context) => GameMode(),
                                       ),
                                     );
                                   },
