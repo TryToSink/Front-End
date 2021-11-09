@@ -21,6 +21,7 @@ class _BatlePageState extends State<BatlePage> {
 
     _advCampo = widget._aCampo;
     _meuCampo = widget._mCampo;
+    print(_advCampo);
   }
 
   Widget buildFieldMeuCampo(BuildContext context, int index) {
@@ -57,32 +58,28 @@ class _BatlePageState extends State<BatlePage> {
       ),
       body: LayoutBuilder(
         builder: (_, constraints) {
-          return Padding(
-            padding: EdgeInsets.only(top: 10, right: 10, left: 10),
-            child: Column(
+          return Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Container(
-                    width: constraints.maxWidth * 0.8,
-                    height: constraints.maxHeight * 0.5,
-                    child: LayoutBuilder(
-                      builder: (_,constraints2){
-                        return GridView.builder(
-                            itemCount: _advCampo.length,
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                mainAxisExtent: constraints2.maxHeight / 5,
-                                mainAxisSpacing: 1,
-                                crossAxisSpacing: 1,
-                                crossAxisCount: 5),
-                            itemBuilder: buildFieldAdvCampo);
-                      },
-                    )
-                ),
-                Container(
-                  width: constraints.maxWidth ,
-                  height: constraints.maxHeight * 0.10,
-                  color: Colors.red,
-                ),
+               Padding(padding: EdgeInsets.only(top: 10),
+                 child:  Container(
+                     width: constraints.maxWidth * 0.9,
+                     height: constraints.maxHeight * 0.6,
+                     child: LayoutBuilder(
+                       builder: (_,constraints2){
+                         return GridView.builder(
+                             itemCount: _advCampo.length,
+                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                 mainAxisExtent: constraints2.maxHeight * 0.08,
+                                 mainAxisSpacing:constraints2.maxHeight * 0.001 ,
+                                 crossAxisSpacing: constraints2.maxWidth * 0.001,
+                                 crossAxisCount: 8),
+                             itemBuilder: buildFieldAdvCampo);
+                       },
+                     )
+                 ),
+               ),
+
                 Container(
                   alignment: Alignment.bottomRight,
                   width: constraints.maxWidth * 0.7,
@@ -103,8 +100,7 @@ class _BatlePageState extends State<BatlePage> {
                 ),
 
               ],
-            ),
-          );
+            );
         },
       ),
     );

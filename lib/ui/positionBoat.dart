@@ -1,7 +1,8 @@
+
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:front_main/ui/battlePage.dart';
-
-
 
 class PositionBoat extends StatefulWidget {
   const PositionBoat({Key? key}) : super(key: key);
@@ -11,13 +12,15 @@ class PositionBoat extends StatefulWidget {
 }
 
 class _PositionBoatState extends State<PositionBoat> {
-  final linhasColunas = 5;
+  final linhasColunas = 8;
   List _campo = [];
-  bool _valid = true;
-  int _count = 0;
+  bool _rotation = false;
+  bool _rotationImage = false;
   List _ultPos = [];
-  int _tamanho =0;
-  late Map<String, dynamic> _lastSelected;
+  List pBuild = [];
+  Color buttonColor = Colors.blueAccent;
+  final degress = 90.0;
+  String defaultImage = "images/water.png";
 
   void _addPosition(int x, int y) {
     setState(() {
@@ -26,6 +29,8 @@ class _PositionBoatState extends State<PositionBoat> {
       newPos["coluna"] = y;
       newPos["status"] = false;
       newPos["ataque"] = false;
+      newPos["rotacao"] = false;
+      newPos["image"] = "";
 
       _campo.add(newPos);
     });
@@ -57,33 +62,96 @@ class _PositionBoatState extends State<PositionBoat> {
     _laco(linhasColunas, linhasColunas, _addPosition);
   }
 
+  Widget buildTargets(BuildContext context, int index) {
+    return DragTarget<int>(
+      builder: (context, data, rejectData) => Container(
+        child: _campo[index]["status"]
+            ? _campo[index]["rotacao"]
+                ? Transform.rotate(
+                    angle: degress * pi / 180,
+                    child: _campo[index]["status"]
+                        ? Image.asset(
+                            "${_campo[index]["image"]}",
+                            fit: BoxFit.fill,
+                          )
+                        : Image.asset(defaultImage),
+                  )
+                : Image.asset(
+                    "${_campo[index]["image"]}",
+                    fit: BoxFit.fill,
+                  )
+            : Image.asset(defaultImage),
+        color: Colors.blueAccent,
+      ),
+      onAccept: _rotation
+          ? (data) {
+              setState(() {
+                print(pBuild);
+                String img = pBuild[data]["image"];
+                String imgUse = img.substring(0, 11);
+                int n = pBuild[data]["size"];
+                for (int i = 0; i <= n; i++) {
+                  _campo[index + i * 8]["image"] =
+                      imgUse + i.toString() + ".png";
+                  _campo[index + i * 8]["status"] = true;
+                  _campo[index + i * 8]["rotacao"] = true;
+                }
 
-  Widget buildField(BuildContext context, int index) {
-    return GestureDetector(
-        onTap: _valid
-            ? () {
-          setState(() {
-            if (_count > 0 ) {
-              _count--;
-              _campo[index]["status"] = true;
-              print(_campo);
-            } else
-              _valid = false;
-          });
-        }
-            : null,
-        onDoubleTap: () {
-          setState(() {
-            _campo[index]["status"] = false;
-            _count ++;
-          });
-        },
-        child: Container(
-          color: _campo[index]["status"] ? Colors.blueAccent : Colors.black26,
-          child: null,
-        ));
+                print(_campo);
+                pBuild = [];
+              });
+            }
+          : (data) {
+              setState(() {
+                print(pBuild);
+                String img = pBuild[data]["image"];
+                String imgUse = img.substring(0, 11);
+                int n = pBuild[data]["size"];
+                for (int i = 0; i <= n; i++) {
+                  _campo[index + i]["image"] = imgUse + i.toString() + ".png";
+                  _campo[index + i]["status"] = true;
+                }
+
+                pBuild = [];
+                print(_campo);
+              });
+            },
+    );
   }
 
+  Widget buildB(String a) {
+    return Container(
+      height: 50,
+      width: 90,
+      color: Colors.blueAccent,
+      alignment: Alignment.center,
+      child: Image.asset(
+        a,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
+  Widget buildB2(int index, String a, int b) {
+    Map<String, dynamic> newBoat = Map();
+    newBoat["image"] = a;
+    newBoat["size"] = b;
+
+    pBuild.add(newBoat);
+    print(pBuild.length);
+    return Draggable<int>(
+      child: buildB(a),
+      feedback: buildB(a),
+      data: index,
+    );
+  }
+
+  void resetGrid() {
+    setState(() {
+      _campo = [];
+      _laco(linhasColunas, linhasColunas, _addPosition);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,76 +162,62 @@ class _PositionBoatState extends State<PositionBoat> {
         backgroundColor: Colors.blueAccent,
       ),
       body: LayoutBuilder(
-        builder: (_,constraints){
+        builder: (_, constraints) {
           return Column(children: <Widget>[
             Padding(
               padding: EdgeInsets.only(top: 20, bottom: 80),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Expanded(
-                      child: ElevatedButton(
-                          onPressed: () {
+                  buildB2(0, "images/boat.png", 1),
+                  buildB2(1, "images/baco.png", 2),
+                  buildB2(2, "images/veio.png", 3),
+                  IconButton(
+                    onPressed: _rotation
+                        ? () {
                             setState(() {
-                              _count = 2;
-                              _valid = true;
-                              print(_count);
+                              _rotation = false;
+                              buttonColor = Colors.blueAccent;
+                            });
+                          }
+                        : () {
+                            setState(() {
+                              _rotation = true;
+                              buttonColor = Colors.redAccent;
                             });
                           },
-                          style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.black),
-                          ),
-                          child: Text("2"))),
-                  Expanded(
-                      child: ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _count = 3;
-                              _valid = true;
-                            });
-                          },
-                          style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.black),
-                          ),
-                          child: Text("3"))),
-                  Expanded(
-                      child: ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _count = 4;
-                              _valid = true;
-                            });
-                          },
-                          style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.black),
-                          ),
-                          child: Text("4")))
+                    icon: Icon(Icons.refresh),
+                    color: buttonColor,
+                  ),
+                  IconButton(onPressed: resetGrid,
+                      icon: Icon(Icons.delete_rounded))
                 ],
               ),
             ),
-            Expanded(
-                child: GridView.builder(
-                    padding: EdgeInsets.all(10),
-                    itemCount: _campo.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        mainAxisExtent: constraints.maxWidth * 0.1,
-                        mainAxisSpacing: 2,
-                        crossAxisSpacing: 2,
-                        crossAxisCount: linhasColunas),
-                    itemBuilder: buildField))
+            Container(
+                height: constraints.maxHeight * 0.7,
+                width: constraints.maxWidth * 0.9,
+                child: LayoutBuilder(builder: (_, constraints2) {
+                  return GridView.builder(
+                      padding: EdgeInsets.all(10),
+                      itemCount: _campo.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisExtent: constraints2.maxWidth * 0.08,
+                          mainAxisSpacing: constraints2.maxHeight * 0.001,
+                          crossAxisSpacing: constraints2.maxWidth * 0.001,
+                          crossAxisCount: linhasColunas),
+                      itemBuilder: buildTargets);
+                }))
           ]);
         },
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blueAccent,
-        onPressed: (){
-          Navigator.push(context,
-              MaterialPageRoute(builder:
-                  (context) => BatlePage(_campo,_campo)
-              ));
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BatlePage(_campo, _campo)));
         },
         tooltip: 'Increment Counter',
         child: const Icon(Icons.save),
