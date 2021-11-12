@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:front_main/ui/battlePage.dart';
 
+import '../timer.dart';
+
 class PositionBoat extends StatefulWidget {
   const PositionBoat({Key? key}) : super(key: key);
 
@@ -18,14 +20,10 @@ class _PositionBoatState extends State<PositionBoat> {
   List _campo = [];
   bool _rotation = false;
   List pBuild = [];
+  List posBarcos = [];
   Color buttonColor = Colors.blueAccent;
   final degress = 90.0;
   String defaultImage = "images/water.png";
-  static const maxSeconds = 59;
-  static const maxMins = 1;
-  int seconds = maxSeconds;
-  int mins = maxMins;
-  Timer? time;
   int aux = 0;
   Random random = new Random();
   int maxAlt = 6;
@@ -38,6 +36,7 @@ class _PositionBoatState extends State<PositionBoat> {
       newPos["status"] = false;
       newPos["ataque"] = false;
       newPos["rotacao"] = false;
+      newPos["afundou"] = false;
       newPos["image"] = "";
 
       _campo.add(newPos);
@@ -66,9 +65,15 @@ class _PositionBoatState extends State<PositionBoat> {
 
     _laco(linhasColunas, linhasColunas, _addPosition);
     startTimer();
-    setBarcos("images/boat.png", 1);
-    setBarcos("images/baco.png", 2);
-    setBarcos("images/veio.png", 3);
+    setBarcos("Boat","images/boat.png", 1);
+    setBarcos("Baco","images/baco.png", 2);
+    setBarcos("veio","images/veio.png", 3);
+  }
+
+  void svBarco(String a, String b){
+    Map<String, dynamic> newBoat = Map();
+    newBoat["name"] = a;
+    newBoat["posicoes"] = b;
   }
 
   void posicionaBarco(int index, int n, String img) {
@@ -216,39 +221,13 @@ class _PositionBoatState extends State<PositionBoat> {
     });
   }
 
-  Widget timer() {
-    if (seconds < 10) {
-      return Text(
-        "0$mins : 0$seconds",
-        style: TextStyle(color: Colors.white, fontSize: 20),
-      );
-    } else {
-      return Text(
-        "0$mins : $seconds",
-        style: TextStyle(color: Colors.white, fontSize: 20),
-      );
-    }
-  }
 
-  void startTimer() {
-    time = Timer.periodic(Duration(seconds: 1), (_) {
-      setState(() {
-        if (mins == 0 && seconds == 0)
-          time?.cancel();
-        else if (seconds == 0) {
-          mins--;
-          seconds = maxSeconds;
-        } else
-          seconds--;
-      });
-      ;
-    });
-  }
 
-  void setBarcos(String a, int b) {
+  void setBarcos(String a, String b, int c) {
     Map<String, dynamic> newBoat = Map();
-    newBoat["image"] = a;
-    newBoat["size"] = b;
+    newBoat["name"] = a;
+    newBoat["image"] = b;
+    newBoat["size"] = c;
 
     pBuild.add(newBoat);
     print(pBuild.length);
@@ -271,6 +250,20 @@ class _PositionBoatState extends State<PositionBoat> {
     }
     maxAlt = 6;
     _rotation = false;
+  }
+
+  void startTimer() {
+    time = Timer.periodic(Duration(seconds: 1), (_) {
+      setState(() {
+        if (mins == 0 && seconds == 0)
+          time?.cancel();
+        else if (seconds == 0) {
+          mins--;
+          seconds = maxSeconds;
+        } else
+          seconds--;
+      });
+    });
   }
 
   @override
@@ -410,7 +403,7 @@ class _PositionBoatState extends State<PositionBoat> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => BatlePage(_campo, _campo)));
+                                builder: (context) => BatlePage(_campo,_campo)));
                       },
                       style:
                           ElevatedButton.styleFrom(primary: Color(0xff3D5A80)),

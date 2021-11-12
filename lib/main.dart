@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_main/ui/battlePage.dart';
 import 'package:front_main/ui/login.dart';
 
 void main() {
