@@ -1,4 +1,4 @@
 io/flutter/plugins/GeneratedPluginRegistrant.java
  io.flutter.plugins.GeneratedPluginRegistrant
-com/example/front_main/BuildConfig.java
- com.example.front_main.BuildConfig
+com/example/profile_try_to_sink/BuildConfig.java
+ com.example.profile_try_to_sink.BuildConfig

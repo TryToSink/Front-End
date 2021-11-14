@@ -4,7 +4,7 @@
     "type": "COMPATIBLE_SCREEN_MANIFEST",
     "kind": "Directory"
   },
-  "applicationId": "com.example.front_main",
+  "applicationId": "com.example.profile_try_to_sink",
   "variantName": "debug",
   "elements": []
 }

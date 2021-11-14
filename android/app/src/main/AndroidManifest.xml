@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.front_main">
+    package="com.example.profile_try_to_sink">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="front_main"
+        android:label="profile_try_to_sink"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

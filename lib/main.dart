@@ -1,41 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:front_main/ui/mainGabriel.dart';
+
+import 'screens/profile_page.dart';
 
 void main() {
-  runApp(MaterialApp(
-    home: HomeMain()
-  ));
+  runApp(ProfilePageApp());
 }
 
-class HomeMain extends StatefulWidget {
-  const HomeMain({Key? key}) : super(key: key);
+class ProfilePageApp extends StatelessWidget {
+  const ProfilePageApp({Key? key}) : super(key: key);
 
-  @override
-  _HomeMainState createState() => _HomeMainState();
-}
-
-class _HomeMainState extends State<HomeMain> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Tela Principal"),
-        backgroundColor: Colors.blue,
-        centerTitle: true,
-      ),
-      body: Center(child:Text("Avance para próxima tela"),),
-      floatingActionButton:  FloatingActionButton(
-        tooltip: "Next Page",
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.navigate_next),
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Home_Gabriel())
-
-          );
-        },
+    return MaterialApp(
+      home: ProfilePage(idUser: "id", userName: "name", imageName: "foto"),
+      theme: ThemeData(
+        backgroundColor: Colors.blueAccent,
+        primaryColor: Colors.blue[200],
       ),
     );
   }
 }
-
-
