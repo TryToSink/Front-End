@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/ui/cenarios.dart';
+import 'package:proj0511/ui/configuracao.dart';
 import 'package:proj0511/ui/energia.dart';
 
 class HomePage extends StatefulWidget {
@@ -291,14 +292,7 @@ class _MyHomePageState extends State<HomePage> {
           iconSize: 50,
           icon: const Icon(Icons.person),
           tooltip: 'Perfil',
-          onPressed: () {
-            //Navigator.push(
-            //  context,
-            //  MaterialPageRoute(
-            //    builder: (context) => PerfilPage(),
-            //  ),
-            //);
-          },
+          onPressed: () {},
         ),
       ],
     );
@@ -308,34 +302,14 @@ class _MyHomePageState extends State<HomePage> {
     return Column(
       children: <Widget>[
         IconButton(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          iconSize: 50,
-          icon: const Icon(Icons.settings),
-          tooltip: 'Configurações',
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      automaticallyImplyLeading: false,
-                      title: const Text("Segunda Rota (tela)"),
-                    ),
-                    body: Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Retornar !'),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
-        ),
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+            iconSize: 50,
+            icon: const Icon(Icons.settings),
+            tooltip: 'Configurações',
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LoadConfig()));
+            }),
       ],
     );
   }
