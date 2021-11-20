@@ -7,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:profile_try_to_sink/main.dart';
 import 'package:profile_try_to_sink/model/boat.dart';
-import 'package:profile_try_to_sink/widget/create_boat/appbar_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
@@ -34,7 +33,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String userName;
   String idUser;
-  String imageName;
+  String imageName = 'placeholder';
   File? image;
 
   _ProfilePageState({
@@ -101,33 +100,50 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       backgroundColor: bGColor,
-      appBar: buildAppBar(context),
+      appBar: AppBar(
+        leading: const BackButton(
+          color: Colors.white,
+        ),
+        elevation: 0,
+        backgroundColor: appBarBGColor,
+        toolbarHeight: 30,
+      ),
       body: Column(
         children: [
           Container(
             child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(32.0, 0.0, 16.0, 16.0),
-                  child: Container(
-                    width: 120.0,
-                    height: 120.0,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage('images/profile_pic.jpg'),
-                        fit: BoxFit.fill,
+                if (imageName == 'placeholder')
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(32.0, 0.0, 16.0, 16.0),
+                    child: Container(
+                      width: 120.0,
+                      height: 120.0,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: AssetImage('images/profile_pic.jpg'),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
+                  )
+                else
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      urlPhoto,
+                      width: 120.0,
+                      height: 120.0,
+                    ),
                   ),
-                ),
                 Column(
                   children: [
                     Row(
                       children: const [
                         Text(
                           //userName,
-                          'Felipe Angélico',
+                          'Felipe',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24.0,
@@ -151,8 +167,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           padding: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
                           child: Flag.fromString(
                             'BR',
-                            height: 24,
-                            width: 32,
+                            height: 40,
+                            width: 40,
                           ),
                         ),
                         Padding(
