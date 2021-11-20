@@ -4,6 +4,8 @@ import 'package:proj0511/ui/LoginApi.dart.dart';
 import 'package:proj0511/ui/home.dart';
 import 'package:proj0511/ui/resetPasswordPage.dart';
 import 'SignUpPage.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatelessWidget{
 
@@ -120,12 +122,20 @@ class LoginPage extends StatelessWidget{
                       String username = emailController.text;
                       String password = passController.text;
                       print("Login: $username , Senha: $password ");
+                      Map params = {"username": username, "password": password};
+                      var header = {"Content-Type": "application/json"};
+                      var url = 'http://3.144.90.4:3333/login';
+                      var _body = json.encode(params);
+                      print("json enviado : $_body");
+                      var response = await http.post(Uri.parse(url), headers: header, body: _body);
+                      Map mapResponse = json.decode(response.body);
 
-                      var User = await LoginApi.login(username, password);
+                      var token = mapResponse["token"];
+                      print("token : $token");
 
-                      if (User) {
+                      if(response.statusCode == 200) {
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => HomePage(User)));
+                            context, MaterialPageRoute(builder: (context) => HomePage(token)));
                       }
                       else {
                             showDialog(
@@ -168,5 +178,6 @@ class LoginPage extends StatelessWidget{
     );
 
   }
+
 
 }
