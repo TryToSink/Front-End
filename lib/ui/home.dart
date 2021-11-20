@@ -1,8 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:front_main/ui/load.dart';
 import 'package:front_main/ui/perfil.dart';
-
 import 'gameMode.dart';
+import 'package:http/http.dart' as http;
+import 'package:proj0511/ui/cenarios.dart';
+import 'package:proj0511/ui/configuracao.dart';
+import 'package:proj0511/ui/energia.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,6 +17,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
+  late String url = 'http://3.144.90.4:3333/modoJogo/lista';
+  var _lista = [];
+  void getTest() async {
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+      );
+      final jsonData = jsonDecode(response.body) as List;
+      setState(() {
+        _lista = jsonData;
+      });
+    } catch (error) {}
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getTest();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -19,181 +44,152 @@ class _MyHomePageState extends State<HomePage> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
 //        brightness: Brightness.dark,
-          primaryColor: Colors.blueGrey[400],
+          primaryColor: Colors.blueGrey[900],
         ),
         home: Scaffold(
           appBar: AppBar(
+
             actionsIconTheme: IconThemeData(size: 30.0, color: Colors.white),
             title: Text('Batalha naval'),
             centerTitle: true,
+            backgroundColor: Colors.blueGrey[900],
+
             actions: <Widget>[
               Padding(
-                padding: EdgeInsets.all(10),
-                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Container(
                     height: 10,
                     width: 60,
-                    color: Colors.lightBlue[800],
+                    color: Colors.blueGrey[900],
                     child: Center(
-                      child: Text(
-                        '17/20 +',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )),
-              ),
+                      child: TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.blueGrey[900],
+                              elevation: 5,
+                              shadowColor: Colors.grey),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoadEnergia(),
+                                ));
+                          },
+                          child: Text(
+                            '/20 +',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                            ),
+                          )),
+                    ),
+                  ))
             ],
           ),
           body: Container(
             width: size.width,
             height: size.height,
+            color: Colors.grey[350],
             child: LayoutBuilder(builder: (_, constraints) {
               return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
                       width: constraints.maxWidth,
-                      height: constraints.maxHeight * .76,
-                      color: Colors.green,
+                      height: constraints.maxHeight * .85,
+                      color: Colors.grey[350],
                       child: Stack(
                         children: [
                           Column(children: [
                             Container(
                               width: constraints.maxWidth,
-                              height: constraints.maxHeight * .87 * .20,
-                              color: Colors.blueGrey,
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(0, 8, 0, 6),
-                                child: Column(
-                                  children: <Widget>[
-                                    FlatButton(
-                                      minWidth: constraints.maxWidth * .80,
-                                      height: constraints.maxHeight *
-                                          .87 *
-                                          .20 *
-                                          .80,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          side:
-                                              BorderSide(color: Colors.black)),
-                                      color: Colors.blue[900],
-                                      textColor: Colors.white,
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return Scaffold(
-                                                appBar: AppBar(
-                                                  automaticallyImplyLeading:
-                                                      false,
-                                                  title: Text(
-                                                      "Segunda Rota (tela)"),
-                                                ),
-                                                body: Center(
-                                                  child: RaisedButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text('Retornar !'),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      },
-                                      child: Text(
-                                        "ANUNCIE AQUI",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: constraints.maxWidth * .85,
-                              height: constraints.maxHeight * .83 * .70,
-                              color: Colors.black,
+                              height: constraints.maxHeight * .85,
+                              color: Colors.grey[350],
                               child: Column(
                                 children: <Widget>[
                                   Expanded(
                                     child: GridView.builder(
                                       gridDelegate:
-                                          new SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 1),
-                                      itemCount: 2,
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 1,
+                                              childAspectRatio: 1.5),
+                                      itemCount: _lista.length,
                                       itemBuilder: (context, index) {
-                                        return Container(
-                                          // width: constraints.maxWidth * .80,
-                                          // height:
-                                          //     constraints.maxHeight * .85 * .50,
-                                          color: Colors.yellow,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              FlatButton(
-                                                minWidth: constraints.maxWidth *
-                                                    .80 *
-                                                    .70,
+                                        return SizedBox(
+                                            width: constraints.maxWidth * .90,
+                                            height: constraints.maxHeight *
+                                                .85 *
+                                                .30,
+                                            child: SizedBox(
+                                                width:
+                                                    constraints.maxWidth * .30,
                                                 height: constraints.maxHeight *
-                                                    .87 *
-                                                    .90,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                    side: BorderSide(
-                                                        color: Colors.black)),
-                                                color: Colors.blue[900],
-                                                textColor: Colors.white,
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          LoadPage(),
-                                                    ),
-                                                  );
-                                                },
-                                                child: Text(
-                                                  "JOGUE AQUI",
-                                                  style: TextStyle(
-                                                    fontSize: 20,
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Column(
+                                                    .85 *
+                                                    .20,
+                                                child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    FlatButton(
-                                                      minWidth:
+                                                  children: [
+                                                    Container(
+                                                        width: constraints
+                                                                .maxWidth *
+                                                            .40,
+                                                        height: constraints
+                                                                .maxHeight *
+                                                            .85 *
+                                                            .39,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                                borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10)),
+                                                                color: Colors
+                                                                    .white,
+                                                                image:
+                                                                    DecorationImage(
+                                                                  image: NetworkImage(
+                                                                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ))),
+                                                    SizedBox(
+                                                      width:
                                                           constraints.maxWidth *
-                                                              .80 *
-                                                              .30,
+                                                              .40,
                                                       height: constraints
                                                               .maxHeight *
-                                                          .87 *
-                                                          .92 *
-                                                          .70 *
-                                                          .30,
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10.0),
-                                                              side: BorderSide(
-                                                                  color: Colors
-                                                                      .black)),
+                                                          .85 *
+                                                          .39,
+                                                      child: TextButton(
+                                                        style: TextButton
+                                                            .styleFrom(
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .white,
+                                                                elevation: 15,
+                                                                shadowColor:
+                                                                    Colors
+                                                                        .grey),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: [
+                                                            Text(
+                                                              _lista[index]
+                                                                      ["nome"]
+                                                                  .toString(),
+                                                              style: const TextStyle(
+                                                                  fontSize: 20,
+                                                                  color: Colors.black)),
                                                       color: Colors.blue[900],
                                                       textColor: Colors.white,
                                                       onPressed: () {
@@ -288,15 +284,23 @@ class _MyHomePageState extends State<HomePage> {
                                                         "JOGUE AQUI",
                                                         style: TextStyle(
                                                           fontSize: 20,
+
                                                         ),
+                                                        onPressed: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          LoadCenario(
+                                                                            idmodojogo:
+                                                                                _lista[index]["idModoJogo"],
+                                                                          )));
+                                                        },
                                                       ),
-                                                    ),
+                                                    )
                                                   ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        );
+                                                )));
                                       },
                                     ),
                                   ),
@@ -359,111 +363,60 @@ class _MyHomePageState extends State<HomePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        _Icons1(),
-        _Icons2(),
-        _Icons3(),
+        _icons1(),
+        _icons2(),
+        _icons3(),
       ],
     );
   }
 
-  Widget _Icons1() {
+  Widget _icons1() {
     return Column(
       children: <Widget>[
         IconButton(
-          icon: const Icon(Icons.directions_boat_rounded),
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+          iconSize: 50,
+          icon: const Icon(Icons.play_arrow),
           tooltip: 'Jogar',
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LoadPage(),
-              ),
-            );
+            //  Navigator.push(
+            //    context,
+            //    MaterialPageRoute(
+            //      builder: (context) => LoadPage(),
+            //    ),
+            //  );
           },
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-          child: Text(
-            "Jogar",
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
         ),
       ],
     );
   }
 
-  Widget _Icons2() {
+  Widget _icons2() {
     return Column(
       children: <Widget>[
         IconButton(
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+          iconSize: 50,
           icon: const Icon(Icons.person),
           tooltip: 'Perfil',
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PerfilPage(),
-              ),
-            );
-          },
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
-          child: Text(
-            "Perfil",
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          onPressed: () {},
         ),
       ],
     );
   }
 
-  Widget _Icons3() {
+  Widget _icons3() {
     return Column(
       children: <Widget>[
         IconButton(
-          icon: const Icon(Icons.settings),
-          tooltip: 'Configurações',
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      automaticallyImplyLeading: false,
-                      title: Text("Segunda Rota (tela)"),
-                    ),
-                    body: Center(
-                      child: RaisedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('Retornar !'),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 4),
-          child: Text(
-            "Configurações",
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+            iconSize: 50,
+            icon: const Icon(Icons.settings),
+            tooltip: 'Configurações',
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LoadConfig()));
+            }),
       ],
     );
   }
