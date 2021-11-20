@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:testeteste30_09/Signup.Page.dart';
-import 'package:testeteste30_09/home.dart';
-import 'package:testeteste30_09/reset-password.page.dart';
+import 'package:front_main/ui/Signup.Page.dart';
+import 'package:front_main/ui/home.dart';
+import 'package:front_main/ui/reset-password.page.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {

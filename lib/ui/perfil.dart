@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testeteste30_09/home.dart';
+// import 'package:testeteste30_09/home.dart';
 
 class PerfilPage extends StatefulWidget {
   const PerfilPage({Key? key}) : super(key: key);

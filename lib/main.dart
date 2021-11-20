@@ -1,5 +1,7 @@
 // @dart=2.9
 import 'package:flutter/material.dart';
+import 'package:front_main/ui/battlePage.dart';
+import 'package:front_main/ui/login.dart';
 import 'package:proj0511/ui/LoginPage.dart%20.dart';
 
 void main() {

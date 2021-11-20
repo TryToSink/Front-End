@@ -1,9 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:front_main/ui/load.dart';
+import 'package:front_main/ui/perfil.dart';
+import 'gameMode.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/ui/cenarios.dart';
 import 'package:proj0511/ui/configuracao.dart';
 import 'package:proj0511/ui/energia.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -44,12 +48,12 @@ class _MyHomePageState extends State<HomePage> {
         ),
         home: Scaffold(
           appBar: AppBar(
+
+            actionsIconTheme: IconThemeData(size: 30.0, color: Colors.white),
+            title: Text('Batalha naval'),
+            centerTitle: true,
             backgroundColor: Colors.blueGrey[900],
-            actionsIconTheme:
-                const IconThemeData(size: 30.0, color: Colors.white),
-            title: const Center(
-              child: (Text('                MODO DE JOGO')),
-            ),
+
             actions: <Widget>[
               Padding(
                   padding: const EdgeInsets.all(10),
@@ -185,28 +189,102 @@ class _MyHomePageState extends State<HomePage> {
                                                                   .toString(),
                                                               style: const TextStyle(
                                                                   fontSize: 20,
+                                                                  color: Colors.black)),
+                                                      color: Colors.blue[900],
+                                                      textColor: Colors.white,
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    LoadPage(),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Text(
+                                                        "JOGUE AQUI",
+                                                        style: TextStyle(
+                                                          fontSize: 20,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    FlatButton(
+                                                      minWidth:
+                                                          constraints.maxWidth *
+                                                              .80 *
+                                                              .30,
+                                                      height: constraints
+                                                              .maxHeight *
+                                                          .87 *
+                                                          .92 *
+                                                          .70 *
+                                                          .30,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.0),
+                                                              side: BorderSide(
                                                                   color: Colors
-                                                                      .black),
-                                                              softWrap: true,
-                                                            ),
-                                                            const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            5)),
-                                                            Text(
-                                                              "Aproximadamente " +
-                                                                  _lista[index][
-                                                                          "duracao"]
-                                                                      .toString() +
-                                                                  " min.",
-                                                              style: const TextStyle(
-                                                                  fontSize: 10,
+                                                                      .black)),
+                                                      color: Colors.blue[900],
+                                                      textColor: Colors.white,
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    GameMode(),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Text(
+                                                        "JOGUE AQUI",
+                                                        style: TextStyle(
+                                                          fontSize: 20,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    FlatButton(
+                                                      minWidth:
+                                                          constraints.maxWidth *
+                                                              .80 *
+                                                              .30,
+                                                      height: constraints
+                                                              .maxHeight *
+                                                          .87 *
+                                                          .92 *
+                                                          .70 *
+                                                          .30,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.0),
+                                                              side: BorderSide(
                                                                   color: Colors
-                                                                      .orange),
-                                                              softWrap: true,
-                                                            ),
-                                                          ],
+                                                                      .black)),
+                                                      color: Colors.blue[900],
+                                                      textColor: Colors.white,
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    GameMode(),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Text(
+                                                        "JOGUE AQUI",
+                                                        style: TextStyle(
+                                                          fontSize: 20,
+
                                                         ),
                                                         onPressed: () {
                                                           Navigator.push(
@@ -235,16 +313,45 @@ class _MyHomePageState extends State<HomePage> {
                     ),
                     Container(
                       width: constraints.maxWidth,
-                      height: constraints.maxHeight * .15,
-                      //color: Colors.lightBlue[600],
-                      decoration: BoxDecoration(
-                          color: Colors.blueGrey[900],
-                          border: Border.all(color: Colors.black),
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30))),
-
-                      child: _buildRodapeicons(),
+                      height: constraints.maxHeight * .24,
+                      color: Colors.blueGrey[400],
+                      child: Stack(
+                        children: <Widget>[
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                                child: FlatButton(
+                                  minWidth: constraints.maxWidth * .95,
+                                  height: constraints.maxHeight * .18 * .50,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      side: BorderSide(color: Colors.black)),
+                                  color: Colors.blue[900],
+                                  textColor: Colors.white,
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => GameMode(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    "NOVA PARTIDA",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              _buildRodapeicons()
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ]);
             }),
