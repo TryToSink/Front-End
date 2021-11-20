@@ -9,7 +9,7 @@ class BatlePage extends StatefulWidget {
   List _aCampo = [];
   List _mCampo = [];
 
-  BatlePage(this._aCampo, this._mCampo);
+  BatlePage(this._mCampo, this._aCampo);
 
   @override
   _BatlePageState createState() => _BatlePageState();
@@ -33,7 +33,6 @@ class _BatlePageState extends State<BatlePage> {
     setCurrentUser(5649, "Ronaldo (321)", "");
     setAdvUser(5650, "Gabriel (565)", "");
 
-    print(_advCampo);
     startTimer();
   }
 
