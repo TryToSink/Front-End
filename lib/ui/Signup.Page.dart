@@ -4,166 +4,183 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'LoginPage.dart.dart';
+import 'apiSignUp.dart';
 
-class SignupPage extends StatelessWidget {
-  static const _baseUrl = '_baseUrl :333/login';
+class SignUpPage extends StatelessWidget{
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _userController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _password2Controller = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.only(top: 10, left: 40, right: 40),
-        color: Colors.white,
-        child: ListView(
-          children: <Widget>[
-            Container(
-              width: 200,
-              height: 200,
-              alignment: Alignment(0.0, 1.15),
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                  image: AssetImage(""),
-                  fit: BoxFit.fitHeight,
-                ),
-              ),
-              child: Container(
-                height: 56,
-                width: 56,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [0.3, 1.0],
-                    colors: [
-                      Color(0xFF42A1FF),
-                      Color(0xFF22FFFF),
+      key: scaffoldKey,
+      backgroundColor: Color(0xDFFFFFFF),
+
+      appBar: AppBar(
+
+        backgroundColor: Color(0xff3D5A80),
+
+        title: const Text('Registre-se'),
+        centerTitle: true,
+
+
+      ),
+
+      body: new ListView(
+        children: [
+          Container(
+            height: 50, width: 20,
+
+
+          ),
+
+          Center(
+
+
+            child: Card(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              child: Form(
+
+
+                  key: formKey,
+
+                  child: ListView(
+                    padding: const EdgeInsets.all(16),
+                    shrinkWrap: true,
+                    children: <Widget>[
+
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: const InputDecoration(hintText: 'Nome Completo'),
+                          validator: (name){
+                            if(name!.isEmpty)
+                              return 'Campo obrigatÃ³rio';
+                            else if(name.trim().split(' ').length <= 1)
+                              return 'Preencha seu Nome completo';
+                            return null;
+                          }
+
+                      ),
+
+                      const SizedBox(height: 16,),
+                      TextFormField(
+                        controller: _userController,
+                          decoration: const InputDecoration(
+                              hintText: 'UsuÃ¡rio'),
+                          validator: (usuario) {
+                            if (usuario!.isEmpty)
+                              return 'Campo obrigatÃ³rio';
+                          }
+                      ),
+                      const SizedBox(height: 16,),
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: const InputDecoration(hintText: 'E-mail'),
+                        keyboardType: TextInputType.emailAddress,
+                        autocorrect: false,
+                        validator: (email){
+                          if(!emailValid(email!))
+                            return 'E-mail InvÃ¡lido';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16,),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: const InputDecoration(hintText: 'Senha'),
+                        autocorrect: false,
+                        obscureText: true,
+                        validator: (pass){
+                          if(pass!.isEmpty)
+                            return 'Campo obrigatÃ³rio';
+                          else if(pass.length < 6 )
+                            return 'A senha precisa ter 6 caracteres ou mais';
+                          else if(!passValid(pass))
+                            return 'A senha deve possuir pelo menos uma letra maiuscula, um numero e um caracter especial';
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16,),
+                      TextFormField(
+                        controller: _password2Controller,
+                          decoration: const InputDecoration(hintText: 'Repita a Senha'),
+                          obscureText: true,
+                      ),
+
+                      const SizedBox(height: 16,),
+                      SizedBox(
+                          height: 44,
+                          child: RaisedButton(
+                            onPressed: () async {
+                              if(formKey.currentState!.validate()) {
+
+                                String name = _nameController.text;
+                                String username = _userController.text;
+                                String email = _emailController.text;
+                                String password = _passwordController.text;
+                                String password2 = _password2Controller.text;
+
+                                print("User: $name");
+
+                                var User = await ApiSignUp.signUp(name,username,email, password);
+
+                                    if (User) {
+                                    _navegaHomepage(context);
+                                    }
+
+                                    }
+
+                                    if(_passwordController.text != _password2Controller.text){
+                                      showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                            title: Text("Erro"),
+                                            content: Text("As senhas nÃ£o coincidem"),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                  child: Text("OK"),
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                        context, MaterialPageRoute(builder: (context) => LoginPage()));
+                                                })
+                                          ]);
+                                    },
+                                  );
+                                }
+                              },
+                            color: Color(0xff3D5A80),
+                            textColor: Colors.white,
+
+                            child: const Text(
+                                'Registrar',
+                                style: TextStyle(
+                                    fontSize: 18
+                                )
+                            ),
+                          )
+                      )
                     ],
-                  ),
-                  border: Border.all(
-                    width: 4.0,
-                    color: const Color(0xFFFFFFFF),
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(56),
-                  ),
-                ),
-                child: SizedBox.expand(
-                  child: FlatButton(
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
+                  )
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              // autofocus: true,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                labelText: "Nome",
-                labelStyle: TextStyle(
-                  color: Colors.black38,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
-                ),
-              ),
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              // autofocus: true,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: "E-mail",
-                labelStyle: TextStyle(
-                  color: Colors.black38,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
-                ),
-              ),
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              // autofocus: true,
-              keyboardType: TextInputType.text,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: "Senha",
-                labelStyle: TextStyle(
-                  color: Colors.black38,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
-                ),
-              ),
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              height: 60,
-              alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: [0.3, 1],
-                  colors: [
-                    Color(0xFF42A1FF),
-                    Color(0xFF22FFFF),
-                  ],
-                ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5),
-                ),
-              ),
-              child: SizedBox.expand(
-                child: FlatButton(
-                  child: Text(
-                    "Cadastrar",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  onPressed: () {},
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              height: 40,
-              alignment: Alignment.center,
-              child: FlatButton(
-                child: Text(
-                  "Cancelar",
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: () => Navigator.pop(context, false),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+
   }
+}
+
+_navegaHomepage(BuildContext context) {
+  Navigator.push(
+      context, MaterialPageRoute(builder: (context) => LoginPage()));
 }
