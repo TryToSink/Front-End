@@ -6,7 +6,8 @@ import 'package:proj0511/ui/cenarios.dart';
 import 'package:proj0511/ui/configuracao.dart';
 import 'package:proj0511/ui/energia.dart';
 import 'package:flutter/foundation.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:proj0511/ui/profile_page.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,31 +21,21 @@ class _MyHomePageState extends State<HomePage> {
 //  late String urlSocket = 'http://3.144.90.4:3334/';
   var _lista = [];
 
-//  final _channel =
-//      WebSocketChannel.connect(Uri.parse('http://3.144.90.4:3334/'));
+//  final _channel = WebSocketChannel.connect(Uri.parse('ws://3.144.90.4:3334/'));
 
-//  void _sendMessage() {
-//    if (_lista.isNotEmpty) {
-//      _channel.sink.add('oi');
-//    }/
-//  }
-//
-//  @override
-//  void dispose() {
-//    _channel.sink.close();
-//    super.dispose();
-//  }
+  IO.Socket socket = IO.io('http://3.144.90.4:3334');
 
-//  var connection = WebSocket('http://3.144.90.4:3334/',['soap','xmpp']);
-//  connection.onopen = function (){
-//    connection.send('Ping');
-//  }
-//  connection.onerror = function (error){
-//    console.log('WebSocket Error ' + error);
-//  }
-//  connection.onmessage = function (e){
-//    console.log('Server: ' + e.data);
-//  }
+  void _sendMessage() {
+    socket.onConnect((_) {
+      print('connect');
+      socket
+          .emit('user id', {"userId": 'a82d490e-bf98-4a37-a470-9b611fb93183'});
+    });
+//  socket.on('event', (data) => print(data));
+//  socket.onDisconnect((_) => print('disconnect'));
+//  socket.on('fromServer', () => print());
+//  socket.connect();
+  }
 
   void getTest() async {
     try {
@@ -58,10 +49,6 @@ class _MyHomePageState extends State<HomePage> {
     } catch (error) {}
   }
 
-//  void connectServer() async {
-//    try {} catch (error) {}
-//  }
-
   @override
   void initState() {
     super.initState();
@@ -70,6 +57,7 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _sendMessage();
     var size = MediaQuery.of(context).size;
     return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -182,7 +170,7 @@ class _MyHomePageState extends State<HomePage> {
                                                                 image:
                                                                     DecorationImage(
                                                                   image: NetworkImage(
-                                                                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                                      'assets/Cópia de jostik.png'),
                                                                   fit: BoxFit
                                                                       .cover,
                                                                 ))),
@@ -327,7 +315,10 @@ class _MyHomePageState extends State<HomePage> {
           iconSize: 50,
           icon: const Icon(Icons.person),
           tooltip: 'Perfil',
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfilePage()));
+          },
         ),
       ],
     );
