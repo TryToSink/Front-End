@@ -17,17 +17,17 @@ class HomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<HomePage> {
   late String url = 'http://3.144.90.4:3333/modoJogo/lista';
-  late String urlSocket = 'http://3.144.90.4:3334/';
+//  late String urlSocket = 'http://3.144.90.4:3334/';
   var _lista = [];
 
-  final _channel =
-      WebSocketChannel.connect(Uri.parse('http://3.144.90.4:3334/'));
+//  final _channel =
+//      WebSocketChannel.connect(Uri.parse('http://3.144.90.4:3334/'));
 
-  void _sendMessage() {
-    if (_lista.isNotEmpty) {
-      _channel.sink.add('oi');
-    }
-  }
+//  void _sendMessage() {
+//    if (_lista.isNotEmpty) {
+//      _channel.sink.add('oi');
+//    }/
+//  }
 //
 //  @override
 //  void dispose() {
@@ -58,9 +58,9 @@ class _MyHomePageState extends State<HomePage> {
     } catch (error) {}
   }
 
-  void connectServer() async {
-    try {} catch (error) {}
-  }
+//  void connectServer() async {
+//    try {} catch (error) {}
+//  }
 
   @override
   void initState() {
