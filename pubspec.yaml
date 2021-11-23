@@ -80,6 +80,18 @@ flutter:
      - assets/logo.png
      - assets/excluir.png
      - assets/sleepy_pirate.png
+     - assets/ingles.png
+     - assets/portugues.png
+     - assets/espanhol.png
+     - assets/pix.jpg
+     - assets/visa.png
+     - assets/sums-pay.png
+     - assets/pagamento.png
+     - assets/plus.png
+     - assets/diamond.png
+     - assets/gold.png
+     - assets/standard.png
+     - assets/energy.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
