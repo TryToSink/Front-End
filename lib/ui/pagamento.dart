@@ -25,6 +25,11 @@ class _LoadPagamentoState extends State<LoadPagamento> {
         ),
         home: Scaffold(
             appBar: AppBar(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(30),
+                ),
+              ),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
@@ -41,7 +46,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
             body: Container(
                 width: size.width,
                 height: size.height,
-                color: Colors.grey[350],
+                color: Colors.white,
                 child: LayoutBuilder(builder: (_, constraints) {
                   return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -49,12 +54,12 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                         Container(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight,
-                            color: Colors.grey[350],
+                            color: Colors.white,
                             child: Stack(children: [
                               Container(
                                   width: constraints.maxWidth,
                                   height: constraints.maxHeight,
-                                  color: Colors.grey[350],
+                                  color: Colors.white,
                                   child: Column(children: <Widget>[
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
@@ -73,7 +78,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                           children: [
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/visa.png'),
                                             ),
                                             Text(
                                               'Credit Card',
@@ -119,7 +124,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                           children: [
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/sums-pay.png'),
                                             ),
                                             Text(
                                               'Samsung Pay',
@@ -161,10 +166,10 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                           children: [
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/pix.jpg'),
                                             ),
                                             Text(
-                                              'Credit Card',
+                                              'PIX',
                                               style: const TextStyle(
                                                   fontSize: 30,
                                                   color: Colors.black),
@@ -207,7 +212,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                           children: [
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/plus.png'),
                                             ),
                                             Text(
                                               'Adicionar Cartão',
@@ -261,7 +266,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      HomePage()));
+                                                      HomePage(idUser: '')));
                                         },
                                       ),
                                     )

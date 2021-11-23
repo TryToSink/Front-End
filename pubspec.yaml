@@ -92,6 +92,9 @@ flutter:
      - assets/gold.png
      - assets/standard.png
      - assets/energy.png
+     - assets/band-bras.png
+     - assets/empty-person.png
+     - assets/green-dot.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

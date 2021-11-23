@@ -109,8 +109,8 @@ class LoginPage extends StatelessWidget {
                                 var User =
                                     await LoginApi.login(username, password);
 
-                                if (User) {
-                                  _navegaHomepage(context);
+                                if (User.toString().isNotEmpty) {
+                                  _navegaHomepage(context, User.toString());
                                 } else {
                                   showDialog(
                                     context: context,
@@ -150,7 +150,7 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-_navegaHomepage(BuildContext context) {
+_navegaHomepage(BuildContext context, String userId) {
   Navigator.push(context,
-      MaterialPageRoute(builder: (context) => HomePage(idUser: '_iduser')));
+      MaterialPageRoute(builder: (context) => HomePage(idUser: userId)));
 }

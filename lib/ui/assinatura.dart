@@ -26,6 +26,11 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
         ),
         home: Scaffold(
             appBar: AppBar(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(30),
+                ),
+              ),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
@@ -42,7 +47,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
             body: Container(
                 width: size.width,
                 height: size.height,
-                color: Colors.grey[350],
+                color: Colors.white,
                 child: LayoutBuilder(builder: (_, constraints) {
                   return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -50,12 +55,12 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                         Container(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight,
-                            color: Colors.grey[350],
+                            color: Colors.white,
                             child: Stack(children: [
                               Container(
                                   width: constraints.maxWidth,
                                   height: constraints.maxHeight,
-                                  color: Colors.grey[350],
+                                  color: Colors.white,
                                   child: Column(children: <Widget>[
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
@@ -85,7 +90,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                             ),
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/standard.png'),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(
@@ -146,7 +151,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                             ),
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/gold.png'),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(
@@ -207,7 +212,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                             ),
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/diamond.png'),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(

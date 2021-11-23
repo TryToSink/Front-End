@@ -26,7 +26,8 @@ class _LoadCenarioState extends State<LoadTela> {
   void initState() {
     super.initState();
     socketConnect().partidaAleatoria(idCenario, idUser);
-    socketConnect().home();
+    socketConnect()
+        .partidaAleatoria(idCenario, '04be7cad-70aa-4921-98da-3b3c2b806b61');
   }
 
   @override
@@ -63,19 +64,19 @@ class _LoadCenarioState extends State<LoadTela> {
                         Container(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight,
-                            color: Colors.grey[350],
+                            color: Colors.white,
                             child: Stack(children: [
                               Container(
                                   width: constraints.maxWidth,
                                   height: constraints.maxHeight,
-                                  color: Colors.grey[350],
+                                  color: Colors.white,
                                   child: Column(children: <Widget>[
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
                                     ),
                                     Container(
-                                        width: constraints.maxWidth * .80,
-                                        height: constraints.maxHeight * .60,
+                                        width: constraints.maxWidth * .90,
+                                        height: constraints.maxHeight * .50,
                                         //color: Colors.black,
                                         decoration: const BoxDecoration(
                                             borderRadius: BorderRadius.only(
@@ -93,7 +94,7 @@ class _LoadCenarioState extends State<LoadTela> {
                                     Container(
                                       width: constraints.maxWidth * .90,
                                       height: constraints.maxHeight * .15,
-                                      color: Colors.grey[350],
+                                      color: Colors.white,
                                       child: Center(
                                           child: Text(
                                         'Procurando  Oponente',

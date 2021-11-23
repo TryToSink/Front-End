@@ -213,26 +213,17 @@ class _MyHomePageState extends State<HomePage> {
                                                                           .all(
                                                                               5)),
                                                               Text(
-                                                                "Aproximadamente " +
-                                                                    _lista[index +
-                                                                                1]
-                                                                            [
-                                                                            "duracao"]
-                                                                        .toString() +
-                                                                    " min.",
+                                                                "Em manutenção",
                                                                 style: const TextStyle(
                                                                     fontSize:
                                                                         10,
                                                                     color: Colors
-                                                                        .orange),
+                                                                        .red),
                                                                 softWrap: true,
                                                               ),
                                                             ],
                                                           ),
                                                           onPressed: () {
-                                                            print(idUser);
-                                                            print(_lista[
-                                                                index + 1]);
                                                             Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
