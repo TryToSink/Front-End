@@ -7,24 +7,30 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
-import 'package:proj0511/ui/profile_page_edit.dart';
+import 'package:proj0511/ui/profile_page_edit%20(1).dart';
 import 'package:proj0511/ui/user.dart';
 import 'package:proj0511/ui/apiSignUp.dart';
-import 'globals.dart' as globals;
 
 class ProfilePage extends StatefulWidget {
+  late String idUser;
+
   ProfilePage({
     Key? key,
+    required this.idUser,
   }) : super(key: key);
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfilePage> createState() => _ProfilePageState(idUser: idUser);
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  _ProfilePageState();
-  late User user = globals.globalUser;
+  String idUser;
+  _ProfilePageState({Key? key, required this.idUser});
+
   late String imageName = 'foto';
+  late String _username = '';
+  late List _amigos = [];
+  late List _usernameAmigo = [];
 
   late String urlProfile = 'http://3.144.90.4:3333/usuarios/find';
   late String urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName;
@@ -35,17 +41,31 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    getUser(user.id);
+    print('Entrou no initstate');
+    getUser();
   }
 
-  Future getUser(String idUser) async {
+  getUser() async {
+    print('object');
+    print(urlProfile + "?id=" + idUser);
     try {
       final response = await http.get(
         Uri.parse(urlProfile + "?id=" + idUser),
       );
+      print('BODY: ' + response.body);
 
+      final jsonData = jsonDecode(response.body) as Map;
+      print('JSONDATA:' + jsonData.toString());
       setState(() {
-        user = globals.globalUser;
+        _username = jsonData['username'];
+        _amigos = jsonData['amigos'];
+
+        print('amigos: ' + _amigos.toString());
+        for (int i = 0; i <= jsonData['amigos'].length; i++) {
+          _amigos[i] = jsonData['amigos'][i];
+          _usernameAmigo[i] = jsonData['amigos'][i]['name'];
+        }
+        print('amigo[0]: ' + _amigos[0]);
       });
     } catch (error) {
       print(error);
@@ -62,8 +82,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    const String gamesPlayed = '25';
-    const String gamesWon = '25%';
+    const String gamesPlayed = ' 25';
+    const String gamesWon = ' 45%';
     const String winStreak = '5';
     const String country = 'Brasil';
     const String labelMatches = 'Partidas Recentes';
@@ -101,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage('images/profile_pic.jpg'),
+                          image: AssetImage('assets/carra.png'),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -119,9 +139,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          user.username,
+                          _username,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 32.0,
@@ -129,9 +150,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Text(
-                          user.id,
+                          '#' +
+                              idUser.toString().split('-').first.toUpperCase(),
                           style: const TextStyle(
-                            fontSize: 32.0,
+                            fontSize: 16.0,
                             color: Colors.grey,
                           ),
                         ),
@@ -140,10 +162,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               IconButton(
                                 onPressed: () {
+                                  print('idUser: ' + idUser);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ProfilePageEdit(),
+                                      builder: (context) => ProfilePageEdit(
+                                        idUser: idUser,
+                                      ),
                                     ),
                                   );
                                 },
@@ -154,16 +179,23 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
+                      children: [
                         Padding(
-                          padding: EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
-                          child: Flag.fromString(
-                            'BR',
-                            height: 40,
-                            width: 40,
+                          padding:
+                              const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 8.0),
+                          child: Container(
+                            width: 20.0,
+                            height: 20.0,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: AssetImage('assets/band-bras.png'),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
                           ),
                         ),
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 8.0),
                           child: Text(
                             country,
@@ -207,20 +239,36 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         labelGamesPlayed,
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 16.0,
                         ),
                       ),
-                      Text(
-                        '\u{1F3AE} ${gamesPlayed}',
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 30.0,
+                            height: 30.0,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: AssetImage('assets/Cópia de jostik.png'),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            gamesPlayed,
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
                       ),
                     ],
                   ),
@@ -241,20 +289,36 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         labelGamesWon,
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 16.0,
                         ),
                       ),
-                      Text(
-                        '\u{1F451} ${gamesWon}',
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 30.0,
+                            height: 30.0,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: AssetImage('assets/cubo-star.png'),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            gamesWon,
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
                       ),
                     ],
                   ),
@@ -284,7 +348,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       Text(
-                        '\u{1F525} ${winStreak}',
+                        '\u{1F525} $winStreak',
                         style: TextStyle(
                           fontSize: 24.0,
                           fontWeight: FontWeight.bold,
@@ -296,35 +360,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          // Container(
-          //   child: const Padding(
-          //     padding: EdgeInsets.symmetric(
-          //       vertical: 8.0,
-          //       horizontal: 24.0,
-          //     ),
-          //     child: Text(
-          //       labelMatches,
-          //       style: TextStyle(
-          //         color: Colors.white,
-          //         fontSize: 18.0,
-          //       ),
-          //     ),
-          //   ),
-          //   height: 40.0,
-          //   width: double.infinity,
-          //   decoration: BoxDecoration(color: appBarBGColor),
-          // ),
-          // Expanded(
-          //   child: ListView(
-          //     children: const [
-          //       Card(
-          //         child: ListTile(
-          //           title: Text('Player'),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           Container(
             child: const Padding(
               padding: EdgeInsets.symmetric(
@@ -345,35 +380,71 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: user.amigos.length,
+              itemCount: _amigos.length,
               itemBuilder: (BuildContext context, int index) {
-                return user.amigos.isEmpty
+                print(_amigos.isEmpty);
+                return _amigos.isEmpty
                     ? Center(
                         child: Column(
                           children: [
-                            Image.asset('sleepy_pirate.png'),
-                            Text('Tá meio vazio por aqui!'),
+                            Image.asset(
+                              'sleepy_pirate.png',
+                              height: 100,
+                              width: 100,
+                            ),
+                            const Text(
+                              'Tá meio vazio por aqui!',
+                              style: TextStyle(color: textColor),
+                            ),
                           ],
                         ),
                       )
-                    : GestureDetector(
-                        onTap: () {
-                          print("tamanho da lista " +
-                              user.amigos.length.toString());
-                        },
-                        child: ListTile(
-                          leading: Icon(Icons.person_pin),
-                          title: Text(user.amigos[index].friendUsername),
-                          subtitle: Text(user.amigos[index].online.toString()),
-                          key: Key((user.amigos[index].friendId).toString()),
-                          trailing: Container(
-                            width: 50,
+                    : Padding(
+                        padding: const EdgeInsets.only(
+                            top: 16, bottom: 16, left: 16, right: 16),
+                        child: Container(
+                          height: 80,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 0.5,
+                                  spreadRadius: 0.5,
+                                  offset: Offset(1.5, 1.5))
+                            ],
+                          ),
+                          child: Card(
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                IconButton(
-                                  icon: Icon(Icons.add),
-                                  color: Colors.black,
-                                  onPressed: () {},
+                                Container(
+                                  height: 65,
+                                  width: 65,
+                                  child: Image.asset('assets/empty-person.png'),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Text(
+                                    _amigos[index]['name'],
+                                    style: const TextStyle(
+                                      color: textColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                Spacer(
+                                  flex: 2,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 24.0),
+                                  child: Container(
+                                    height: 20,
+                                    width: 20,
+                                    child: Image.asset('assets/green-dot.png'),
+                                  ),
                                 ),
                               ],
                             ),
