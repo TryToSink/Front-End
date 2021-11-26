@@ -104,5 +104,6 @@ class ResetPasswordPage extends StatelessWidget {
 }
 
 _navegaHomepage(BuildContext context) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+  Navigator.push(
+      context, MaterialPageRoute(builder: (context) => HomePage(idUser: '')));
 }

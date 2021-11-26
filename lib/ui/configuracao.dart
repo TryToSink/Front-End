@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/ui/assinatura.dart';
 import 'package:proj0511/ui/home.dart';
+import 'package:proj0511/ui/idioma.dart';
 import 'package:proj0511/ui/pagamento.dart';
 import 'cenariosclass.dart';
 
@@ -25,24 +26,33 @@ class _LoadConfigState extends State<LoadConfig> {
           primaryColor: Colors.blueGrey[900],
         ),
         home: Scaffold(
+            backgroundColor: Color(0xFFDDDDDD),
             appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(30),
+                ),
               ),
-              backgroundColor: Colors.blueGrey[900],
-              actionsIconTheme:
-                  const IconThemeData(size: 30.0, color: Colors.white),
-              title: const Center(
-                child: (Text('CONFIGURAÇÕES')),
+              backgroundColor: Color(0xFF293241),
+              toolbarHeight: 100,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                //crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(Icons.arrow_back)),
+                  Padding(padding: EdgeInsets.fromLTRB(0, 0, 120, 0)),
+                  Text('CONFIGURAÇÕES')
+                ],
               ),
             ),
             body: Container(
                 width: size.width,
                 height: size.height,
-                color: Colors.grey[350],
+                color: Color(0xFFDDDDDD),
                 child: LayoutBuilder(builder: (_, constraints) {
                   return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -50,12 +60,12 @@ class _LoadConfigState extends State<LoadConfig> {
                         Container(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight,
-                            color: Colors.grey[350],
+                            color: Colors.white,
                             child: Stack(children: [
                               Container(
                                   width: constraints.maxWidth,
                                   height: constraints.maxHeight,
-                                  color: Colors.grey[350],
+                                  color: Color(0xFFDDDDDD),
                                   child: Column(children: <Widget>[
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
@@ -74,7 +84,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                           children: [
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/assinatur.png'),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(
@@ -115,7 +125,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                           children: [
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/pagamento.png'),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(
@@ -156,7 +166,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                           children: [
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/historica.png'),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(
@@ -191,7 +201,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                           children: [
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/aplicativo.png'),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(
@@ -226,7 +236,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                           children: [
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/idioma.png'),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(
@@ -241,7 +251,13 @@ class _LoadConfigState extends State<LoadConfig> {
                                             ),
                                           ],
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PageIdioma()));
+                                        },
                                       ),
                                     ),
                                     Padding(
@@ -261,7 +277,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                           children: [
                                             Image(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
+                                                  'assets/excluir.png'),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.fromLTRB(

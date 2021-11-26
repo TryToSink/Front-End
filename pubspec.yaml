@@ -36,7 +36,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.0.8
   http: ^0.13.3
-  socket_io_client: ^1.0.1
+  socket_io_common: ^1.0.0
+  js: ^0.6.3
+  logging: ^1.0.1
+  socket_io_client: ^1.0.2
+  web_socket_channel: ^2.1.0
+  image_picker: ^0.8.4+4
+  flag: ^5.0.1
+  path_provider: ^2.0.7
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +70,32 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
      - assets/logo.png
+     - assets/Cópia de jostik.png
+     - assets/aplicativo.png
+     - assets/assinatur.png
+     - assets/carra.png
+     - assets/espera.png
+     - assets/computadores.png
+     - assets/idioma.png
+     - assets/logo.png
+     - assets/excluir.png
+     - assets/sleepy_pirate.png
+     - assets/ingles.png
+     - assets/portugues.png
+     - assets/espanhol.png
+     - assets/pix.jpg
+     - assets/visa.png
+     - assets/sums-pay.png
+     - assets/pagamento.png
+     - assets/plus.png
+     - assets/diamond.png
+     - assets/gold.png
+     - assets/standard.png
+     - assets/energy.png
+     - assets/band-bras.png
+     - assets/empty-person.png
+     - assets/green-dot.png
+     - assets/cubo-star.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

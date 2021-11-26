@@ -16,6 +16,9 @@ class LoadEnergia extends StatefulWidget {
 }
 
 class _LoadEnergiaState extends State<LoadEnergia> {
+  bool value = false;
+  bool value2 = false;
+  bool value3 = false;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -23,27 +26,36 @@ class _LoadEnergiaState extends State<LoadEnergia> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
 //        brightness: Brightness.dark,
-          primaryColor: Colors.blueGrey[900],
+          primaryColor: Color(0xFF293241),
         ),
         home: Scaffold(
+            backgroundColor: Color(0xFFDDDDDD),
             appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(30),
+                ),
               ),
-              backgroundColor: Colors.blueGrey[900],
-              actionsIconTheme:
-                  const IconThemeData(size: 30.0, color: Colors.white),
-              title: const Center(
-                child: (Text('ENERGIA')),
+              backgroundColor: Color(0xFF293241),
+              toolbarHeight: 100,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                //crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(Icons.arrow_back)),
+                  Padding(padding: EdgeInsets.fromLTRB(0, 0, 150, 0)),
+                  Text('ENERGIA')
+                ],
               ),
             ),
             body: Container(
                 width: size.width,
                 height: size.height,
-                color: Colors.grey[350],
+                color: Color(0xFFDDDDDD),
                 child: LayoutBuilder(builder: (_, constraints) {
                   return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -51,12 +63,12 @@ class _LoadEnergiaState extends State<LoadEnergia> {
                         Container(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight,
-                            color: Colors.grey[350],
+                            color: Color(0xFFDDDDDD),
                             child: Stack(children: [
                               Container(
                                   width: constraints.maxWidth,
                                   height: constraints.maxHeight,
-                                  color: Colors.grey[350],
+                                  color: Color(0xFFDDDDDD),
                                   child: Column(children: <Widget>[
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
@@ -106,36 +118,41 @@ class _LoadEnergiaState extends State<LoadEnergia> {
                                             elevation: 15,
                                             shadowColor: Colors.grey),
                                         child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
-                                            Image(
-                                              image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
-                                            ),
+                                            Row(children: [
+                                              Image(
+                                                image: NetworkImage(
+                                                    'assets/energy.png'),
+                                              ),
+                                              Text(
+                                                'X 1   ',
+                                                style: const TextStyle(
+                                                    fontSize: 30,
+                                                    color: Colors.black),
+                                                softWrap: true,
+                                              )
+                                            ]),
                                             Text(
-                                              'X 1   ',
-                                              style: const TextStyle(
-                                                  fontSize: 30,
-                                                  color: Colors.black),
-                                              softWrap: true,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 30, 0),
-                                            ),
-                                            Text(
-                                              'RS 0,10',
+                                              'R\$ 0,10',
                                               style: const TextStyle(
                                                   fontSize: 20,
                                                   color: Colors.black),
                                               softWrap: true,
                                             ),
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 30, 0),
-                                            ),
-                                            Icon(
-                                              Icons.circle,
-                                              color: Color(0xff3D5A80),
+                                            Checkbox(
+                                              value: this.value,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  this.value = value;
+                                                });
+                                              }, //Checkbox
+                                              activeColor: Colors.green,
+                                              checkColor: Colors.white,
+                                              tristate: false,
                                             ),
                                           ],
                                         ),
@@ -151,7 +168,7 @@ class _LoadEnergiaState extends State<LoadEnergia> {
                                     ),
                                     Padding(
                                         padding:
-                                            EdgeInsets.fromLTRB(0, 0, 0, 10)),
+                                            EdgeInsets.fromLTRB(0, 0, 0, 20)),
                                     Container(
                                       width: constraints.maxWidth * .80,
                                       height: constraints.maxHeight * .10,
@@ -163,36 +180,41 @@ class _LoadEnergiaState extends State<LoadEnergia> {
                                             elevation: 15,
                                             shadowColor: Colors.grey),
                                         child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
-                                            Image(
-                                              image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
-                                            ),
+                                            Row(children: [
+                                              Image(
+                                                image: NetworkImage(
+                                                    'assets/energy.png'),
+                                              ),
+                                              Text(
+                                                'X 5   ',
+                                                style: const TextStyle(
+                                                    fontSize: 30,
+                                                    color: Colors.black),
+                                                softWrap: true,
+                                              )
+                                            ]),
                                             Text(
-                                              'X 5   ',
-                                              style: const TextStyle(
-                                                  fontSize: 30,
-                                                  color: Colors.black),
-                                              softWrap: true,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 30, 0),
-                                            ),
-                                            Text(
-                                              'RS 0,40',
+                                              'R\$ 0,40',
                                               style: const TextStyle(
                                                   fontSize: 20,
                                                   color: Colors.black),
                                               softWrap: true,
                                             ),
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 30, 0),
-                                            ),
-                                            Icon(
-                                              Icons.circle,
-                                              color: Color(0xff3D5A80),
+                                            Checkbox(
+                                              value: this.value2,
+                                              onChanged: (value2) {
+                                                setState(() {
+                                                  this.value2 = value2;
+                                                });
+                                              }, //Checkbox
+                                              activeColor: Colors.green,
+                                              checkColor: Colors.white,
+                                              tristate: false,
                                             ),
                                           ],
                                         ),
@@ -208,7 +230,7 @@ class _LoadEnergiaState extends State<LoadEnergia> {
                                     ),
                                     Padding(
                                         padding:
-                                            EdgeInsets.fromLTRB(0, 0, 0, 10)),
+                                            EdgeInsets.fromLTRB(0, 0, 0, 20)),
                                     Container(
                                       width: constraints.maxWidth * .80,
                                       height: constraints.maxHeight * .10,
@@ -220,36 +242,41 @@ class _LoadEnergiaState extends State<LoadEnergia> {
                                             elevation: 15,
                                             shadowColor: Colors.grey),
                                         child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
-                                            Image(
-                                              image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
-                                            ),
+                                            Row(children: [
+                                              Image(
+                                                image: NetworkImage(
+                                                    'assets/energy.png'),
+                                              ),
+                                              Text(
+                                                'X 10 ',
+                                                style: const TextStyle(
+                                                    fontSize: 30,
+                                                    color: Colors.black),
+                                                softWrap: true,
+                                              )
+                                            ]),
                                             Text(
-                                              'X 10 ',
-                                              style: const TextStyle(
-                                                  fontSize: 30,
-                                                  color: Colors.black),
-                                              softWrap: true,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 30, 0),
-                                            ),
-                                            Text(
-                                              'RS 0,70',
+                                              'R\$ 0,70',
                                               style: const TextStyle(
                                                   fontSize: 20,
                                                   color: Colors.black),
                                               softWrap: true,
                                             ),
-                                            Padding(
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 30, 0),
-                                            ),
-                                            Icon(
-                                              Icons.circle,
-                                              color: Colors.blue,
+                                            Checkbox(
+                                              value: this.value3,
+                                              onChanged: (value3) {
+                                                setState(() {
+                                                  this.value3 = value3;
+                                                });
+                                              }, //Checkbox
+                                              activeColor: Colors.green,
+                                              checkColor: Colors.white,
+                                              tristate: false,
                                             ),
                                           ],
                                         ),

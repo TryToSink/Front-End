@@ -4,17 +4,26 @@ import 'package:http/http.dart' as http;
 import 'package:proj0511/ui/cenarios.dart';
 import 'package:proj0511/ui/configuracao.dart';
 import 'package:proj0511/ui/energia.dart';
+import 'package:flutter/foundation.dart';
+import 'package:proj0511/ui/profile_page%20(1).dart';
+import 'package:proj0511/ui/socketConnect%20(1).dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  String idUser;
+  HomePage({Key? key, required this.idUser}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _MyHomePageState(idUser: idUser);
 }
 
 class _MyHomePageState extends State<HomePage> {
+  String idUser;
+  _MyHomePageState({Key? key, required this.idUser});
   late String url = 'http://3.144.90.4:3333/modoJogo/lista';
+//late String urlSocket = 'http://3.144.90.4:3334/';
   var _lista = [];
+
   void getTest() async {
     try {
       final response = await http.get(
@@ -23,30 +32,43 @@ class _MyHomePageState extends State<HomePage> {
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         _lista = jsonData;
+        print(_lista.toString());
       });
-    } catch (error) {}
+    } catch (error) {
+      print(error);
+    }
   }
 
   @override
   void initState() {
     super.initState();
     getTest();
+    socketConnect().login(idUser);
+    socketConnect().home();
   }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return MaterialApp(
+        color: Color(0xFFDDDDDD),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-//        brightness: Brightness.dark,
-          primaryColor: Colors.blueGrey[900],
+          backgroundColor: Color(0xFFDDDDDD),
+          primaryColor: Color(0xFFDDDDDD),
         ),
         home: Scaffold(
+          backgroundColor: Color(0xFFDDDDDD),
           appBar: AppBar(
-            backgroundColor: Colors.blueGrey[900],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(30),
+              ),
+            ),
+            backgroundColor: Color(0xFF293241),
+            toolbarHeight: 100,
             actionsIconTheme:
-                const IconThemeData(size: 30.0, color: Colors.white),
+                const IconThemeData(size: 30.0, color: Color(0xFFDDDDDD)),
             title: const Center(
               child: (Text('                MODO DE JOGO')),
             ),
@@ -56,7 +78,7 @@ class _MyHomePageState extends State<HomePage> {
                   child: Container(
                     height: 10,
                     width: 60,
-                    color: Colors.blueGrey[900],
+                    color: Color(0xFF293241),
                     child: Center(
                       child: TextButton(
                           style: TextButton.styleFrom(
@@ -84,148 +106,342 @@ class _MyHomePageState extends State<HomePage> {
           body: Container(
             width: size.width,
             height: size.height,
-            color: Colors.grey[350],
+            color: Color(0xFFDDDDDD),
             child: LayoutBuilder(builder: (_, constraints) {
               return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
                       width: constraints.maxWidth,
-                      height: constraints.maxHeight * .85,
-                      color: Colors.grey[350],
+                      height: constraints.maxHeight * .88,
+                      color: Color(0xFFDDDDDD),
                       child: Stack(
                         children: [
                           Column(children: [
                             Container(
                               width: constraints.maxWidth,
-                              height: constraints.maxHeight * .85,
-                              color: Colors.grey[350],
+                              height: constraints.maxHeight * .88,
+                              color: Color(0xFFDDDDDD),
                               child: Column(
                                 children: <Widget>[
                                   Expanded(
-                                    child: GridView.builder(
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 1,
-                                              childAspectRatio: 1.5),
-                                      itemCount: _lista.length,
-                                      itemBuilder: (context, index) {
-                                        return SizedBox(
+                                      //child: GridView.builder(
+                                      // gridDelegate:
+                                      //      const SliverGridDelegateWithFixedCrossAxisCount(
+                                      //           crossAxisCount: 1,
+                                      //          childAspectRatio: 1),
+                                      //   itemCount: 1,
+                                      //   itemBuilder: (context, index) {
+                                      //     return
+                                      child: Column(children: <Widget>[
+                                    SizedBox(
+                                        width: constraints.maxWidth * .95,
+                                        height: constraints.maxHeight * .21,
+                                        child: SizedBox(
                                             width: constraints.maxWidth * .90,
-                                            height: constraints.maxHeight *
-                                                .85 *
-                                                .30,
-                                            child: SizedBox(
-                                                width:
-                                                    constraints.maxWidth * .30,
-                                                height: constraints.maxHeight *
-                                                    .85 *
-                                                    .20,
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                        width: constraints
+                                            height: constraints.maxHeight * .20,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                    width:
+                                                        constraints
                                                                 .maxWidth *
                                                             .40,
-                                                        height: constraints
+                                                    height:
+                                                        constraints
                                                                 .maxHeight *
-                                                            .85 *
-                                                            .39,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                                borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            10)),
-                                                                color: Colors
-                                                                    .white,
-                                                                image:
-                                                                    DecorationImage(
-                                                                  image: NetworkImage(
-                                                                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                ))),
-                                                    SizedBox(
-                                                      width:
-                                                          constraints.maxWidth *
-                                                              .40,
-                                                      height: constraints
-                                                              .maxHeight *
-                                                          .85 *
-                                                          .39,
-                                                      child: TextButton(
-                                                        style: TextButton
-                                                            .styleFrom(
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .white,
-                                                                elevation: 15,
-                                                                shadowColor:
-                                                                    Colors
-                                                                        .grey),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          children: [
-                                                            Text(
-                                                              _lista[index]
-                                                                      ["nome"]
-                                                                  .toString(),
-                                                              style: const TextStyle(
+                                                            .15,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            color: Colors.grey,
+                                                            image:
+                                                                DecorationImage(
+                                                              image: NetworkImage(
+                                                                  'assets/computadores.png'),
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            ))),
+                                                SizedBox(
+                                                  width: constraints.maxWidth *
+                                                      .45,
+                                                  height:
+                                                      constraints.maxHeight *
+                                                          .18,
+                                                  child: TextButton(
+                                                    style: TextButton.styleFrom(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        elevation: 15,
+                                                        shadowColor:
+                                                            Colors.grey),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          'Jogar vs IA',
+                                                          style:
+                                                              const TextStyle(
                                                                   fontSize: 20,
                                                                   color: Colors
                                                                       .black),
-                                                              softWrap: true,
-                                                            ),
-                                                            const Padding(
-                                                                padding:
-                                                                    EdgeInsets
-                                                                        .all(
-                                                                            5)),
-                                                            Text(
-                                                              "Aproximadamente " +
-                                                                  _lista[index][
-                                                                          "duracao"]
-                                                                      .toString() +
-                                                                  " min.",
-                                                              style: const TextStyle(
+                                                          softWrap: true,
+                                                        ),
+                                                        const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5)),
+                                                        Text(
+                                                          "    Em manutenção",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 10,
+                                                                  color: Colors
+                                                                      .red),
+                                                          softWrap: true,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  LoadCenario(
+                                                                      idmodojogo:
+                                                                          _lista[0]
+                                                                              [
+                                                                              'idModoJogo'],
+                                                                      idUser:
+                                                                          idUser)));
+                                                    },
+                                                  ),
+                                                )
+                                              ],
+                                            ))),
+                                    SizedBox(
+                                        width: constraints.maxWidth * .95,
+                                        height: constraints.maxHeight * .21,
+                                        child: SizedBox(
+                                            width: constraints.maxWidth * .90,
+                                            height: constraints.maxHeight * .20,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                    width:
+                                                        constraints
+                                                                .maxWidth *
+                                                            .40,
+                                                    height:
+                                                        constraints
+                                                                .maxHeight *
+                                                            .15,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            color: Colors.grey,
+                                                            image:
+                                                                DecorationImage(
+                                                              image: NetworkImage(
+                                                                  'assets/Cópia de jostik.png'),
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            ))),
+                                                SizedBox(
+                                                  width: constraints.maxWidth *
+                                                      .45,
+                                                  height:
+                                                      constraints.maxHeight *
+                                                          .18,
+                                                  child: TextButton(
+                                                    style: TextButton.styleFrom(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        elevation: 15,
+                                                        shadowColor:
+                                                            Colors.grey),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          'Jogar vs Amigo',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 20,
+                                                                  color: Colors
+                                                                      .black),
+                                                          softWrap: true,
+                                                        ),
+                                                        const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5)),
+                                                        Text(
+                                                          "    Aproximadamente " +
+                                                              '2' +
+                                                              " min.",
+                                                          style:
+                                                              const TextStyle(
                                                                   fontSize: 10,
                                                                   color: Colors
                                                                       .orange),
-                                                              softWrap: true,
-                                                            ),
-                                                          ],
+                                                          softWrap: true,
                                                         ),
-                                                        onPressed: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          LoadCenario(
-                                                                            idmodojogo:
-                                                                                _lista[index]["idModoJogo"],
-                                                                          )));
-                                                        },
-                                                      ),
-                                                    )
-                                                  ],
-                                                )));
-                                      },
-                                    ),
-                                  ),
+                                                      ],
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  LoadCenario(
+                                                                      idmodojogo:
+                                                                          _lista[1]
+                                                                              [
+                                                                              'idModoJogo'],
+                                                                      idUser:
+                                                                          idUser)));
+                                                    },
+                                                  ),
+                                                )
+                                              ],
+                                            ))),
+                                    SizedBox(
+                                        width: constraints.maxWidth * .95,
+                                        height: constraints.maxHeight * .21,
+                                        child: SizedBox(
+                                            width: constraints.maxWidth * .90,
+                                            height: constraints.maxHeight * .20,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                    width:
+                                                        constraints
+                                                                .maxWidth *
+                                                            .40,
+                                                    height:
+                                                        constraints
+                                                                .maxHeight *
+                                                            .15,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            color: Colors.grey,
+                                                            image:
+                                                                DecorationImage(
+                                                              image: NetworkImage(
+                                                                  'assets/cubos.png'),
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            ))),
+                                                SizedBox(
+                                                  width: constraints.maxWidth *
+                                                      .45,
+                                                  height:
+                                                      constraints.maxHeight *
+                                                          .18,
+                                                  child: TextButton(
+                                                    style: TextButton.styleFrom(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        elevation: 15,
+                                                        shadowColor:
+                                                            Colors.grey),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          'Jogar vs Aleátorio',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 20,
+                                                                  color: Colors
+                                                                      .black),
+                                                          softWrap: true,
+                                                        ),
+                                                        const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5)),
+                                                        Text(
+                                                          "    Aproximadamente " +
+                                                              '2' +
+                                                              " min.",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 10,
+                                                                  color: Colors
+                                                                      .orange),
+                                                          softWrap: true,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  LoadCenario(
+                                                                      idmodojogo:
+                                                                          _lista[2]
+                                                                              [
+                                                                              'idModoJogo'],
+                                                                      idUser:
+                                                                          idUser)));
+                                                    },
+                                                  ),
+                                                )
+                                              ],
+                                            )))
+                                  ])
+                                      //},
+                                      //),
+                                      ),
                                 ],
                               ),
                             ),
@@ -235,10 +451,10 @@ class _MyHomePageState extends State<HomePage> {
                     ),
                     Container(
                       width: constraints.maxWidth,
-                      height: constraints.maxHeight * .15,
+                      height: constraints.maxHeight * .12,
                       //color: Colors.lightBlue[600],
                       decoration: BoxDecoration(
-                          color: Colors.blueGrey[900],
+                          color: Color(0xFF293241),
                           border: Border.all(color: Colors.black),
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(30),
@@ -267,6 +483,7 @@ class _MyHomePageState extends State<HomePage> {
     return Column(
       children: <Widget>[
         IconButton(
+          color: Colors.white,
           padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
           iconSize: 50,
           icon: const Icon(Icons.play_arrow),
@@ -288,11 +505,19 @@ class _MyHomePageState extends State<HomePage> {
     return Column(
       children: <Widget>[
         IconButton(
+          color: Colors.white,
           padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
           iconSize: 50,
           icon: const Icon(Icons.person),
           tooltip: 'Perfil',
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProfilePage(
+                          idUser: idUser,
+                        )));
+          },
         ),
       ],
     );
@@ -302,6 +527,7 @@ class _MyHomePageState extends State<HomePage> {
     return Column(
       children: <Widget>[
         IconButton(
+            color: Colors.white,
             padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
             iconSize: 50,
             icon: const Icon(Icons.settings),

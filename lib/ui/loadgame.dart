@@ -2,66 +2,33 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:proj0511/ui/socketConnect%20(1).dart';
 
 import 'cenariosclass.dart';
 
 class LoadTela extends StatefulWidget {
-  LoadTela({Key key}) : super(key: key);
+  String idCenario;
+  String idUser;
+  LoadTela({Key key, this.idCenario, this.idUser}) : super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
-  State<LoadTela> createState() => _LoadCenarioState();
+  State<LoadTela> createState() =>
+      _LoadCenarioState(idCenario: idCenario, idUser: idUser);
 }
 
 class _LoadCenarioState extends State<LoadTela> {
-  //void getTest() async {
-  //  try {
-  //    final response = await http.get(Uri.parse(url));
-  //    final jsonData = jsonDecode(response.body) as List;
-  //    setState(() {
-  //      _lista = jsonData;
-  //    });
-  //  } catch (error) {}
-  //  ;
-  //}
+  String idCenario;
+  String idUser;
+  _LoadCenarioState({Key key, this.idCenario, this.idUser});
 
-  //void getTest2() async {
-  //  try {
-  //    final response =
-  //        await http.get(Uri.parse(url2 + '?idModoJogo=' + idmodojogo));
-  //    setState(() {
-  //      final PostDart returno = PostDart.fromJson(json.decode(response.body));
-  //      final List<Cenarios> _returno2 = returno.cenarios;
-  //      print(returno.cenarios.length);
-  //      for (int i = 0; _returno2.length > i; i++) {
-  //        _arraydeCenarios.add(_returno2[i].nome);
-  //        print(_arraydeCenarios[i]);
-  //        //if (_returno2[i].nome != _nomeCenarios) {
-  //        //  _nomeCenarios = _returno2[i].nome;
-  //        //} else if (_returno2[i].nome == _nomeCenarios2) {
-  //         //  _nomeCenarios2 = _returno2[i].nome;
-  //        //} else {
-  //  _nomeCenarios3 = _returno2[i].nome;
-  //        // }
-  //      }
-  //for (int j = 0; _returno2.length > j; j++){
-  //  if (_lista[j].isEmpty){
-  //    _lista[j]=_nomeCenarios;
-  //  }
-  //}
-  //    });
-  //  } catch (error) {
-  //    print('ta errado, isso ai');
-  //  }
-//
-  //  print('é treta');
-  //}
-
-  //@override
-  //void initState() {
-  //  super.initState();
-  //  getTest2();
-  //}
+  @override
+  void initState() {
+    super.initState();
+    socketConnect().partidaAleatoria(idCenario, idUser);
+    socketConnect()
+        .partidaAleatoria(idCenario, '04be7cad-70aa-4921-98da-3b3c2b806b61');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +40,17 @@ class _LoadCenarioState extends State<LoadTela> {
           primaryColor: Colors.blueGrey[900],
         ),
         home: Scaffold(
+            backgroundColor: Color(0xFFDDDDDD),
             appBar: AppBar(
-              backgroundColor: Colors.blueGrey[900],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(30),
+                ),
+              ),
+              backgroundColor: Color(0xFF293241),
               actionsIconTheme:
                   const IconThemeData(size: 30.0, color: Colors.white),
+              toolbarHeight: 100,
               title: const Center(
                 child: (Text('LOADING')),
               ),
@@ -92,19 +66,19 @@ class _LoadCenarioState extends State<LoadTela> {
                         Container(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight,
-                            color: Colors.grey[350],
+                            color: Color(0xFFDDDDDD),
                             child: Stack(children: [
                               Container(
                                   width: constraints.maxWidth,
                                   height: constraints.maxHeight,
-                                  color: Colors.grey[350],
+                                  color: Color(0xFFDDDDDD),
                                   child: Column(children: <Widget>[
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
                                     ),
                                     Container(
-                                        width: constraints.maxWidth * .80,
-                                        height: constraints.maxHeight * .60,
+                                        width: constraints.maxWidth * .70,
+                                        height: constraints.maxHeight * .50,
                                         //color: Colors.black,
                                         decoration: const BoxDecoration(
                                             borderRadius: BorderRadius.only(
@@ -113,16 +87,16 @@ class _LoadCenarioState extends State<LoadTela> {
                                                 bottomLeft: Radius.circular(10),
                                                 bottomRight:
                                                     Radius.circular(10)),
-                                            color: Colors.white,
+                                            color: Color(0xFFDDDDDD),
                                             image: DecorationImage(
                                               image: NetworkImage(
-                                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg'),
-                                              fit: BoxFit.cover,
+                                                  'assets/espera.png'),
+                                              fit: BoxFit.fill,
                                             ))),
                                     Container(
                                       width: constraints.maxWidth * .90,
                                       height: constraints.maxHeight * .15,
-                                      color: Colors.grey[350],
+                                      color: Color(0xFFDDDDDD),
                                       child: Center(
                                           child: Text(
                                         'Procurando  Oponente',
