@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/ui/cenarios.dart';
@@ -33,8 +32,11 @@ class _MyHomePageState extends State<HomePage> {
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         _lista = jsonData;
+        print(_lista.toString());
       });
-    } catch (error) {}
+    } catch (error) {
+      print(error);
+    }
   }
 
   @override
@@ -49,20 +51,24 @@ class _MyHomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return MaterialApp(
+        color: Color(0xFFDDDDDD),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: Colors.blueGrey[900],
+          backgroundColor: Color(0xFFDDDDDD),
+          primaryColor: Color(0xFFDDDDDD),
         ),
         home: Scaffold(
+          backgroundColor: Color(0xFFDDDDDD),
           appBar: AppBar(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(30),
               ),
             ),
-            backgroundColor: Colors.blueGrey[900],
+            backgroundColor: Color(0xFF293241),
+            toolbarHeight: 100,
             actionsIconTheme:
-                const IconThemeData(size: 30.0, color: Colors.white),
+                const IconThemeData(size: 30.0, color: Color(0xFFDDDDDD)),
             title: const Center(
               child: (Text('                MODO DE JOGO')),
             ),
@@ -72,7 +78,7 @@ class _MyHomePageState extends State<HomePage> {
                   child: Container(
                     height: 10,
                     width: 60,
-                    color: Colors.blueGrey[900],
+                    color: Color(0xFF293241),
                     child: Center(
                       child: TextButton(
                           style: TextButton.styleFrom(
@@ -100,7 +106,7 @@ class _MyHomePageState extends State<HomePage> {
           body: Container(
             width: size.width,
             height: size.height,
-            color: Colors.white,
+            color: Color(0xFFDDDDDD),
             child: LayoutBuilder(builder: (_, constraints) {
               return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -108,373 +114,334 @@ class _MyHomePageState extends State<HomePage> {
                     Container(
                       width: constraints.maxWidth,
                       height: constraints.maxHeight * .88,
-                      color: Colors.white,
+                      color: Color(0xFFDDDDDD),
                       child: Stack(
                         children: [
                           Column(children: [
                             Container(
                               width: constraints.maxWidth,
                               height: constraints.maxHeight * .88,
-                              color: Colors.white,
+                              color: Color(0xFFDDDDDD),
                               child: Column(
                                 children: <Widget>[
                                   Expanded(
-                                    child: GridView.builder(
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 1,
-                                              childAspectRatio: 1),
-                                      itemCount: 1,
-                                      itemBuilder: (context, index) {
-                                        return Column(children: <Widget>[
-                                          SizedBox(
-                                              width: constraints.maxWidth * .95,
-                                              height:
-                                                  constraints.maxHeight * .21,
-                                              child: SizedBox(
+                                      //child: GridView.builder(
+                                      // gridDelegate:
+                                      //      const SliverGridDelegateWithFixedCrossAxisCount(
+                                      //           crossAxisCount: 1,
+                                      //          childAspectRatio: 1),
+                                      //   itemCount: 1,
+                                      //   itemBuilder: (context, index) {
+                                      //     return
+                                      child: Column(children: <Widget>[
+                                    SizedBox(
+                                        width: constraints.maxWidth * .95,
+                                        height: constraints.maxHeight * .21,
+                                        child: SizedBox(
+                                            width: constraints.maxWidth * .90,
+                                            height: constraints.maxHeight * .20,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                    width:
+                                                        constraints
+                                                                .maxWidth *
+                                                            .40,
+                                                    height:
+                                                        constraints
+                                                                .maxHeight *
+                                                            .15,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            color: Colors.grey,
+                                                            image:
+                                                                DecorationImage(
+                                                              image: NetworkImage(
+                                                                  'assets/computadores.png'),
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            ))),
+                                                SizedBox(
                                                   width: constraints.maxWidth *
-                                                      .90,
+                                                      .45,
                                                   height:
                                                       constraints.maxHeight *
-                                                          .20,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Container(
-                                                          width: constraints
-                                                                  .maxWidth *
-                                                              .40,
-                                                          height: constraints
-                                                                  .maxHeight *
-                                                              .15,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10)),
+                                                          .18,
+                                                  child: TextButton(
+                                                    style: TextButton.styleFrom(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        elevation: 15,
+                                                        shadowColor:
+                                                            Colors.grey),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          'Jogar vs IA',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 20,
                                                                   color: Colors
-                                                                      .grey,
-                                                                  image:
-                                                                      DecorationImage(
-                                                                    image: NetworkImage(
-                                                                        'assets/computadores.png'),
-                                                                    fit: BoxFit
-                                                                        .contain,
-                                                                  ))),
-                                                      SizedBox(
-                                                        width: constraints
-                                                                .maxWidth *
-                                                            .45,
-                                                        height: constraints
-                                                                .maxHeight *
-                                                            .18,
-                                                        child: TextButton(
-                                                          style: TextButton
-                                                              .styleFrom(
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .white,
-                                                                  elevation: 15,
-                                                                  shadowColor:
-                                                                      Colors
-                                                                          .grey),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            children: [
-                                                              Text(
-                                                                _lista[index +
-                                                                            1]
-                                                                        ["nome"]
-                                                                    .toString(),
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        20,
-                                                                    color: Colors
-                                                                        .black),
-                                                                softWrap: true,
-                                                              ),
-                                                              const Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              5)),
-                                                              Text(
-                                                                "Em manutenção",
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        10,
-                                                                    color: Colors
-                                                                        .red),
-                                                                softWrap: true,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          onPressed: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) => LoadCenario(
-                                                                        idmodojogo: _lista[index +
-                                                                                1]
-                                                                            [
-                                                                            "idModoJogo"],
-                                                                        idUser:
-                                                                            idUser)));
-                                                          },
+                                                                      .black),
+                                                          softWrap: true,
                                                         ),
-                                                      )
-                                                    ],
-                                                  ))),
-                                          SizedBox(
-                                              width: constraints.maxWidth * .95,
-                                              height:
-                                                  constraints.maxHeight * .21,
-                                              child: SizedBox(
+                                                        const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5)),
+                                                        Text(
+                                                          "    Em manutenção",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 10,
+                                                                  color: Colors
+                                                                      .red),
+                                                          softWrap: true,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  LoadCenario(
+                                                                      idmodojogo:
+                                                                          _lista[0]
+                                                                              [
+                                                                              'idModoJogo'],
+                                                                      idUser:
+                                                                          idUser)));
+                                                    },
+                                                  ),
+                                                )
+                                              ],
+                                            ))),
+                                    SizedBox(
+                                        width: constraints.maxWidth * .95,
+                                        height: constraints.maxHeight * .21,
+                                        child: SizedBox(
+                                            width: constraints.maxWidth * .90,
+                                            height: constraints.maxHeight * .20,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                    width:
+                                                        constraints
+                                                                .maxWidth *
+                                                            .40,
+                                                    height:
+                                                        constraints
+                                                                .maxHeight *
+                                                            .15,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            color: Colors.grey,
+                                                            image:
+                                                                DecorationImage(
+                                                              image: NetworkImage(
+                                                                  'assets/Cópia de jostik.png'),
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            ))),
+                                                SizedBox(
                                                   width: constraints.maxWidth *
-                                                      .90,
+                                                      .45,
                                                   height:
                                                       constraints.maxHeight *
-                                                          .20,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Container(
-                                                          width: constraints
-                                                                  .maxWidth *
-                                                              .40,
-                                                          height: constraints
-                                                                  .maxHeight *
-                                                              .15,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10)),
+                                                          .18,
+                                                  child: TextButton(
+                                                    style: TextButton.styleFrom(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        elevation: 15,
+                                                        shadowColor:
+                                                            Colors.grey),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          'Jogar vs Amigo',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 20,
                                                                   color: Colors
-                                                                      .grey,
-                                                                  image:
-                                                                      DecorationImage(
-                                                                    image: NetworkImage(
-                                                                        'assets/Cópia de jostik.png'),
-                                                                    fit: BoxFit
-                                                                        .contain,
-                                                                  ))),
-                                                      SizedBox(
-                                                        width: constraints
-                                                                .maxWidth *
-                                                            .45,
-                                                        height: constraints
-                                                                .maxHeight *
-                                                            .18,
-                                                        child: TextButton(
-                                                          style: TextButton
-                                                              .styleFrom(
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .white,
-                                                                  elevation: 15,
-                                                                  shadowColor:
-                                                                      Colors
-                                                                          .grey),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            children: [
-                                                              Text(
-                                                                _lista[index]
-                                                                        ["nome"]
-                                                                    .toString(),
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        20,
-                                                                    color: Colors
-                                                                        .black),
-                                                                softWrap: true,
-                                                              ),
-                                                              const Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              5)),
-                                                              Text(
-                                                                "Aproximadamente " +
-                                                                    _lista[index]
-                                                                            [
-                                                                            "duracao"]
-                                                                        .toString() +
-                                                                    " min.",
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        10,
-                                                                    color: Colors
-                                                                        .orange),
-                                                                softWrap: true,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          onPressed: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) => LoadCenario(
-                                                                        idmodojogo: _lista[index]
-                                                                            [
-                                                                            "idModoJogo"],
-                                                                        idUser:
-                                                                            idUser)));
-                                                          },
+                                                                      .black),
+                                                          softWrap: true,
                                                         ),
-                                                      )
-                                                    ],
-                                                  ))),
-                                          SizedBox(
-                                              width: constraints.maxWidth * .95,
-                                              height:
-                                                  constraints.maxHeight * .21,
-                                              child: SizedBox(
+                                                        const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5)),
+                                                        Text(
+                                                          "    Aproximadamente " +
+                                                              '2' +
+                                                              " min.",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 10,
+                                                                  color: Colors
+                                                                      .orange),
+                                                          softWrap: true,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  LoadCenario(
+                                                                      idmodojogo:
+                                                                          _lista[1]
+                                                                              [
+                                                                              'idModoJogo'],
+                                                                      idUser:
+                                                                          idUser)));
+                                                    },
+                                                  ),
+                                                )
+                                              ],
+                                            ))),
+                                    SizedBox(
+                                        width: constraints.maxWidth * .95,
+                                        height: constraints.maxHeight * .21,
+                                        child: SizedBox(
+                                            width: constraints.maxWidth * .90,
+                                            height: constraints.maxHeight * .20,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                    width:
+                                                        constraints
+                                                                .maxWidth *
+                                                            .40,
+                                                    height:
+                                                        constraints
+                                                                .maxHeight *
+                                                            .15,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                            color: Colors.grey,
+                                                            image:
+                                                                DecorationImage(
+                                                              image: NetworkImage(
+                                                                  'assets/cubos.png'),
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            ))),
+                                                SizedBox(
                                                   width: constraints.maxWidth *
-                                                      .90,
+                                                      .45,
                                                   height:
                                                       constraints.maxHeight *
-                                                          .20,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Container(
-                                                          width: constraints
-                                                                  .maxWidth *
-                                                              .40,
-                                                          height: constraints
-                                                                  .maxHeight *
-                                                              .15,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10)),
+                                                          .18,
+                                                  child: TextButton(
+                                                    style: TextButton.styleFrom(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        elevation: 15,
+                                                        shadowColor:
+                                                            Colors.grey),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          'Jogar vs Aleátorio',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 20,
                                                                   color: Colors
-                                                                      .grey,
-                                                                  image:
-                                                                      DecorationImage(
-                                                                    image: NetworkImage(
-                                                                        'assets/cubos.png'),
-                                                                    fit: BoxFit
-                                                                        .contain,
-                                                                  ))),
-                                                      SizedBox(
-                                                        width: constraints
-                                                                .maxWidth *
-                                                            .45,
-                                                        height: constraints
-                                                                .maxHeight *
-                                                            .18,
-                                                        child: TextButton(
-                                                          style: TextButton
-                                                              .styleFrom(
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .white,
-                                                                  elevation: 15,
-                                                                  shadowColor:
-                                                                      Colors
-                                                                          .grey),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            children: [
-                                                              Text(
-                                                                _lista[index +
-                                                                            1]
-                                                                        ["nome"]
-                                                                    .toString(),
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        20,
-                                                                    color: Colors
-                                                                        .black),
-                                                                softWrap: true,
-                                                              ),
-                                                              const Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              5)),
-                                                              Text(
-                                                                "Aproximadamente " +
-                                                                    _lista[index +
-                                                                                1]
-                                                                            [
-                                                                            "duracao"]
-                                                                        .toString() +
-                                                                    " min.",
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        10,
-                                                                    color: Colors
-                                                                        .orange),
-                                                                softWrap: true,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          onPressed: () {
-                                                            //  Navigator.push(
-                                                            //      context,
-                                                            //      MaterialPageRoute(
-                                                            //          builder:
-                                                            //              (context) =>
-                                                            //                  LoadCenario(
-                                                            //                    idmodojogo:
-                                                            //                        _lista[index]["idModoJogo"],
-                                                            //                  )));
-                                                          },
+                                                                      .black),
+                                                          softWrap: true,
                                                         ),
-                                                      )
-                                                    ],
-                                                  )))
-                                        ]);
-                                      },
-                                    ),
-                                  ),
+                                                        const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5)),
+                                                        Text(
+                                                          "    Aproximadamente " +
+                                                              '2' +
+                                                              " min.",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 10,
+                                                                  color: Colors
+                                                                      .orange),
+                                                          softWrap: true,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  LoadCenario(
+                                                                      idmodojogo:
+                                                                          _lista[2]
+                                                                              [
+                                                                              'idModoJogo'],
+                                                                      idUser:
+                                                                          idUser)));
+                                                    },
+                                                  ),
+                                                )
+                                              ],
+                                            )))
+                                  ])
+                                      //},
+                                      //),
+                                      ),
                                 ],
                               ),
                             ),
@@ -487,7 +454,7 @@ class _MyHomePageState extends State<HomePage> {
                       height: constraints.maxHeight * .12,
                       //color: Colors.lightBlue[600],
                       decoration: BoxDecoration(
-                          color: Colors.blueGrey[900],
+                          color: Color(0xFF293241),
                           border: Border.all(color: Colors.black),
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(30),

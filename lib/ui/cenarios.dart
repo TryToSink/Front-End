@@ -61,32 +61,36 @@ class _LoadCenarioState extends State<LoadCenario> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: Colors.blueGrey[900],
+          primaryColor: Color(0xFF293241),
         ),
         home: Scaffold(
+          backgroundColor: Color(0xFFDDDDDD),
           appBar: AppBar(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(30),
               ),
             ),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+            toolbarHeight: 100,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              //crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(Icons.arrow_back)),
+                Padding(padding: EdgeInsets.fromLTRB(0, 0, 100, 0)),
+                Text('ESCOLHA UM CENÁRIO')
+              ],
             ),
-            backgroundColor: Colors.blueGrey[900],
-            actionsIconTheme:
-                const IconThemeData(size: 30.0, color: Colors.white),
-            title: const Center(
-              child: (Text('Escolha um Cenário')),
-            ),
+            backgroundColor: Color(0xFF293241),
           ),
           body: Container(
             width: size.width,
             height: size.height,
-            color: Colors.grey[350],
+            color: Color(0xFFDDDDDD),
             child: LayoutBuilder(builder: (_, constraints) {
               return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -94,14 +98,14 @@ class _LoadCenarioState extends State<LoadCenario> {
                     Container(
                       width: constraints.maxWidth,
                       height: constraints.maxHeight,
-                      color: Colors.grey[350],
+                      color: Color(0xFFDDDDDD),
                       child: Stack(
                         children: [
                           Column(children: [
                             Container(
                               width: constraints.maxWidth,
                               height: constraints.maxHeight,
-                              color: Colors.white,
+                              color: Color(0xFFDDDDDD),
                               child: Column(
                                 children: <Widget>[
                                   Expanded(
@@ -109,17 +113,17 @@ class _LoadCenarioState extends State<LoadCenario> {
                                       gridDelegate:
                                           const SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 1,
-                                              childAspectRatio: 1.5),
+                                              childAspectRatio: 2.3),
                                       itemCount: _arraydeCenarios.length,
                                       itemBuilder: (context, index) {
                                         return SizedBox(
                                             width: constraints.maxWidth * .90,
-                                            height: constraints.maxHeight * .40,
+                                            height: constraints.maxHeight * .20,
                                             child: SizedBox(
                                                 width:
                                                     constraints.maxWidth * .90,
                                                 height:
-                                                    constraints.maxHeight * .40,
+                                                    constraints.maxHeight * .20,
                                                 child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
@@ -129,19 +133,19 @@ class _LoadCenarioState extends State<LoadCenario> {
                                                           _arraydeFotos[index],
                                                       height: constraints
                                                               .maxHeight *
-                                                          .30,
+                                                          .20,
                                                       width:
                                                           constraints.maxWidth *
-                                                              .40,
+                                                              .45,
                                                       fit: BoxFit.cover,
                                                     ),
                                                     SizedBox(
                                                       width:
                                                           constraints.maxWidth *
-                                                              .40,
+                                                              .45,
                                                       height: constraints
                                                               .maxHeight *
-                                                          .30,
+                                                          .20,
                                                       child: TextButton(
                                                         style: TextButton
                                                             .styleFrom(

@@ -40,15 +40,17 @@ class _LoadCenarioState extends State<LoadTela> {
           primaryColor: Colors.blueGrey[900],
         ),
         home: Scaffold(
+            backgroundColor: Color(0xFFDDDDDD),
             appBar: AppBar(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
                   bottom: Radius.circular(30),
                 ),
               ),
-              backgroundColor: Colors.blueGrey[900],
+              backgroundColor: Color(0xFF293241),
               actionsIconTheme:
                   const IconThemeData(size: 30.0, color: Colors.white),
+              toolbarHeight: 100,
               title: const Center(
                 child: (Text('LOADING')),
               ),
@@ -64,18 +66,18 @@ class _LoadCenarioState extends State<LoadTela> {
                         Container(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight,
-                            color: Colors.white,
+                            color: Color(0xFFDDDDDD),
                             child: Stack(children: [
                               Container(
                                   width: constraints.maxWidth,
                                   height: constraints.maxHeight,
-                                  color: Colors.white,
+                                  color: Color(0xFFDDDDDD),
                                   child: Column(children: <Widget>[
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
                                     ),
                                     Container(
-                                        width: constraints.maxWidth * .90,
+                                        width: constraints.maxWidth * .70,
                                         height: constraints.maxHeight * .50,
                                         //color: Colors.black,
                                         decoration: const BoxDecoration(
@@ -85,16 +87,16 @@ class _LoadCenarioState extends State<LoadTela> {
                                                 bottomLeft: Radius.circular(10),
                                                 bottomRight:
                                                     Radius.circular(10)),
-                                            color: Colors.white,
+                                            color: Color(0xFFDDDDDD),
                                             image: DecorationImage(
                                               image: NetworkImage(
                                                   'assets/espera.png'),
-                                              fit: BoxFit.cover,
+                                              fit: BoxFit.fill,
                                             ))),
                                     Container(
                                       width: constraints.maxWidth * .90,
                                       height: constraints.maxHeight * .15,
-                                      color: Colors.white,
+                                      color: Color(0xFFDDDDDD),
                                       child: Center(
                                           child: Text(
                                         'Procurando  Oponente',

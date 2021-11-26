@@ -136,11 +136,7 @@ class SignUpPage extends StatelessWidget {
                                           FlatButton(
                                               child: Text("OK"),
                                               onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            LoginPage()));
+                                                Navigator.pop(context);
                                               })
                                         ]);
                                   },

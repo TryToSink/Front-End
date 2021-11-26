@@ -26,29 +26,33 @@ class _LoadConfigState extends State<LoadConfig> {
           primaryColor: Colors.blueGrey[900],
         ),
         home: Scaffold(
+            backgroundColor: Color(0xFFDDDDDD),
             appBar: AppBar(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
                   bottom: Radius.circular(30),
                 ),
               ),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              backgroundColor: Colors.blueGrey[900],
-              actionsIconTheme:
-                  const IconThemeData(size: 30.0, color: Colors.white),
-              title: const Center(
-                child: (Text('CONFIGURAÇÕES')),
+              backgroundColor: Color(0xFF293241),
+              toolbarHeight: 100,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                //crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(Icons.arrow_back)),
+                  Padding(padding: EdgeInsets.fromLTRB(0, 0, 120, 0)),
+                  Text('CONFIGURAÇÕES')
+                ],
               ),
             ),
             body: Container(
                 width: size.width,
                 height: size.height,
-                color: Colors.white,
+                color: Color(0xFFDDDDDD),
                 child: LayoutBuilder(builder: (_, constraints) {
                   return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +65,7 @@ class _LoadConfigState extends State<LoadConfig> {
                               Container(
                                   width: constraints.maxWidth,
                                   height: constraints.maxHeight,
-                                  color: Colors.white,
+                                  color: Color(0xFFDDDDDD),
                                   child: Column(children: <Widget>[
                                     Padding(
                                       padding: EdgeInsets.fromLTRB(0, 40, 0, 0),

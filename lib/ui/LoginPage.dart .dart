@@ -108,9 +108,10 @@ class LoginPage extends StatelessWidget {
 
                                 var User =
                                     await LoginApi.login(username, password);
+                                var ID = await LoginApi.get(username, password);
 
-                                if (User.toString().isNotEmpty) {
-                                  _navegaHomepage(context, User.toString());
+                                if (User) {
+                                  _navegaHomepage(context, ID.toString());
                                 } else {
                                   showDialog(
                                     context: context,

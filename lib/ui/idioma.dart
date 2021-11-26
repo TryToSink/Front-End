@@ -1,7 +1,9 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 
 class PageIdioma extends StatefulWidget {
-  PageIdioma({Key? key}) : super(key: key);
+  PageIdioma({Key key}) : super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
@@ -9,6 +11,9 @@ class PageIdioma extends StatefulWidget {
 }
 
 class _IdiomaState extends State<PageIdioma> {
+  bool value = false;
+  bool value2 = false;
+  bool value3 = false;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -16,32 +21,36 @@ class _IdiomaState extends State<PageIdioma> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
 //        brightness: Brightness.dark,
-        primaryColor: Colors.blueGrey[900],
+        primaryColor: Color(0xFF293241),
       ),
       home: Scaffold(
+        backgroundColor: Color(0xFFDDDDDD),
         appBar: AppBar(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(30),
             ),
           ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          backgroundColor: Colors.blueGrey[900],
-          actionsIconTheme:
-              const IconThemeData(size: 30.0, color: Colors.white),
-          title: const Center(
-            child: (Text('IDIOMA')),
+          toolbarHeight: 100,
+          backgroundColor: Color(0xFF293241),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            //crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icon(Icons.arrow_back)),
+              Padding(padding: EdgeInsets.fromLTRB(0, 0, 170, 0)),
+              Text('IDIOMA')
+            ],
           ),
         ),
         body: Container(
           width: size.width,
           height: size.height,
-          color: Colors.white,
+          color: Color(0xFFDDDDDD),
           child: LayoutBuilder(
             builder: (_, constraints) {
               return Column(
@@ -61,6 +70,8 @@ class _IdiomaState extends State<PageIdioma> {
                           elevation: 15,
                           shadowColor: Colors.grey),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
                               height: 40,
@@ -76,9 +87,6 @@ class _IdiomaState extends State<PageIdioma> {
                                     image: NetworkImage('assets/portugues.png'),
                                     fit: BoxFit.cover,
                                   ))),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 50, 50, 0),
-                          ),
                           Text(
                             'Português',
                             style: const TextStyle(
@@ -87,20 +95,16 @@ class _IdiomaState extends State<PageIdioma> {
                                 color: Colors.black),
                             softWrap: true,
                           ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 100, 0),
-                          ),
                           Checkbox(
-                            value: true,
+                            value: this.value,
                             onChanged: (value) {
-                              toggleCheckbox(value);
-                            },
+                              setState(() {
+                                this.value = value;
+                              });
+                            }, //Checkbox
                             activeColor: Colors.green,
                             checkColor: Colors.white,
                             tristate: false,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
                           ),
                         ],
                       ),
@@ -119,6 +123,8 @@ class _IdiomaState extends State<PageIdioma> {
                           elevation: 15,
                           shadowColor: Colors.grey),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
                               height: 40,
@@ -134,9 +140,6 @@ class _IdiomaState extends State<PageIdioma> {
                                     image: NetworkImage('assets/ingles.png'),
                                     fit: BoxFit.cover,
                                   ))),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 50, 50, 0),
-                          ),
                           Text(
                             'English',
                             style: const TextStyle(
@@ -145,14 +148,13 @@ class _IdiomaState extends State<PageIdioma> {
                                 color: Colors.black),
                             softWrap: true,
                           ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 130, 0),
-                          ),
                           Checkbox(
-                            value: false,
-                            onChanged: (value) {
-                              toggleCheckbox(value);
-                            },
+                            value: this.value3,
+                            onChanged: (value3) {
+                              setState(() {
+                                this.value3 = value3;
+                              });
+                            }, //Checkbox
                             activeColor: Colors.green,
                             checkColor: Colors.white,
                             tristate: false,
@@ -174,6 +176,8 @@ class _IdiomaState extends State<PageIdioma> {
                           elevation: 15,
                           shadowColor: Colors.grey),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
                               height: 40,
@@ -189,9 +193,6 @@ class _IdiomaState extends State<PageIdioma> {
                                     image: NetworkImage('assets/espanhol.png'),
                                     fit: BoxFit.cover,
                                   ))),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 50, 50, 0),
-                          ),
                           Text(
                             'Español',
                             style: const TextStyle(
@@ -200,20 +201,16 @@ class _IdiomaState extends State<PageIdioma> {
                                 color: Colors.black),
                             softWrap: true,
                           ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 125, 0),
-                          ),
                           Checkbox(
-                            value: false,
-                            onChanged: (value) {
-                              toggleCheckbox(value);
-                            },
+                            value: this.value2,
+                            onChanged: (value2) {
+                              setState(() {
+                                this.value2 = value2;
+                              });
+                            }, //Checkbox
                             activeColor: Colors.green,
                             checkColor: Colors.white,
                             tristate: false,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 40, 30, 0),
                           ),
                         ],
                       ),
@@ -249,22 +246,5 @@ class _IdiomaState extends State<PageIdioma> {
         ),
       ),
     );
-  }
-
-  void toggleCheckbox(bool? value) {
-    var isChecked = false;
-    if (isChecked == false) {
-      // Put your code here which you want to execute on CheckBox Checked event.
-      setState(() {
-        isChecked = true;
-        var checkedResult = 'Checkbox is CHECKED';
-      });
-    } else {
-      // Put your code here which you want to execute on CheckBox Un-Checked event.
-      setState(() {
-        isChecked = false;
-        var checkedResult = 'Checkbox is UN-CHECKED';
-      });
-    }
   }
 }
