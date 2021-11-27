@@ -19,6 +19,7 @@ class _LoadEnergiaState extends State<LoadEnergia> {
   bool value = false;
   bool value2 = false;
   bool value3 = false;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -124,9 +125,7 @@ class _LoadEnergiaState extends State<LoadEnergia> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Row(children: [
-                                              Image.asset(
-                                                'assets/energy.png'
-                                              ),
+                                              Image.asset('assets/energy.png'),
                                               Text(
                                                 'X 1   ',
                                                 style: const TextStyle(
@@ -148,7 +147,8 @@ class _LoadEnergiaState extends State<LoadEnergia> {
                                                 setState(() {
                                                   this.value = value;
                                                 });
-                                              }, //Checkbox
+                                              },
+                                              //Checkbox
                                               activeColor: Colors.green,
                                               checkColor: Colors.white,
                                               tristate: false,
@@ -210,7 +210,8 @@ class _LoadEnergiaState extends State<LoadEnergia> {
                                                 setState(() {
                                                   this.value2 = value2;
                                                 });
-                                              }, //Checkbox
+                                              },
+                                              //Checkbox
                                               activeColor: Colors.green,
                                               checkColor: Colors.white,
                                               tristate: false,
@@ -272,7 +273,8 @@ class _LoadEnergiaState extends State<LoadEnergia> {
                                                 setState(() {
                                                   this.value3 = value3;
                                                 });
-                                              }, //Checkbox
+                                              },
+                                              //Checkbox
                                               activeColor: Colors.green,
                                               checkColor: Colors.white,
                                               tristate: false,

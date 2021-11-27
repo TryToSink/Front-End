@@ -10,6 +10,7 @@ import 'cenariosclass.dart';
 class LoadCenario extends StatefulWidget {
   String idmodojogo;
   String idUser;
+
   LoadCenario({Key key, this.idmodojogo, this.idUser}) : super(key: key);
 
   @override
@@ -22,7 +23,9 @@ class _LoadCenarioState extends State<LoadCenario> {
   String idCenario;
   String idmodojogo;
   String idUser;
+
   _LoadCenarioState({this.idmodojogo, this.idUser});
+
   String url2 = 'http://3.144.90.4:3333/modoJogo/find';
   PostDart returno;
   List<Cenarios> _returno2 = [];
