@@ -1,15 +1,14 @@
 import 'posicao.dart';
 
-import 'package:proj0511/ui/barcosDTO.dart';
+import 'package:proj0511/ui/barcos_dto.dart';
 
 class BarcoPosicao {
-
   BarcoPosicao(this.barco);
 
-  barcosDTO barco;
+  BarcosDTO barco;
   List<Posicao> posicoes = [];
 
-  void printT(){
+  void printT() {
     print(barco);
     print(posicoes);
   }

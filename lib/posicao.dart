@@ -3,15 +3,15 @@ class Posicao {
   late int eixoX;
   late int eixoY;
 
-  String retorno (){
+  String retorno() {
     return "eixoX: $eixoX, eixoY: $eixoY";
   }
 
-  int returnEixoX (){
+  int returnEixoX() {
     return eixoX;
   }
 
-  int returnEixoY (){
+  int returnEixoY() {
     return eixoY;
   }
 }

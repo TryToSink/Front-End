@@ -7,9 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
-import 'package:proj0511/ui/profile_page_edit%20(1).dart';
+import 'package:proj0511/ui/profile_page_edit.dart';
 import 'package:proj0511/ui/user.dart';
-import 'package:proj0511/ui/apiSignUp.dart';
+import 'package:proj0511/ui/api_sign_up.dart';
 
 class ProfilePage extends StatefulWidget {
   late String idUser;
@@ -25,6 +25,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   String idUser;
+
   _ProfilePageState({Key? key, required this.idUser});
 
   late String imageName = 'foto';

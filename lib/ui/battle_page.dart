@@ -79,17 +79,17 @@ class _BatlePageState extends State<BatlePage> {
         color: Color(0xff75CCFE),
         child: _meuCampo[index]["status"]
             ? _meuCampo[index]["rotacao"]
-            ? Transform.rotate(
-          angle: degress * pi / 180,
-          child: Image.asset(
-            "${_meuCampo[index]["image"]}",
-            fit: BoxFit.fill,
-          ),
-        )
-            : Image.asset(
-          "${_meuCampo[index]["image"]}",
-          fit: BoxFit.fill,
-        )
+                ? Transform.rotate(
+                    angle: degress * pi / 180,
+                    child: Image.asset(
+                      "${_meuCampo[index]["image"]}",
+                      fit: BoxFit.fill,
+                    ),
+                  )
+                : Image.asset(
+                    "${_meuCampo[index]["image"]}",
+                    fit: BoxFit.fill,
+                  )
             : null);
   }
 
@@ -98,28 +98,27 @@ class _BatlePageState extends State<BatlePage> {
     return GestureDetector(
       onTap: _valid
           ? () {
-        setState(() {
-          _advCampo[index]["ataque"] = true;
-          _advCampo[index]["image"] = "images/fire.png";
-
-        });
-      }
+              setState(() {
+                _advCampo[index]["ataque"] = true;
+                _advCampo[index]["image"] = "images/fire.png";
+              });
+            }
           : null,
       child: Container(
           color: Color(0xff75CCFE),
           child: _advCampo[index]["ataque"]
               ? _advCampo[index]["rotacao"]
-              ? Transform.rotate(
-            angle: degress * pi / 180,
-            child: Image.asset(
-              "${_advCampo[index]["image"]}",
-              fit: BoxFit.fill,
-            ),
-          )
-              : Image.asset(
-            "${_advCampo[index]["image"]}",
-            fit: BoxFit.fill,
-          )
+                  ? Transform.rotate(
+                      angle: degress * pi / 180,
+                      child: Image.asset(
+                        "${_advCampo[index]["image"]}",
+                        fit: BoxFit.fill,
+                      ),
+                    )
+                  : Image.asset(
+                      "${_advCampo[index]["image"]}",
+                      fit: BoxFit.fill,
+                    )
               : null),
     );
   }
@@ -173,7 +172,7 @@ class _BatlePageState extends State<BatlePage> {
                       children: [
                         Text("${advUser[0]["name"]}",
                             style:
-                            TextStyle(color: Colors.white, fontSize: 20)),
+                                TextStyle(color: Colors.white, fontSize: 20)),
                         Divider(),
                         Row(
                           children: [
@@ -214,16 +213,16 @@ class _BatlePageState extends State<BatlePage> {
                                     child: GridView.builder(
                                       itemCount: _meuCampo.length,
                                       gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          mainAxisExtent:
-                                          constraint2.maxHeight *
-                                              (gridSize / 2.25),
-                                          mainAxisSpacing:
-                                          constraint2.maxHeight * 0.001,
-                                          crossAxisSpacing:
-                                          constraint2.maxHeight * 0.001,
-                                          crossAxisCount:
-                                          linhaColuna.toInt()),
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              mainAxisExtent:
+                                                  constraint2.maxHeight *
+                                                      (gridSize / 2.25),
+                                              mainAxisSpacing:
+                                                  constraint2.maxHeight * 0.001,
+                                              crossAxisSpacing:
+                                                  constraint2.maxHeight * 0.001,
+                                              crossAxisCount:
+                                                  linhaColuna.toInt()),
                                       itemBuilder: buildFieldMeuCampo,
                                     )),
                               ),
@@ -231,7 +230,7 @@ class _BatlePageState extends State<BatlePage> {
                                 padding: EdgeInsets.only(right: 20),
                                 child: Column(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Container(
                                       height: constraint2.maxHeight * 0.07,
@@ -283,18 +282,18 @@ class _BatlePageState extends State<BatlePage> {
                                       child: GridView.builder(
                                         itemCount: _advCampo.length,
                                         gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                            mainAxisExtent:
-                                            constraint3.maxHeight *
-                                                gridSize,
-                                            mainAxisSpacing: constraint3
-                                                .maxHeight *
-                                                0.004,
-                                            crossAxisSpacing:
-                                            constraint3.maxHeight *
-                                                0.004,
-                                            crossAxisCount:
-                                            linhaColuna.toInt()),
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                                mainAxisExtent:
+                                                    constraint3.maxHeight *
+                                                        gridSize,
+                                                mainAxisSpacing: constraint3
+                                                        .maxHeight *
+                                                    0.004,
+                                                crossAxisSpacing:
+                                                    constraint3.maxHeight *
+                                                        0.004,
+                                                crossAxisCount:
+                                                    linhaColuna.toInt()),
                                         itemBuilder: buildFieldAdvCampo,
                                       ),
                                     ),
@@ -330,7 +329,7 @@ class _BatlePageState extends State<BatlePage> {
                       children: [
                         Text("${advUser[0]["name"]}",
                             style:
-                            TextStyle(color: Colors.white, fontSize: 20)),
+                                TextStyle(color: Colors.white, fontSize: 20)),
                         Divider(),
                         Row(
                           children: [

@@ -1,6 +1,6 @@
 // @dart=2.9
 import 'package:flutter/material.dart';
-import 'package:proj0511/ui/LoginPage.dart%20.dart';
+import 'package:proj0511/ui/login_page.dart';
 
 void main() {
   runApp(Myapp());

@@ -2,13 +2,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/socketConnect.dart';
+import 'package:proj0511/ui/socket_connect.dart';
 
 import 'cenariosclass.dart';
 
 class LoadTela extends StatefulWidget {
   String idCenario;
   String idUser;
+
   LoadTela({Key key, this.idCenario, this.idUser}) : super(key: key);
 
   @override
@@ -20,6 +21,7 @@ class LoadTela extends StatefulWidget {
 class _LoadCenarioState extends State<LoadTela> {
   String idCenario;
   String idUser;
+
   _LoadCenarioState({Key key, this.idCenario, this.idUser});
 
   @override

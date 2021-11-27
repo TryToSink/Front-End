@@ -5,12 +5,12 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:proj0511/barcoPosicao.dart';
+import 'package:proj0511/barco_posicao.dart';
 import 'package:proj0511/posicao.dart';
-import 'package:proj0511/ui/battlePage.dart';
+import 'package:proj0511/ui/battle_page.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:proj0511/ui/barcosDTO.dart';
+import 'package:proj0511/ui/barcos_dto.dart';
 import '../timer.dart';
 
 class PositionBoat extends StatefulWidget {
@@ -26,7 +26,7 @@ class _PositionBoatState extends State<PositionBoat> {
   List _mCampo = [];
   List _aCampo = [];
   bool _rotation = false;
-  List<barcosDTO> pBuild = [];
+  List<BarcosDTO> pBuild = [];
   List<BarcoPosicao> barcosPosicoes = [];
   Color buttonColor = Colors.blueAccent;
   final degress = 90.0;
@@ -143,7 +143,8 @@ class _PositionBoatState extends State<PositionBoat> {
   }
 
 // funcao para posicionar barco
-  void posicionaBarco(int index, String name, int n, String img, barcosDTO barco) {
+  void posicionaBarco(
+      int index, String name, int n, String img, BarcosDTO barco) {
     String imgUse = img.substring(0, 11);
     BarcoPosicao posBarco = new BarcoPosicao(barco);
     bool save = true;
@@ -240,24 +241,24 @@ class _PositionBoatState extends State<PositionBoat> {
   Widget buildTargets(BuildContext context, int index) {
     return DragTarget<int>(
         builder: (context, data, rejectData) => Container(
-          child: _mCampo[index]["status"]
-              ? _mCampo[index]["rotacao"]
-              ? Transform.rotate(
-            angle: degress * pi / 180,
-            child: _mCampo[index]["status"]
-                ? Image.asset(
-              "${_mCampo[index]["image"]}",
-              fit: BoxFit.fill,
-            )
-                : Image.asset(defaultImage),
-          )
-              : Image.asset(
-            "${_mCampo[index]["image"]}",
-            fit: BoxFit.fill,
-          )
-              : Image.asset(defaultImage),
-          color: Colors.blueAccent,
-        ),
+              child: _mCampo[index]["status"]
+                  ? _mCampo[index]["rotacao"]
+                      ? Transform.rotate(
+                          angle: degress * pi / 180,
+                          child: _mCampo[index]["status"]
+                              ? Image.asset(
+                                  "${_mCampo[index]["image"]}",
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.asset(defaultImage),
+                        )
+                      : Image.asset(
+                          "${_mCampo[index]["image"]}",
+                          fit: BoxFit.fill,
+                        )
+                  : Image.asset(defaultImage),
+              color: Colors.blueAccent,
+            ),
         onAccept: (data) {
           if (_mCampo[index]["status"] == false &&
               _mCampo[index]["linha"] != 9) {
@@ -313,8 +314,8 @@ class _PositionBoatState extends State<PositionBoat> {
     List<dynamic> _Barcos = _jogo[0]["jogadorPartida1"]["cenario"]["barcos"];
 
     for (int i = 0; i < _Barcos.length; i++) {
-      barcosDTO barco = new barcosDTO();
-      barco.IDBarco = _Barcos[i]["idBarco"];
+      BarcosDTO barco = new BarcosDTO();
+      barco.iDBarco = _Barcos[i]["idBarco"];
       barco.nomeBarco = _Barcos[i]["nome"];
       barco.tamanho = _Barcos[i]["tamanho"];
       barco.foto1 = _Barcos[i]["foto1"];
@@ -352,13 +353,11 @@ class _PositionBoatState extends State<PositionBoat> {
   void startTimer() {
     time = Timer.periodic(Duration(seconds: 1), (_) {
       setState(() {
-        if (mins == 0 && seconds == 0){
+        if (mins == 0 && seconds == 0) {
           time?.cancel();
           print(barcosPosicoes);
-          if (barcosPosicoes.isEmpty || barcosPosicoes.length<5)aleatorio();
-        }
-
-        else if (seconds == 0) {
+          if (barcosPosicoes.isEmpty || barcosPosicoes.length < 5) aleatorio();
+        } else if (seconds == 0) {
           mins--;
           seconds = maxSeconds;
         } else
@@ -415,14 +414,14 @@ class _PositionBoatState extends State<PositionBoat> {
                             return GridView.builder(
                                 itemCount: _mCampo.length,
                                 gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisExtent:
-                                    constraints2.maxHeight * gridSize,
-                                    mainAxisSpacing:
-                                    constraints2.maxHeight * 0.001,
-                                    crossAxisSpacing:
-                                    constraints2.maxWidth * 0.001,
-                                    crossAxisCount: linhasColunas),
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        mainAxisExtent:
+                                            constraints2.maxHeight * gridSize,
+                                        mainAxisSpacing:
+                                            constraints2.maxHeight * 0.001,
+                                        crossAxisSpacing:
+                                            constraints2.maxWidth * 0.001,
+                                        crossAxisCount: linhasColunas),
                                 itemBuilder: buildTargets);
                           })),
                       Container(
@@ -482,17 +481,17 @@ class _PositionBoatState extends State<PositionBoat> {
                       IconButton(
                         onPressed: _rotation
                             ? () {
-                          setState(() {
-                            _rotation = false;
-                            buttonColor = Colors.blueAccent;
-                          });
-                        }
+                                setState(() {
+                                  _rotation = false;
+                                  buttonColor = Colors.blueAccent;
+                                });
+                              }
                             : () {
-                          setState(() {
-                            _rotation = true;
-                            buttonColor = Colors.redAccent;
-                          });
-                        },
+                                setState(() {
+                                  _rotation = true;
+                                  buttonColor = Colors.redAccent;
+                                });
+                              },
                         icon: Icon(Icons.refresh),
                         color: buttonColor,
                         hoverColor: Color(0xff3D5A80),
@@ -515,7 +514,7 @@ class _PositionBoatState extends State<PositionBoat> {
                                     BatlePage(_mCampo, _aCampo)));
                       },
                       style:
-                      ElevatedButton.styleFrom(primary: Color(0xff3D5A80)),
+                          ElevatedButton.styleFrom(primary: Color(0xff3D5A80)),
                       child: Text(
                         "Pronto!",
                         style: TextStyle(fontSize: 20),

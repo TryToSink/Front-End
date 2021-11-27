@@ -8,8 +8,6 @@ int seconds = maxSeconds;
 int mins = maxMins;
 Timer? time;
 
-
-
 Widget timer() {
   if (seconds < 10) {
     return Text(
