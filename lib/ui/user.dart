@@ -1,4 +1,4 @@
-import 'package:proj0511/ui/apiSignUp.dart';
+import 'package:proj0511/ui/api_sign_up.dart';
 
 class User {
   late String id;

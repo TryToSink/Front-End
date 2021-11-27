@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -5,12 +7,12 @@ import 'package:proj0511/ui/cenarios.dart';
 import 'package:proj0511/ui/configuracao.dart';
 import 'package:proj0511/ui/energia.dart';
 import 'package:flutter/foundation.dart';
-import 'package:proj0511/ui/profile_page%20(1).dart';
-import 'package:proj0511/ui/socketConnect.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:proj0511/ui/profile_page.dart';
+import 'package:proj0511/ui/socket_connect.dart';
 
 class HomePage extends StatefulWidget {
   String idUser;
+
   HomePage({Key? key, required this.idUser}) : super(key: key);
 
   @override
@@ -19,8 +21,11 @@ class HomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<HomePage> {
   String idUser;
+
   _MyHomePageState({Key? key, required this.idUser});
+
   late String url = 'http://3.144.90.4:3333/modoJogo/lista';
+
 //late String urlSocket = 'http://3.144.90.4:3334/';
   var _lista = [];
 
@@ -51,34 +56,33 @@ class _MyHomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return MaterialApp(
-        color: Color(0xFFDDDDDD),
+        color: const Color(0xFFDDDDDD),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          backgroundColor: Color(0xFFDDDDDD),
-          primaryColor: Color(0xFFDDDDDD),
+          backgroundColor: const Color(0xFFDDDDDD),
+          primaryColor: const Color(0xFFDDDDDD),
         ),
         home: Scaffold(
-          backgroundColor: Color(0xFFDDDDDD),
+          backgroundColor: const Color(0xFFDDDDDD),
           appBar: AppBar(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(30),
               ),
             ),
-            backgroundColor: Color(0xFF293241),
+            backgroundColor: const Color(0xFF293241),
             toolbarHeight: 100,
             actionsIconTheme:
                 const IconThemeData(size: 30.0, color: Color(0xFFDDDDDD)),
-            title: const Center(
-              child: (Text('                MODO DE JOGO')),
-            ),
+            centerTitle: true,
+            title: const Text('MODO DE JOGO'),
             actions: <Widget>[
               Padding(
                   padding: const EdgeInsets.all(10),
                   child: Container(
                     height: 10,
                     width: 60,
-                    color: Color(0xFF293241),
+                    color: const Color(0xFF293241),
                     child: Center(
                       child: TextButton(
                           style: TextButton.styleFrom(
@@ -92,9 +96,9 @@ class _MyHomePageState extends State<HomePage> {
                                   builder: (context) => LoadEnergia(),
                                 ));
                           },
-                          child: Text(
+                          child: const Text(
                             '/20 +',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 15,
                               color: Colors.white,
                             ),
@@ -106,7 +110,7 @@ class _MyHomePageState extends State<HomePage> {
           body: Container(
             width: size.width,
             height: size.height,
-            color: Color(0xFFDDDDDD),
+            color: const Color(0xFFDDDDDD),
             child: LayoutBuilder(builder: (_, constraints) {
               return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -114,14 +118,14 @@ class _MyHomePageState extends State<HomePage> {
                     Container(
                       width: constraints.maxWidth,
                       height: constraints.maxHeight * .88,
-                      color: Color(0xFFDDDDDD),
+                      color: const Color(0xFFDDDDDD),
                       child: Stack(
                         children: [
                           Column(children: [
                             Container(
                               width: constraints.maxWidth,
                               height: constraints.maxHeight * .88,
-                              color: Color(0xFFDDDDDD),
+                              color: const Color(0xFFDDDDDD),
                               child: Column(
                                 children: <Widget>[
                                   Expanded(
@@ -145,31 +149,23 @@ class _MyHomePageState extends State<HomePage> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Container(
-                                                    width:
-                                                        constraints
-                                                                .maxWidth *
-                                                            .40,
-                                                    height:
-                                                        constraints
-                                                                .maxHeight *
-                                                            .15,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            color: Colors.grey,
-                                                            image:
-                                                                DecorationImage(
-                                                              image: NetworkImage(
-                                                                  'assets/computadores.png'),
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                            ))),
+                                                  width: constraints.maxWidth *
+                                                      .40,
+                                                  height:
+                                                      constraints.maxHeight *
+                                                          .15,
+                                                  decoration: const BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(
+                                                                      10)),
+                                                      color: Colors.grey),
+                                                  child: Image.asset(
+                                                      'assets/computadores.png'),
+                                                ),
                                                 SizedBox(
                                                   width: constraints.maxWidth *
                                                       .45,
@@ -192,27 +188,25 @@ class _MyHomePageState extends State<HomePage> {
                                                               .start,
                                                       mainAxisSize:
                                                           MainAxisSize.max,
-                                                      children: [
+                                                      children: const [
                                                         Text(
                                                           'Jogar vs IA',
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 20,
-                                                                  color: Colors
-                                                                      .black),
+                                                          style: TextStyle(
+                                                              fontSize: 20,
+                                                              color:
+                                                                  Colors.black),
                                                           softWrap: true,
                                                         ),
-                                                        const Padding(
+                                                        Padding(
                                                             padding:
                                                                 EdgeInsets.all(
                                                                     5)),
                                                         Text(
                                                           "    Em manutenção",
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: Colors
-                                                                      .red),
+                                                          style: TextStyle(
+                                                              fontSize: 10,
+                                                              color:
+                                                                  Colors.red),
                                                           softWrap: true,
                                                         ),
                                                       ],
@@ -289,32 +283,28 @@ class _MyHomePageState extends State<HomePage> {
                                                               .center,
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
-                                                              .start,
+                                                              .center,
                                                       mainAxisSize:
                                                           MainAxisSize.max,
-                                                      children: [
+                                                      children: const [
                                                         Text(
                                                           'Jogar vs Amigo',
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 20,
-                                                                  color: Colors
-                                                                      .black),
+                                                          style: TextStyle(
+                                                              fontSize: 20,
+                                                              color:
+                                                                  Colors.black),
                                                           softWrap: true,
                                                         ),
-                                                        const Padding(
+                                                        Padding(
                                                             padding:
                                                                 EdgeInsets.all(
                                                                     5)),
                                                         Text(
-                                                          "    Aproximadamente " +
-                                                              '2' +
-                                                              " min.",
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: Colors
-                                                                      .orange),
+                                                          "Aproximadamente 4 min.",
+                                                          style: TextStyle(
+                                                              fontSize: 10,
+                                                              color: Colors
+                                                                  .orange),
                                                           softWrap: true,
                                                         ),
                                                       ],
@@ -391,32 +381,28 @@ class _MyHomePageState extends State<HomePage> {
                                                               .center,
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
-                                                              .start,
+                                                              .center,
                                                       mainAxisSize:
                                                           MainAxisSize.max,
-                                                      children: [
+                                                      children: const [
                                                         Text(
                                                           'Jogar vs Aleátorio',
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 20,
-                                                                  color: Colors
-                                                                      .black),
+                                                          style: TextStyle(
+                                                              fontSize: 20,
+                                                              color:
+                                                                  Colors.black),
                                                           softWrap: true,
                                                         ),
-                                                        const Padding(
+                                                        Padding(
                                                             padding:
                                                                 EdgeInsets.all(
                                                                     5)),
                                                         Text(
-                                                          "    Aproximadamente " +
-                                                              '2' +
-                                                              " min.",
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: Colors
-                                                                      .orange),
+                                                          "Aproximadamente 2 min.",
+                                                          style: TextStyle(
+                                                              fontSize: 10,
+                                                              color: Colors
+                                                                  .orange),
                                                           softWrap: true,
                                                         ),
                                                       ],
@@ -454,7 +440,7 @@ class _MyHomePageState extends State<HomePage> {
                       height: constraints.maxHeight * .12,
                       //color: Colors.lightBlue[600],
                       decoration: BoxDecoration(
-                          color: Color(0xFF293241),
+                          color: const Color(0xFF293241),
                           border: Border.all(color: Colors.black),
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(30),

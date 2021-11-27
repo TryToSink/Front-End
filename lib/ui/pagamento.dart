@@ -19,6 +19,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
   bool value2 = false;
   bool value3 = false;
   bool value4 = false;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -108,7 +109,8 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                               setState(() {
                                                 this.value1 = value1;
                                               });
-                                            }, //Checkbox
+                                            },
+                                            //Checkbox
                                             activeColor: Colors.green,
                                             checkColor: Colors.white,
                                             tristate: false,
@@ -161,7 +163,8 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                               setState(() {
                                                 this.value2 = value2;
                                               });
-                                            }, //Checkbox
+                                            },
+                                            //Checkbox
                                             activeColor: Colors.green,
                                             checkColor: Colors.white,
                                             tristate: false,
@@ -214,7 +217,8 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                               setState(() {
                                                 this.value3 = value3;
                                               });
-                                            }, //Checkbox
+                                            },
+                                            //Checkbox
                                             activeColor: Colors.green,
                                             checkColor: Colors.white,
                                             tristate: false,
@@ -267,7 +271,8 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                               setState(() {
                                                 this.value4 = value4;
                                               });
-                                            }, //Checkbox
+                                            },
+                                            //Checkbox
                                             activeColor: Colors.green,
                                             checkColor: Colors.white,
                                             tristate: false,

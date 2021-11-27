@@ -21,18 +21,18 @@ class _IdiomaState extends State<PageIdioma> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
 //        brightness: Brightness.dark,
-        primaryColor: Color(0xFF293241),
+        primaryColor: const Color(0xFF293241),
       ),
       home: Scaffold(
-        backgroundColor: Color(0xFFDDDDDD),
+        backgroundColor: const Color(0xFFDDDDDD),
         appBar: AppBar(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(30),
             ),
           ),
           toolbarHeight: 100,
-          backgroundColor: Color(0xFF293241),
+          backgroundColor: const Color(0xFF293241),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             //crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,25 +41,25 @@ class _IdiomaState extends State<PageIdioma> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  icon: Icon(Icons.arrow_back)),
-              Padding(padding: EdgeInsets.fromLTRB(0, 0, 170, 0)),
-              Text('IDIOMA')
+                  icon: const Icon(Icons.arrow_back)),
+              const Padding(padding: EdgeInsets.fromLTRB(0, 0, 170, 0)),
+              const Text('IDIOMA')
             ],
           ),
         ),
         body: Container(
           width: size.width,
           height: size.height,
-          color: Color(0xFFDDDDDD),
+          color: const Color(0xFFDDDDDD),
           child: LayoutBuilder(
             builder: (_, constraints) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.fromLTRB(0, 30, 30, 0),
                   ),
-                  Container(
+                  SizedBox(
                     width: constraints.maxWidth * .80,
                     height: constraints.maxHeight * .15,
                     child: TextButton(
@@ -87,16 +87,16 @@ class _IdiomaState extends State<PageIdioma> {
                                     image: NetworkImage('assets/portugues.png'),
                                     fit: BoxFit.cover,
                                   ))),
-                          Text(
+                          const Text(
                             'Português',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
                             softWrap: true,
                           ),
                           Checkbox(
-                            value: this.value,
+                            value: value,
                             onChanged: (value) {
                               setState(() {
                                 this.value = value;
@@ -111,8 +111,8 @@ class _IdiomaState extends State<PageIdioma> {
                       onPressed: () {},
                     ),
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 10)),
-                  Container(
+                  const Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 10)),
+                  SizedBox(
                     width: constraints.maxWidth * .80,
                     height: constraints.maxHeight * .15,
                     child: TextButton(
@@ -140,16 +140,16 @@ class _IdiomaState extends State<PageIdioma> {
                                     image: NetworkImage('assets/ingles.png'),
                                     fit: BoxFit.cover,
                                   ))),
-                          Text(
+                          const Text(
                             'English',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
                             softWrap: true,
                           ),
                           Checkbox(
-                            value: this.value3,
+                            value: value3,
                             onChanged: (value3) {
                               setState(() {
                                 this.value3 = value3;
@@ -164,8 +164,8 @@ class _IdiomaState extends State<PageIdioma> {
                       onPressed: () {},
                     ),
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 10)),
-                  Container(
+                  const Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 10)),
+                  SizedBox(
                     width: constraints.maxWidth * .80,
                     height: constraints.maxHeight * .15,
                     child: TextButton(
@@ -193,16 +193,16 @@ class _IdiomaState extends State<PageIdioma> {
                                     image: NetworkImage('assets/espanhol.png'),
                                     fit: BoxFit.cover,
                                   ))),
-                          Text(
+                          const Text(
                             'Español',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
                             softWrap: true,
                           ),
                           Checkbox(
-                            value: this.value2,
+                            value: value2,
                             onChanged: (value2) {
                               setState(() {
                                 this.value2 = value2;
@@ -217,21 +217,21 @@ class _IdiomaState extends State<PageIdioma> {
                       onPressed: () {},
                     ),
                   ),
-                  Padding(padding: EdgeInsets.fromLTRB(0, 70, 0, 50)),
-                  Container(
+                  const Padding(padding: EdgeInsets.fromLTRB(0, 70, 0, 50)),
+                  SizedBox(
                     width: constraints.maxWidth * .70,
                     height: constraints.maxHeight * .10,
                     child: TextButton(
                       style: TextButton.styleFrom(
                           //maximumSize: size,
                           fixedSize: size,
-                          backgroundColor: Color(0xFF3D5AB0),
+                          backgroundColor: const Color(0xFF3D5AB0),
                           elevation: 15,
                           shadowColor: Colors.grey),
-                      child: Text(
+                      child: const Text(
                         'OK',
                         style:
-                            const TextStyle(fontSize: 25, color: Colors.white),
+                            TextStyle(fontSize: 25, color: Colors.white),
                         softWrap: true,
                       ),
                       onPressed: () {
