@@ -124,9 +124,8 @@ class _LoadEnergiaState extends State<LoadEnergia> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Row(children: [
-                                              Image(
-                                                image: NetworkImage(
-                                                    'assets/energy.png'),
+                                              Image.asset(
+                                                'assets/energy.png'
                                               ),
                                               Text(
                                                 'X 1   ',

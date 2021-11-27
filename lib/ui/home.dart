@@ -6,7 +6,7 @@ import 'package:proj0511/ui/configuracao.dart';
 import 'package:proj0511/ui/energia.dart';
 import 'package:flutter/foundation.dart';
 import 'package:proj0511/ui/profile_page%20(1).dart';
-import 'package:proj0511/ui/socketConnect%20(1).dart';
+import 'package:proj0511/ui/socketConnect.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomePage extends StatefulWidget {
