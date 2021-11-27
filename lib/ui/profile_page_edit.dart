@@ -10,6 +10,7 @@ import 'package:async/async.dart';
 
 class ProfilePageEdit extends StatefulWidget {
   String idUser;
+
   ProfilePageEdit({Key? key, required this.idUser}) : super(key: key);
 
   @override
@@ -18,6 +19,7 @@ class ProfilePageEdit extends StatefulWidget {
 
 class _ProfilePageEditState extends State<ProfilePageEdit> {
   String idUser;
+
   _ProfilePageEditState({Key? key, required this.idUser});
 
   File? image;

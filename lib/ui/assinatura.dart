@@ -1,4 +1,6 @@
 // @dart=2.9
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +21,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
   bool value1 = false;
   bool value2 = false;
   bool value3 = false;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -130,7 +133,8 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                                         setState(() {
                                                           this.value1 = value1;
                                                         });
-                                                      }, //Checkbox
+                                                      },
+                                                      //Checkbox
                                                       activeColor: Colors.black,
                                                       checkColor: Colors.white,
                                                       tristate: false,
@@ -209,7 +213,8 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                                         setState(() {
                                                           this.value2 = value2;
                                                         });
-                                                      }, //Checkbox
+                                                      },
+                                                      //Checkbox
                                                       activeColor:
                                                           Colors.yellow,
                                                       checkColor: Colors.white,
@@ -287,7 +292,8 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                                         setState(() {
                                                           this.value3 = value3;
                                                         });
-                                                      }, //Checkbox
+                                                      },
+                                                      //Checkbox
                                                       activeColor: Colors.blue,
                                                       checkColor: Colors.white,
                                                       tristate: false,

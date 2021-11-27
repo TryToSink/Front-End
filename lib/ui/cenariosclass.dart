@@ -7,6 +7,7 @@ class PostDart {
   bool ativo;
   Null foto;
   List<Cenarios> cenarios;
+
   PostDart(
       {this.idModoJogo,
       this.nome,
