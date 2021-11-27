@@ -98,6 +98,14 @@ class SignUpPage extends StatelessWidget {
                         decoration:
                             const InputDecoration(hintText: 'Repita a Senha'),
                         obscureText: true,
+                        validator: (pass) {
+                          if (pass!.isEmpty)
+                            return 'Campo obrigatório';
+                          else if (_passwordController.text !=
+                              _password2Controller.text)
+                            return 'As senhas não coincidem';
+                          return null;
+                        },
                       ),
                       const SizedBox(
                         height: 16,
@@ -121,26 +129,6 @@ class SignUpPage extends StatelessWidget {
                                 if (User) {
                                   _navegaHomepage(context);
                                 }
-                              }
-
-                              if (_passwordController.text !=
-                                  _password2Controller.text) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                        title: Text("Erro"),
-                                        content:
-                                            Text("As senhas não coincidem"),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                              child: Text("OK"),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              })
-                                        ]);
-                                  },
-                                );
                               }
                             },
                             color: Color(0xff3D5A80),

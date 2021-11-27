@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/socketConnect%20(1).dart';
+import 'package:proj0511/ui/socketConnect.dart';
 
 import 'cenariosclass.dart';
 
