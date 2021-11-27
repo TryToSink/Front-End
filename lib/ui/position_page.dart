@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -22,7 +24,8 @@ class PositionBoat extends StatefulWidget {
 
 class _PositionBoatState extends State<PositionBoat> {
   // Declarações de variaveis
-  final linhasColunas = 10;
+  final linhasColunas = 8;
+  List _lista = [];
   List _mCampo = [];
   List _aCampo = [];
   bool _rotation = false;
@@ -30,12 +33,26 @@ class _PositionBoatState extends State<PositionBoat> {
   List<BarcoPosicao> barcosPosicoes = [];
   Color buttonColor = Colors.blueAccent;
   final degress = 90.0;
-  String defaultImage = "images/water.png";
+  String defaultImage = "assets/water.png";
   int aux = 0;
   Random random = new Random();
   int maxAlt = 6;
   var _jogo = [];
   double gridSize = 0.0;
+
+  void carregarCenario() async {
+    String url = 'http://3.144.90.4:3333/cenario/find?idCenario=7a7ee764-bf9b-4fbc-916c-020568e8e032';
+    try {
+      final response = await http.get(Uri.parse(url));
+      final jsonData = jsonDecode("["+response.body+"]") as List;
+      setState(() {
+        _lista = jsonData;
+      });
+    } catch (error) {
+      print(error);
+    }
+    print(_lista);
+  }
 
   // criacao do MAP para o grid
   void _addPosition(int x, int y) {
@@ -81,7 +98,7 @@ class _PositionBoatState extends State<PositionBoat> {
     /*final response = await http.get(Uri.parse(urlCriaJogo));
       print(response.body);*/
     final json =
-        '{"jogadorPartida1":{"idPartida":"9af70417-3f0e-479d-8ec4-25579c5ed5b4","cenario":{"idCenario":"7a7ee764-bf9b-4fbc-916c-020568e8e032","nome":"Pearl Harbor","descricao":"Jogue neste cenário histórico.","barcos":[{"IDBarco":"d5a98f49-79de-4e8b-87f8-61ca9e806f9d","nome":"Destroier 2","tamanho":2,"foto1":"images/boat.png","foto2":null,"foto3":null,"foto4":null,"foto5":null},{"IDBarco":"c3d9e16c-33b2-420f-a3a5-ac8157b50d9d","nome":"Corveta","tamanho":3,"foto1":"images/baco.png","foto2":null,"foto3":null,"foto4":null,"foto5":null}],"foto":"573522fbfc3a0be11ef6-pearlharbor200000000000003393_widelg.jpg"},"adversario":{"id":"013291fa-dabc-4a9d-abdb-76d66521cde1","name":"Magaiver Braga","nacionalidade":null,"elo":null}}}';
+        '{"jogadorPartida1":{"idPartida":"9af70417-3f0e-479d-8ec4-25579c5ed5b4","cenario":{"idCenario":"7a7ee764-bf9b-4fbc-916c-020568e8e032","nome":"Pearl Harbor","descricao":"Jogue neste cenário histórico.","barcos":[{"IDBarco":"d5a98f49-79de-4e8b-87f8-61ca9e806f9d","nome":"Destroier 2","tamanho":2,"foto1":"assets/energy.png","foto2":null,"foto3":null,"foto4":null,"foto5":null},{"IDBarco":"c3d9e16c-33b2-420f-a3a5-ac8157b50d9d","nome":"Corveta","tamanho":3,"foto1":"assets/energy.png","foto2":null,"foto3":null,"foto4":null,"foto5":null}],"foto":"573522fbfc3a0be11ef6-pearlharbor200000000000003393_widelg.jpg"},"adversario":{"id":"013291fa-dabc-4a9d-abdb-76d66521cde1","name":"Magaiver Braga","nacionalidade":null,"elo":null}}}';
     Map<String, dynamic> jsonData = jsonDecode(json);
     jsonData["jogadorPartida1"];
     setState(() {
@@ -125,8 +142,9 @@ class _PositionBoatState extends State<PositionBoat> {
   void initState() {
     super.initState();
 
+    carregarCenario();
     _laco(linhasColunas, linhasColunas, _addPosition);
-    startTimer();
+    //startTimer();
     getBoat();
     setBarcos();
     switch (linhasColunas) {
@@ -281,7 +299,7 @@ class _PositionBoatState extends State<PositionBoat> {
     return Container(
       height: 50,
       width: 90,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Color(0xff3D5A80),
           borderRadius: BorderRadius.all(Radius.circular(10))),
       alignment: Alignment.center,
@@ -515,7 +533,7 @@ class _PositionBoatState extends State<PositionBoat> {
                       },
                       style:
                           ElevatedButton.styleFrom(primary: Color(0xff3D5A80)),
-                      child: Text(
+                      child: const Text(
                         "Pronto!",
                         style: TextStyle(fontSize: 20),
                       ),
