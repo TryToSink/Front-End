@@ -96,6 +96,8 @@ flutter:
      - assets/empty-person.png
      - assets/green-dot.png
      - assets/cubo-star.png
+     - assets/vitoria.png
+     - assets/derrota.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

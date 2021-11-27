@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:proj0511/ui/LoginApi.dart.dart';
 import 'package:proj0511/ui/home.dart';
 import 'package:proj0511/ui/resetPasswordPage.dart';
-import 'package:proj0511/ui/socketConnect%20(1).dart';
 import 'SignUpPage.dart';
 
 class LoginPage extends StatelessWidget {
@@ -100,7 +99,6 @@ class LoginPage extends StatelessWidget {
                           height: 44,
                           child: RaisedButton(
                             onPressed: () async {
-                              socketConnect().initSocket();
                               if (formKey.currentState!.validate()) {
                                 String username = emailController.text;
                                 String password = passController.text;
