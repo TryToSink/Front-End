@@ -1,4 +1,4 @@
-import 'package:proj0511/ui/barcos_dto.dart';
+import 'barcos_dto.dart';
 
 class partidaAleatoriaDTO {
   String? elo;

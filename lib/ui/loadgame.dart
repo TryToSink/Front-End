@@ -1,10 +1,9 @@
 // @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/socket_connect.dart';
 
 import 'cenariosclass.dart';
+import 'socket_connect.dart';
 
 class LoadTela extends StatefulWidget {
   String idCenario;
@@ -91,7 +90,7 @@ class _LoadCenarioState extends State<LoadTela> {
                                                     Radius.circular(10)),
                                             color: Color(0xFFDDDDDD),
                                             image: DecorationImage(
-                                              image: NetworkImage(
+                                              image: AssetImage(
                                                   'assets/espera.png'),
                                               fit: BoxFit.fill,
                                             ))),

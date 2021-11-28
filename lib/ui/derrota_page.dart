@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/home.dart';
-import 'package:proj0511/ui/vitoria_page.dart';
+import 'home.dart';
 
 class Derrota extends StatefulWidget {
   Derrota({Key? key}) : super(key: key);
