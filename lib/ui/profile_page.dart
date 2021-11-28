@@ -511,10 +511,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           );
                         default:
-                          if (snapshot.hasError)
+                          if (snapshot.hasError) {
                             return Container();
-                          else
+                          } else {
                             return buildFriends(context, snapshot);
+                          }
                       }
                     });
                 // _partidasJogadas.isEmpty
