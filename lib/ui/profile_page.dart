@@ -30,19 +30,102 @@ class _ProfilePageState extends State<ProfilePage> {
   late List _usernameAmigo = [];
   late List _partidasJogadas = [];
 
-  late String urlProfile = 'http://3.144.90.4:3333/usuarios/find';
-  late String urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName;
-  late String urlFriends = 'http://3.144.90.4:3333/usuarios/amigosOnline';
-  late String urlAddFriends = 'http://3.144.90.4:3333/usuarios/adicionaAmigo';
-  late String urlUpdate = 'http://3.144.90.4:3333/usuarios';
-  late String urlHistorico = 'http://3.144.90.4:3333/usuarios/historico';
+  late String urlProfile = 'http://201.42.59.203:3333/usuarios/find';
+  late String urlPhoto = 'http://201.42.59.203:3333/usuarios/foto/' + imageName;
+  late String urlFriends = 'http://201.42.59.203:3333/usuarios/amigosOnline';
+  late String urlAddFriends =
+      'http://201.42.59.203:3333/usuarios/adicionaAmigo';
+  late String urlUpdate = 'http://201.42.59.203:3333/usuarios';
+  late String urlHistorico = 'http://201.42.59.203:3333/usuarios/historico';
 
   @override
   void initState() {
     super.initState();
     print('Entrou no initstate');
-    getUser();
+    carregarPerfil().then((map) {});
     //getPartidas();
+  }
+
+  Future<List> carregarPerfil() async {
+    return getUser();
+  }
+
+  buildFriends(BuildContext context, AsyncSnapshot snapshot) {
+    const textColor = Color(0xFF3D5A80);
+    ListView.builder(
+      itemCount: _amigos.length,
+      itemBuilder: (BuildContext context, int index) {
+        print(_amigos.isEmpty);
+        return _amigos.isEmpty
+            ? Center(
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'sleepy_pirate.png',
+                      height: 100,
+                      width: 100,
+                    ),
+                    const Text(
+                      'Tá meio vazio por aqui!',
+                      style: TextStyle(color: textColor),
+                    ),
+                  ],
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.only(
+                    top: 16, bottom: 16, left: 16, right: 16),
+                child: Container(
+                  height: 80,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 0.5,
+                          spreadRadius: 0.5,
+                          offset: Offset(1.5, 1.5))
+                    ],
+                  ),
+                  child: Card(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 65,
+                          width: 65,
+                          child: Image.asset('assets/empty-person.png'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            _amigos[index]['name'],
+                            style: const TextStyle(
+                              color: textColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const Spacer(
+                          flex: 2,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 24.0),
+                          child: SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: Image.asset('assets/green-dot.png'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+      },
+    );
   }
 
   getUser() async {
@@ -72,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     setState(() {
-      urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName;
+      urlPhoto = 'http://201.42.59.203:3333/usuarios/foto/' + imageName;
       imageCache!.clear();
       imageCache!.clearLiveImages();
     });
@@ -411,58 +494,97 @@ class _ProfilePageState extends State<ProfilePage> {
             child: ListView.builder(
               itemCount: 4,
               itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(
-                      top: 16, bottom: 16, left: 16, right: 16),
-                  child: Container(
-                    height: 80,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 0.5,
-                            spreadRadius: 0.5,
-                            offset: Offset(1.5, 1.5))
-                      ],
-                    ),
-                    child: Card(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 65,
-                            width: 65,
-                            child: Image.asset('assets/empty-person.png'),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              _amigos[index]['name'],
-                              style: const TextStyle(
-                                color: textColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
+                return FutureBuilder(
+                    future: carregarPerfil(),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                        case ConnectionState.none:
+                          return Container(
+                            width: 50,
+                            height: 50,
+                            alignment: Alignment.center,
+                            child: const CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.black),
+                              strokeWidth: 5.0,
                             ),
-                          ),
-                          const Spacer(
-                            flex: 2,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 24.0),
-                            child: SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: Image.asset('assets/cubo-star.png'),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
+                          );
+                        default:
+                          if (snapshot.hasError)
+                            return Container();
+                          else
+                            return buildFriends(context, snapshot);
+                      }
+                    });
+                // _partidasJogadas.isEmpty
+                //     ? Center(
+                //         child: Column(
+                //           children: [
+                //             Image.asset(
+                //               'sleepy_pirate.png',
+                //               height: 100,
+                //               width: 100,
+                //             ),
+                //             const Text(
+                //               'Tá meio vazio por aqui!',
+                //               style: TextStyle(color: textColor),
+                //             ),
+                //           ],
+                //         ),
+                //       )
+                //     : Padding(
+                //         padding: const EdgeInsets.only(
+                //             top: 16, bottom: 16, left: 16, right: 16),
+                //         child: Container(
+                //           height: 80,
+                //           decoration: const BoxDecoration(
+                //             color: Colors.white,
+                //             boxShadow: <BoxShadow>[
+                //               BoxShadow(
+                //                   color: Colors.black12,
+                //                   blurRadius: 0.5,
+                //                   spreadRadius: 0.5,
+                //                   offset: Offset(1.5, 1.5))
+                //             ],
+                //           ),
+                //           child: Card(
+                //             child: Row(
+                //               mainAxisAlignment: MainAxisAlignment.start,
+                //               crossAxisAlignment: CrossAxisAlignment.center,
+                //               children: <Widget>[
+                //                 SizedBox(
+                //                   height: 65,
+                //                   width: 65,
+                //                   child: Image.asset('assets/empty-person.png'),
+                //                 ),
+                //                 Padding(
+                //                   padding: const EdgeInsets.all(16.0),
+                //                   child: Text(
+                //                     _amigos[index]['name'],
+                //                     style: const TextStyle(
+                //                       color: textColor,
+                //                       fontSize: 16,
+                //                       fontWeight: FontWeight.w600,
+                //                     ),
+                //                   ),
+                //                 ),
+                //                 const Spacer(
+                //                   flex: 2,
+                //                 ),
+                //                 Padding(
+                //                   padding: const EdgeInsets.only(right: 24.0),
+                //                   child: SizedBox(
+                //                     height: 20,
+                //                     width: 20,
+                //                     child: Image.asset('assets/cubo-star.png'),
+                //                   ),
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //       );
               },
             ),
           ),
