@@ -4,6 +4,7 @@ import 'home.dart';
 import 'login_api.dart';
 import 'reset_password_page.dart';
 import 'sign_up_page.dart';
+import 'socket_connect.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -146,6 +147,7 @@ class LoginPage extends StatelessWidget {
 }
 
 _navegaHomepage(BuildContext context, String userId) {
+  socketConnect().initSocket();
   Navigator.push(context,
       MaterialPageRoute(builder: (context) => HomePage(idUser: userId)));
 }
