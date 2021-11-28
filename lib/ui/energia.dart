@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'assinatura.dart';
 import 'cenariosclass.dart';
+import 'pagamento.dart';
 
 class LoadEnergia extends StatefulWidget {
   LoadEnergia({Key key}) : super(key: key);

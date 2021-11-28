@@ -76,7 +76,6 @@ class _LoadCenarioState extends State<LoadCenario> {
               ),
             ),
             toolbarHeight: 100,
-            centerTitle: true,
             title: const Text('ESCOLHA UM CENÁRIO'),
             leading: IconButton(
                 onPressed: () {
