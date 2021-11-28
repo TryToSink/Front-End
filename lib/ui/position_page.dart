@@ -2,12 +2,10 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:proj0511/barco_posicao.dart';
 import 'package:proj0511/create_partida_api.dart';
 import 'package:proj0511/posicao.dart';
@@ -29,17 +27,17 @@ class _PositionBoatState extends State<PositionBoat> {
   final linhasColunas = 10;
   List _lista = [];
   List _mCampo = [];
-  List _aCampo = [];
+  final List _aCampo = [];
   List<int> barcosUsados = [];
   bool usado = false;
   bool _rotation = false;
   List<BarcosDTO> pBuild = [];
   List<BarcoPosicao> barcosPosicoes = [];
   Color buttonColor = Colors.blueAccent;
-  final degress = 90.0;
+
   String defaultImage = "assets/water.png";
   int aux = 0;
-  Random random = new Random();
+  Random random = Random();
   int maxAlt = 6;
   double gridSize = 0.0;
   double gridSize1 = 0.0;
@@ -53,20 +51,12 @@ class _PositionBoatState extends State<PositionBoat> {
     return json.decode("[" + response.body + "]");
   }
 
-  Widget getFoto(String foto) {
-    final url = "http://3.144.90.4:3333/files/";
-    return Image.network(
-      url + foto,
-      fit: BoxFit.fill,
-    );
-  }
-
   void setBarcos() {
     pBuild = [];
     List<dynamic> _barcos = _lista;
 
     for (int i = 0; i < _barcos.length; i++) {
-      BarcosDTO barco = new BarcosDTO();
+      BarcosDTO barco = BarcosDTO();
       barco.iDBarco = _barcos[i]["IDBarco"];
       barco.nomeBarco = _barcos[i]["nome"];
       barco.tamanho = _barcos[i]["tamanho"];
@@ -77,16 +67,13 @@ class _PositionBoatState extends State<PositionBoat> {
       barco.foto5 = _barcos[i]["foto5"];
 
       pBuild.add(barco);
-      print(pBuild.length);
     }
-    print(pBuild[0].foto1);
-    print(pBuild[1].foto1);
   }
 
   // criacao do MAP para o grid
   void _addPosition(int x, int y) {
     setState(() {
-      Map<String, dynamic> newPos = Map();
+      Map<String, dynamic> newPos = {};
       newPos["linha"] = x;
       newPos["coluna"] = y;
       newPos["status"] = false;
@@ -95,7 +82,7 @@ class _PositionBoatState extends State<PositionBoat> {
       newPos["image"] = "";
 
       _mCampo.add(newPos);
-      Map<String, dynamic> newPos1 = Map();
+      Map<String, dynamic> newPos1 = {};
       newPos1["linha"] = x;
       newPos1["coluna"] = y;
       newPos1["status"] = false;
@@ -115,18 +102,11 @@ class _PositionBoatState extends State<PositionBoat> {
     }
   }
 
-  // funcao auxiliar de laco simplez
-  void _laco2(int x, var func) {
-    for (int i = 0; i < x; i++) {
-      func(i);
-    }
-  }
-
 // mensagem de snackbar
   void msgSnack(String msg) {
     final snackBar = SnackBar(
       content: Text(msg),
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -156,7 +136,7 @@ class _PositionBoatState extends State<PositionBoat> {
 // funcao para posicionar barco
   void posicionaBarco(
       int index, String name, int n, String img, BarcosDTO barco) {
-    BarcoPosicao posBarco = new BarcoPosicao(barco);
+    BarcoPosicao posBarco = BarcoPosicao(barco);
     bool save = true;
 
     if (_rotation == false) {
@@ -166,7 +146,7 @@ class _PositionBoatState extends State<PositionBoat> {
           _mCampo[index + i]["image"] = barco.returnFoto(i);
           _mCampo[index + i]["status"] = true;
           aux = i;
-          Posicao eixos = new Posicao();
+          Posicao eixos = Posicao();
           eixos.foto = _mCampo[index + i]["image"];
           eixos.eixoX = _mCampo[index]["linha"];
           eixos.eixoY = _mCampo[index + i]["coluna"];
@@ -194,7 +174,7 @@ class _PositionBoatState extends State<PositionBoat> {
           _mCampo[index + i * linhasColunas]["status"] = true;
           _mCampo[index + i * linhasColunas]["rotacao"] = true;
           aux = i;
-          Posicao eixos = new Posicao();
+          Posicao eixos = Posicao();
           eixos.foto = _mCampo[index + i * linhasColunas]["image"];
           eixos.eixoX = _mCampo[index]["linha"];
           eixos.eixoY = _mCampo[index + i * linhasColunas]["coluna"];
@@ -260,23 +240,17 @@ class _PositionBoatState extends State<PositionBoat> {
   Widget buildTargets(BuildContext context, int index) {
     return DragTarget<int>(
         builder: (context, data, rejectData) => Container(
-              child: _mCampo[index]["status"]
-                  ? _mCampo[index]["rotacao"]
-                      ? Transform.rotate(
-                          angle: degress * pi / 180,
-                          child: _mCampo[index]["status"]
-                              ? getFoto(_mCampo[index]["image"])
-                              : Image.asset(defaultImage),
-                        )
-                      : getFoto(_mCampo[index]["image"])
-                  : Image.asset(defaultImage),
+              child: BarcosDTO.getParteFoto(
+                  _mCampo[index]["status"],
+                  _mCampo[index]["rotacao"],
+                  _mCampo[index]["image"],
+                  defaultImage),
               color: Colors.blueAccent,
             ),
         onAccept: (data) {
           if (_mCampo[index]["status"] == false &&
               _mCampo[index]["linha"] != 9) {
             setState(() {
-              print("data: $data");
               barcosUsados.add(data);
               String img = pBuild[data].foto1;
               String name = pBuild[data].nomeBarco;
@@ -295,7 +269,7 @@ class _PositionBoatState extends State<PositionBoat> {
 // funcao para criar quadrados do grid
   Widget buildB(String foto, int index, int tamanho) {
     usado = false;
-    if (barcosUsados.length > 0) {
+    if (barcosUsados.isNotEmpty) {
       int i = 0;
       do {
         if (index == barcosUsados[i]) usado = true;
@@ -306,23 +280,25 @@ class _PositionBoatState extends State<PositionBoat> {
         ? Container()
         : Padding(
             padding: const EdgeInsets.all(8.0),
-            child:
-                Container(
-                  height: 80,
-                  width: 180,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Color(0xff3D5A80)),
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  alignment: Alignment.center,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      getFoto(foto),
-                      Text("$tamanho", style: TextStyle(fontWeight: FontWeight.bold),)
-                    ],
-                  ),
-                ),
+            child: Container(
+              height: 80,
+              width: 180,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: const Color(0xff3D5A80)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  BarcosDTO.getFoto(foto),
+                  Text(
+                    "$tamanho",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+            ),
           );
   }
 
@@ -342,11 +318,10 @@ class _PositionBoatState extends State<PositionBoat> {
     _lista = snapshot.data[0]["barcos"];
     setBarcos();
     return ListView.builder(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       itemCount: _getCount(snapshot.data[0]["barcos"]),
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
-        print("barcosusados: ${barcosUsados.length}");
         return Draggable<int>(
           child: buildB(snapshot.data[0]["barcos"][index]["foto1"], index,
               snapshot.data[0]["barcos"][index]["tamanho"]),
@@ -387,7 +362,6 @@ class _PositionBoatState extends State<PositionBoat> {
       setState(() {
         if (mins == 0 && seconds == 0) {
           time?.cancel();
-          print(barcosPosicoes);
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -406,12 +380,12 @@ class _PositionBoatState extends State<PositionBoat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Batalha Naval, building tab"),
+        title: const Text("Batalha Naval, building tab"),
         centerTitle: true,
-        backgroundColor: Color(0xff293241),
+        backgroundColor: const Color(0xff293241),
         automaticallyImplyLeading: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_sharp),
+          icon: const Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {
             time?.cancel();
             Navigator.pop(context, false);
@@ -426,7 +400,7 @@ class _PositionBoatState extends State<PositionBoat> {
           return Column(mainAxisAlignment: MainAxisAlignment.start, children: <
               Widget>[
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Color(0xff293241),
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20),
@@ -438,11 +412,11 @@ class _PositionBoatState extends State<PositionBoat> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 15),
+              padding: const EdgeInsets.only(top: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
+                  SizedBox(
                       height: constraints.maxHeight * 0.50,
                       width: constraints.maxWidth * 0.76,
                       child: LayoutBuilder(builder: (_, constraints2) {
@@ -465,23 +439,23 @@ class _PositionBoatState extends State<PositionBoat> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Container(
+                        SizedBox(
                           height: constraints.maxHeight * 0.08,
                           child: ElevatedButton(
                             onPressed: aleatorio,
-                            child: Text("A"),
+                            child: const Text("A"),
                             style: ElevatedButton.styleFrom(
-                                primary: Color(0xff3D5A80)),
+                                primary: const Color(0xff3D5A80)),
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           height: constraints.maxHeight * 0.08,
                           child: ElevatedButton(
                             onPressed: _rotation
                                 ? () {
                                     setState(() {
                                       _rotation = false;
-                                      buttonColor = Color(0xff3D5A80);
+                                      buttonColor = const Color(0xff3D5A80);
                                     });
                                   }
                                 : () {
@@ -490,19 +464,19 @@ class _PositionBoatState extends State<PositionBoat> {
                                       buttonColor = Colors.redAccent;
                                     });
                                   },
-                            child: Icon(Icons.replay),
+                            child: const Icon(Icons.replay),
                             style: ElevatedButton.styleFrom(
                                 primary: buttonColor,
-                                onSurface: Color(0xff3D5A80)),
+                                onSurface: const Color(0xff3D5A80)),
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           height: constraints.maxHeight * 0.08,
                           child: ElevatedButton(
                             onPressed: resetGrid,
-                            child: Icon(Icons.delete_rounded),
+                            child: const Icon(Icons.delete_rounded),
                             style: ElevatedButton.styleFrom(
-                                primary: Color(0xff3D5A80)),
+                                primary: const Color(0xff3D5A80)),
                           ),
                         )
                       ],
@@ -511,7 +485,7 @@ class _PositionBoatState extends State<PositionBoat> {
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               width: constraints.maxWidth,
               height: constraints.maxHeight * 0.18,
               child: Expanded(
@@ -543,7 +517,7 @@ class _PositionBoatState extends State<PositionBoat> {
             Container(
               height: constraints.maxHeight * 0.10,
               width: constraints.maxWidth * 0.40,
-              padding: EdgeInsets.only(top: 30),
+              padding: const EdgeInsets.only(top: 30),
               child: Expanded(
                 child: ElevatedButton(
                   onPressed: () {
@@ -554,7 +528,7 @@ class _PositionBoatState extends State<PositionBoat> {
                         MaterialPageRoute(
                             builder: (context) => BatlePage(_mCampo, _aCampo)));
                   },
-                  style: ElevatedButton.styleFrom(primary: Color(0xff3D5A80)),
+                  style: ElevatedButton.styleFrom(primary: const Color(0xff3D5A80)),
                   child: const Text(
                     "Pronto!",
                     style: TextStyle(fontSize: 20),
