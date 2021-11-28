@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/ui/socketConnect.dart';
+import 'package:proj0511/ui/partidaAleatoriaDTO.dart';
 
 import 'cenariosclass.dart';
 
@@ -25,9 +26,11 @@ class _LoadCenarioState extends State<LoadTela> {
   @override
   void initState() {
     super.initState();
-    socketConnect().partidaAleatoria(idCenario, idUser);
-    socketConnect()
-        .partidaAleatoria(idCenario, '04be7cad-70aa-4921-98da-3b3c2b806b61');
+    // TODO: receber o ID do cenário no construtor.
+    socketConnect().partidaAleatoria('7a7ee764-bf9b-4fbc-916c-020568e8e032', idUser);
+    socketConnect().partidaL((partidaAleatoriaDTO partidaAleatoriaDados) {
+      print('id da partida: ' + partidaAleatoriaDados.idPartida);
+    });
   }
 
   @override

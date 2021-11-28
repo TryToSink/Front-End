@@ -9,7 +9,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class socketConnect {
   IO.Socket socket = IO.io('http://3.144.90.4:3334', <String, dynamic>{
-    //IO.Socket socket = IO.io('http://localhost:3334', <String, dynamic>{
+  //IO.Socket socket = IO.io('http://localhost:3334', <String, dynamic>{
     'transport': ['websocket'],
     'autoConnect': false,
   });
@@ -99,7 +99,7 @@ class socketConnect {
     return idPartida;
   }
 
-  static void setpartidaAleatoriaDados(Map d) {
+  static void setpartidaAleatoriaDados(Map d, partidaLCallBack) {
     Map adversario = new Map();
     Map cenario = new Map();
     d.forEach((key, value) {
@@ -130,6 +130,8 @@ class socketConnect {
       barco.tamanho = barco2['tamanho'];
       partidaAleatoriaDados.barcos.add(barco);
     });
+
+    partidaLCallBack(partidaAleatoriaDados);
   }
 
   static partidaAleatoriaDTO getpartidaAleatoriaDados() {
@@ -137,7 +139,6 @@ class socketConnect {
   }
 
   void initSocket() {
-    socket.on('event', (data) => print(data));
     socket.onConnect((data) => print('connected'));
     socket.connect();
   }
@@ -173,9 +174,9 @@ class socketConnect {
         {'userId': userId, 'idCenario': idCenario});
   }
 
-  void partidaL() {
+  void partidaL(partidaLCallBack) {
     socket.on('partida aleatoria encontrada',
-        (dados) => setpartidaAleatoriaDados(dados));
+        (dados) => setpartidaAleatoriaDados(dados, partidaLCallBack));
   }
 
   void partidaLRecusada() {
@@ -213,7 +214,6 @@ class socketConnect {
   }
 
   void home() {
-    partidaL();
     partidaLRecusada();
     partidaLAceita();
     conviteL();
