@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'cenarios.dart';
 import 'configuracao.dart';
+import 'position_page.dart';
 import 'energia.dart';
 import 'profile_page.dart';
 import 'socket_connect.dart';
@@ -473,12 +474,8 @@ class _MyHomePageState extends State<HomePage> {
           icon: const Icon(Icons.play_arrow),
           tooltip: 'Jogar',
           onPressed: () {
-            //  Navigator.push(
-            //    context,
-            //    MaterialPageRoute(
-            //      builder: (context) => LoadPage(),
-            //    ),
-            //  );
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => PositionBoat()));
           },
         ),
       ],
