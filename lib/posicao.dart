@@ -14,4 +14,7 @@ class Posicao {
   int returnEixoY() {
     return eixoY;
   }
+  void nada (){
+
+  }
 }
