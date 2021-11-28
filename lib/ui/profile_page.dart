@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     print('Entrou no initstate');
     getUser();
-    getPartidas();
+    //getPartidas();
   }
 
   getUser() async {
@@ -80,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return;
   }
 
-  getPartidas() async {
+  /*getPartidas() async {
     try {
       final response =
           await http.get(Uri.parse(urlHistorico + '?id=' + idUser));
@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
     } catch (error) {
       print(error);
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
