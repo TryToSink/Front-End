@@ -2,11 +2,20 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:proj0511/ui/barcos_dto.dart';
-import 'package:proj0511/ui/partida_aleatoria_dto.dart';
+import 'package:proj0511/DTO/barcosDTO.dart';
+import 'package:proj0511/DTO/barcosPerdedorDTO.dart';
+import 'package:proj0511/DTO/posicoesDTO.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import '../DTO/partidaAleatoriaDTO.dart';
+import '../DTO/conviteDTO.dart';
+import '../DTO/partidaRecusadaDTO.dart';
+import '../DTO/exceptionDTO.dart';
+import '../DTO/jogadaTiroDTO.dart';
+import '../DTO/jogadaDestruidoDTO.dart';
+import '../DTO/jogadaFimJogoDTO.dart';
 
 class socketConnect {
   IO.Socket socket = IO.io('http://3.144.90.4:3334', <String, dynamic>{
@@ -16,91 +25,47 @@ class socketConnect {
   });
 
   static partidaAleatoriaDTO partidaAleatoriaDados = new partidaAleatoriaDTO();
+  static conviteDTO conviteLDados = new conviteDTO();
 
   static String userId = '';
   static String idCenario = '';
   static String idPartida = '';
-
-  static String partidaLRecusadaDados = '';
-  static String partidaLAceitaDados = '';
-  static String conviteLDados = '';
+  static partidaRecusadaDTO partidaLRecusadaDados = new partidaRecusadaDTO();
+  static partidaAleatoriaDTO partidaLAceitaDados = new partidaAleatoriaDTO();
   static String iniciarJogoDados = '';
-  static String jogadaDados = '';
-  static String exceptionDados = '';
+  static jogadaTiroDTO jogadaTiroDados = jogadaTiroDTO();
+  static jogadaDestruidoDTO jogadaDestruidoDados = jogadaDestruidoDTO();
+  static jogadaFimJogoDTO jogadaFimDados = jogadaFimJogoDTO();
+  static exceptionDTO exceptionDados = new exceptionDTO();
 
-  static void setpartidaLRecusadaDados(String d) {
-    partidaLRecusadaDados = d;
+  static void setconviteLDados(Map d) {
+    d.forEach((key, value) {
+      if (d != 'message') {
+        conviteLDados.idAmigo = d['data']['idAmigo'];
+        conviteLDados.nome = d['data']['nome'];
+        conviteLDados.idCenario = d['data']['idCenario'];
+      }
+    });
   }
 
-  static String getpartidaLRecusadaDados() {
-    return partidaLRecusadaDados;
-  }
-
-  static void setpartidaLAceitaDados(String d) {
-    partidaLAceitaDados = d;
-  }
-
-  static String getpartidaLAceitaDados() {
-    return partidaLAceitaDados;
-  }
-
-  static void setconviteLDados(String d) {
-    conviteLDados = d;
-  }
-
-  static String getconviteLDados() {
+  static conviteDTO getconviteLDados() {
     return conviteLDados;
   }
 
-  static void setiniciarJogoDados(String d) {
-    iniciarJogoDados = d;
+  static void setpartidaLRecusadaDados(Map d) {
+    d.forEach((key, value) {
+      if (d != 'message') {
+        partidaLRecusadaDados.idJogador = d['data']['idJogador'];
+        partidaLRecusadaDados.nomeJogador = d['data']['nomeJogador'];
+      }
+    });
   }
 
-  static String getiniciarJogoDados() {
-    return iniciarJogoDados;
+  static partidaRecusadaDTO getpartidaLRecusadaDados() {
+    return partidaLRecusadaDados;
   }
 
-  static void setjogadaDados(String d) {
-    jogadaDados = d;
-  }
-
-  static String getjogadaDados() {
-    return jogadaDados;
-  }
-
-  static void setexceptionDados(String d) {
-    exceptionDados = d;
-  }
-
-  static String getexceptionDados() {
-    return exceptionDados;
-  }
-
-  static void setuserId(String d) {
-    userId = d;
-  }
-
-  static String getuserId() {
-    return userId;
-  }
-
-  static void setidCenario(String d) {
-    idCenario = d;
-  }
-
-  static String getidCenario() {
-    return idCenario;
-  }
-
-  static void setidPartida(String d) {
-    idPartida = d;
-  }
-
-  static String getidPartida() {
-    return idPartida;
-  }
-
-  static void setpartidaAleatoriaDados(Map d) {
+  static void setpartidaLAceitaDados(Map d) {
     Map adversario = new Map();
     Map cenario = new Map();
     d.forEach((key, value) {
@@ -108,6 +73,7 @@ class socketConnect {
         adversario = d['data']['adversario'];
         cenario = d['data']['cenario'];
         partidaAleatoriaDados.idPartida = d['data']['idPartida'];
+        idPartida = partidaAleatoriaDados.idPartida = d['data']['idPartida'];
       }
     });
     partidaAleatoriaDados?.idAdversario = adversario['id'];
@@ -118,10 +84,10 @@ class socketConnect {
     partidaAleatoriaDados?.foto = cenario['foto'];
     partidaAleatoriaDados?.nomeCenario = cenario['nome'];
     partidaAleatoriaDados?.descricaoCenario = cenario['descricao'];
-    List<dynamic> listaBarcos = cenario['barcos'];
+    idCenario = partidaAleatoriaDados?.idCenario = cenario['idCenario'];
     cenario['barcos'].forEach((barco2) {
-      BarcosDTO barco = BarcosDTO();
-      barco.iDBarco = barco2['IDBarco'];
+      barcosDTO barco = new barcosDTO();
+      barco.IDBarco = barco2['IDBarco'];
       barco.foto1 = barco2['foto1'];
       barco.foto2 = barco2['foto2'];
       barco.foto3 = barco2['foto3'];
@@ -131,6 +97,184 @@ class socketConnect {
       barco.tamanho = barco2['tamanho'];
       partidaAleatoriaDados.barcos.add(barco);
     });
+  }
+
+  static partidaAleatoriaDTO getpartidaLAceitaDados() {
+    return partidaLAceitaDados;
+  }
+
+  static void setiniciarJogoDados(Map d) {
+    //iniciarJogoDados = d;
+  }
+
+  void getiniciarJogoDados() {
+    socket.emit("enviar dados", {
+      'userId': '3d15f205-8d5e-4e41-a981-0090e345b68c',
+      'idCenario': '7a7ee764-bf9b-4fbc-916c-020568e8e032',
+      'idPartida': '5dba3c90-47aa-4c2a-8917-90d27279b987'
+    });
+  }
+
+  static void setjogadaDados(Map d) {
+    Map posicoes = new Map();
+    Map barcos = new Map();
+
+    d.forEach((key, value) {
+      if (d != 'message') {
+        if (d.containsKey('status') == false) {
+          jogadaFimDados.status = d['perdedor']['status'];
+          jogadaFimDados.message = d['perdedor']['message'];
+          jogadaFimDados.jogo.partida.idPartida =
+              d['perdedor']['jogo']['partida']['idPartida'];
+          jogadaFimDados.jogo.partida.vencedor.id =
+              d['perdedor']['jogo']['partida']['vencedor']['id'];
+          jogadaFimDados.jogo.partida.vencedor.nome =
+              d['perdedor']['jogo']['partida']['vencedor']['nome'];
+          jogadaFimDados.jogo.partida.vencedor.elo =
+              d['perdedor']['jogo']['partida']['vencedor']['elo'];
+          jogadaFimDados.jogo.partida.vencedor.nacionalidade =
+              d['perdedor']['jogo']['partida']['vencedor']['nacionalidade'];
+          jogadaFimDados.jogo.partida.vencedor.cenario.idCenario = d['perdedor']
+              ['jogo']['partida']['vencedor']['cenario']['idCenario'];
+          jogadaFimDados.jogo.partida.vencedor.cenario.nome =
+              d['perdedor']['jogo']['partida']['vencedor']['cenario']['nome'];
+          jogadaFimDados.jogo.partida.vencedor.cenario.descricao = d['perdedor']
+              ['jogo']['partida']['vencedor']['cenario']['descricao'];
+          jogadaFimDados.jogo.partida.vencedor.cenario.foto =
+              d['perdedor']['jogo']['partida']['vencedor']['cenario']['foto'];
+          jogadaFimDados.jogo.adversario.jogador.id =
+              d['perdedor']['jogo']['adversario']['jogador']['id'];
+          jogadaFimDados.jogo.adversario.jogador.nome =
+              d['perdedor']['jogo']['adversario']['jogador']['nome'];
+          jogadaFimDados.jogo.adversario.jogador.elo =
+              d['perdedor']['jogo']['adversario']['jogador']['elo'];
+          jogadaFimDados.jogo.adversario.jogador.nacionalidade =
+              d['perdedor']['jogo']['adversario']['jogador']['nacionalidade'];
+          jogadaFimDados.jogo.adversario.jogador.cenario.idCenario =
+              d['perdedor']['jogo']['adversario']['jogador']['cenario']
+                  ['idCenario'];
+          jogadaFimDados.jogo.adversario.jogador.cenario.nome =
+              d['perdedor']['jogo']['adversario']['jogador']['cenario']['nome'];
+          jogadaFimDados.jogo.adversario.jogador.cenario.descricao =
+              d['perdedor']['jogo']['adversario']['jogador']['cenario']
+                  ['descricao'];
+          jogadaFimDados.jogo.adversario.jogador.cenario.foto =
+              d['perdedor']['jogo']['adversario']['jogador']['cenario']['foto'];
+          //barcos = d['perdedor']['jogo']['adversario']['barcos'];
+          d['perdedor']['jogo']['adversario']['barcos'].forEach((barc) {
+            barcosPerdedorDTO barcoPerdedor = new barcosPerdedorDTO();
+            barcoPerdedor.destruido = barc['destruido'];
+            barcoPerdedor.barco.IDBarco = barc['barco']['IDBarco'];
+            barcoPerdedor.barco.nomeBarco = barc['barco']['nome'];
+            barcoPerdedor.barco.tamanho = barc['barco']['tamanho'];
+            barcoPerdedor.barco.foto1 = barc['barco']['foto1'];
+            barcoPerdedor.barco.foto2 = barc['barco']['foto2'];
+            barcoPerdedor.barco.foto3 = barc['barco']['foto3'];
+            barcoPerdedor.barco.foto4 = barc['barco']['foto4'];
+            barcoPerdedor.barco.foto5 = barc['barco']['foto5'];
+            posicoes = barc['posicoes'];
+            posicoes['posicoes'].forEach((pos) {
+              posicoesDTO posic = new posicoesDTO();
+              posic.idPartesBarcoJogo = pos['idPartesBarcoJogo'];
+              posic.idBarcoPartida = pos['idBarcoPartida'];
+              posic.foto = pos['foto'];
+              posic.eixoX = pos['eixoX'];
+              posic.eixoY = pos['eixoY'];
+              posic.atingido = pos['atingido'];
+              barcoPerdedor.posicoes.add(posic);
+            });
+          });
+          return;
+        }
+        if (d['status'] == '00' || d['status'] == '01') {
+          jogadaTiroDados.status = d['status'];
+          jogadaTiroDados.message = d['message'];
+          jogadaTiroDados.eixox = d['eixoX'];
+          jogadaTiroDados.eixoy = d['eixoY'];
+        }
+        if (d['status'] == '02') {
+          jogadaDestruidoDados.status = d['status'];
+          jogadaDestruidoDados.message = d['message'];
+          jogadaDestruidoDados.barcoDestruido.destruido =
+              d['barcoDestruido']['destruido'];
+          jogadaDestruidoDados.barcoDestruido.barco.IDBarco =
+              d['barcoDestruido']['barco']['IDBarco'];
+          jogadaDestruidoDados.barcoDestruido.barco.nomeBarco =
+              d['barcoDestruido']['barco']['nome'];
+          jogadaDestruidoDados.barcoDestruido.barco.tamanho =
+              d['barcoDestruido']['barco']['tamanho'];
+          jogadaDestruidoDados.barcoDestruido.barco.foto1 =
+              d['barcoDestruido']['barco']['foto1'];
+          jogadaDestruidoDados.barcoDestruido.barco.foto2 =
+              d['barcoDestruido']['barco']['foto2'];
+          jogadaDestruidoDados.barcoDestruido.barco.foto3 =
+              d['barcoDestruido']['barco']['foto3'];
+          jogadaDestruidoDados.barcoDestruido.barco.foto4 =
+              d['barcoDestruido']['barco']['foto4'];
+          jogadaDestruidoDados.barcoDestruido.barco.foto5 =
+              d['barcoDestruido']['barco']['foto5'];
+
+          posicoes = d['barcoDestruido']['posicoes'].forEach((posic) {
+            posicoesDTO position = new posicoesDTO();
+            position.idPartesBarcoJogo = posic['idPartesBarcoJogo'];
+            position.idBarcoPartida = posic['idBarcoPartida'];
+            position.foto = posic['foto'];
+            position.eixoX = posic['eixoX'];
+            position.eixoY = posic['eixoY'];
+            position.atingido = posic['atingido'];
+            jogadaDestruidoDados.barcoDestruido.posicoes.add(position);
+          });
+        }
+      }
+    });
+  }
+
+  static void setexceptionDados(Map d) {
+    d.forEach((key, value) {
+      if (d != 'message') {
+        exceptionDados.mensagem = d['mensagem'];
+        exceptionDados.codigoStatus = d['codigoStatus'];
+      }
+    });
+  }
+
+  static exceptionDTO getexceptionDados() {
+    return exceptionDados;
+  }
+
+  static void setpartidaAleatoriaDados(Map d, partidaLCallback) {
+    Map adversario = new Map();
+    Map cenario = new Map();
+    d.forEach((key, value) {
+      if (d != 'message') {
+        adversario = d['data']['adversario'];
+        cenario = d['data']['cenario'];
+        partidaAleatoriaDados.idPartida = d['data']['idPartida'];
+        idPartida = partidaAleatoriaDados.idPartida = d['data']['idPartida'];
+      }
+    });
+    partidaAleatoriaDados?.idAdversario = adversario['id'];
+    partidaAleatoriaDados?.elo = adversario['elo'];
+    partidaAleatoriaDados?.nacionalidade = adversario['nacionalidade'];
+    partidaAleatoriaDados?.nomeAdversario = adversario['name'];
+    partidaAleatoriaDados?.idCenario = cenario['idCenario'];
+    partidaAleatoriaDados?.foto = cenario['foto'];
+    partidaAleatoriaDados?.nomeCenario = cenario['nome'];
+    partidaAleatoriaDados?.descricaoCenario = cenario['descricao'];
+    idCenario = partidaAleatoriaDados?.idCenario = cenario['idCenario'];
+    cenario['barcos'].forEach((barco2) {
+      barcosDTO barco = new barcosDTO();
+      barco.IDBarco = barco2['IDBarco'];
+      barco.foto1 = barco2['foto1'];
+      barco.foto2 = barco2['foto2'];
+      barco.foto3 = barco2['foto3'];
+      barco.foto4 = barco2['foto4'];
+      barco.foto5 = barco2['foto5'];
+      barco.nomeBarco = barco2['nome'];
+      barco.tamanho = barco2['tamanho'];
+      partidaAleatoriaDados.barcos.add(barco);
+    });
+    partidaLCallback(partidaAleatoriaDados);
   }
 
   static partidaAleatoriaDTO getpartidaAleatoriaDados() {
@@ -148,9 +292,9 @@ class socketConnect {
     socket.on('fromServer', (_) => print(_));
   }
 
-  void login(String userId) {
-    socket.emit('user id', {'userId': userId});
-    setuserId(userId);
+  void login(String user) {
+    socket.emit('user id', {'userId': user});
+    userId = user;
   }
 
   void convidarAmigo(String idAmigo, String idCenario) {
@@ -174,36 +318,33 @@ class socketConnect {
         {'userId': userId, 'idCenario': idCenario});
   }
 
-  void partidaL() {
+  void partidaL(partidaLCallback) {
     socket.on('partida aleatoria encontrada',
-        (dados) => setpartidaAleatoriaDados(dados));
-  }
-
-  void partidaLRecusada() {
-    socket.on('partida recusada',
-        (dados) => setpartidaLRecusadaDados(dados.toString()));
-  }
-
-  void partidaLAceita() {
-    socket.on(
-        'partida aceita', (dados) => setpartidaLAceitaDados(dados.toString()));
+        (dados) => setpartidaAleatoriaDados(dados, partidaLCallback));
   }
 
   void conviteL() {
-    socket.on(
-        'convite de partida', (dados) => setconviteLDados(dados.toString()));
+    socket.on('convite de partida', (dados) => setconviteLDados(dados));
+  }
+
+  void partidaLRecusada() {
+    socket.on('partida recusada', (dados) => setpartidaLRecusadaDados(dados));
+  }
+
+  void partidaLAceita() {
+    socket.on('partida aceita', (dados) => setpartidaLAceitaDados(dados));
   }
 
   void iniciarJogo() {
-    socket.on('iniciar jogo', (dados) => setiniciarJogoDados(dados.toString()));
+    socket.on('iniciar jogo', (dados) => setiniciarJogoDados(dados));
   }
 
   void jogada() {
-    socket.on('jogada', (dados) => setjogadaDados(dados.toString()));
+    socket.on('jogada', (dados) => setjogadaDados(dados));
   }
 
   void exception() {
-    socket.on('exception', (dados) => setexceptionDados(dados.toString()));
+    socket.on('exception', (dados) => setexceptionDados(dados));
   }
 
   void reconnect() {
@@ -214,12 +355,12 @@ class socketConnect {
   }
 
   void home() {
-    partidaL();
     partidaLRecusada();
     partidaLAceita();
     conviteL();
     iniciarJogo();
     reconnect();
+    jogada();
     exception();
   }
 }

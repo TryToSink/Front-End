@@ -29,6 +29,7 @@ class _LoadCenarioState extends State<LoadCenario> {
   PostDart returno;
   List<Cenarios> _returno2 = [];
   List<String> _arraydeCenarios = [];
+  List<String> _arraydeidCenarios = [];
   List<String> _arraydeFotos = [];
   String fotoAtual;
   int i = 0;
@@ -43,6 +44,7 @@ class _LoadCenarioState extends State<LoadCenario> {
         final List<Cenarios> _returno2 = returno.cenarios;
         for (int i = 0; _returno2.length > i; i++) {
           _arraydeCenarios.add(_returno2[i].nome);
+          _arraydeidCenarios.add(_returno2[i].idCenario);
           _arraydeFotos.add(_returno2[i].foto);
         }
       });
@@ -68,14 +70,13 @@ class _LoadCenarioState extends State<LoadCenario> {
         home: Scaffold(
           backgroundColor: Color(0xFFDDDDDD),
           appBar: AppBar(
-            centerTitle: true,
-
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(30),
               ),
             ),
             toolbarHeight: 100,
+            centerTitle: true,
             title: const Text('ESCOLHA UM CENÁRIO'),
             leading: IconButton(
                 onPressed: () {
@@ -176,7 +177,7 @@ class _LoadCenarioState extends State<LoadCenario> {
                                                         ),
                                                         onPressed: () {
                                                           idCenario =
-                                                              _arraydeCenarios[
+                                                              _arraydeidCenarios[
                                                                   index];
                                                           Navigator.push(
                                                               context,
