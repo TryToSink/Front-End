@@ -67,7 +67,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             Container(
-                                              width: constraints.maxWidth * .29,
+                                              width: constraints.maxWidth * .25,
                                               height:
                                                   constraints.maxHeight * .60,
                                               child: TextButton(
@@ -88,7 +88,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                                     Text(
                                                       'STANDARD',
                                                       style: const TextStyle(
-                                                          fontSize: 20,
+                                                          fontSize: 21,
                                                           color: Colors.black),
                                                       softWrap: true,
                                                     ),
@@ -141,9 +141,9 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                             ),
                                             Padding(
                                                 padding: EdgeInsets.fromLTRB(
-                                                    0, 0, 20, 0)),
+                                                    0, 0, 30, 0)),
                                             Container(
-                                              width: constraints.maxWidth * .29,
+                                              width: constraints.maxWidth * .25,
                                               height:
                                                   constraints.maxHeight * .60,
                                               child: TextButton(
@@ -165,7 +165,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                                     Text(
                                                       'GOLD',
                                                       style: const TextStyle(
-                                                          fontSize: 20,
+                                                          fontSize: 21,
                                                           color: Color(
                                                               0xFFF9A825)),
                                                       softWrap: true,
@@ -222,9 +222,9 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                             ),
                                             Padding(
                                                 padding: EdgeInsets.fromLTRB(
-                                                    0, 0, 20, 0)),
+                                                    0, 0, 30, 0)),
                                             Container(
-                                              width: constraints.maxWidth * .29,
+                                              width: constraints.maxWidth * .25,
                                               height:
                                                   constraints.maxHeight * .60,
                                               child: TextButton(
@@ -246,7 +246,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                                     Text(
                                                       'DIAMOND',
                                                       style: const TextStyle(
-                                                        fontSize: 20,
+                                                        fontSize: 21,
                                                         color: Colors.blue,
                                                       ),
                                                       softWrap: true,
