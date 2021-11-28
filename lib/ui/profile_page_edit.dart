@@ -1,13 +1,14 @@
+// ignore_for_file: no_logic_in_create_state, must_be_immutable, avoid_print, deprecated_member_use, unused_element
+
 import 'dart:io';
 import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:flag/flag.dart';
+import 'package:path/path.dart';
+import 'package:async/async.dart';
 
 class ProfilePageEdit extends StatefulWidget {
   String idUser;
@@ -88,7 +89,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
       if (imagemBarcoGaleria == null) return;
 
       final imageTemporary = File(imagemBarcoGaleria.path);
-      setState(() => this.image = imageTemporary);
+      setState(() => image = imageTemporary);
     } catch (e) {
       print(e);
     }
@@ -101,7 +102,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
     final imageTemporary = File(imagemBarcoGaleria.path);
 
     var stream =
-        new http.ByteStream(DelegatingStream.typed(imageTemporary.openRead()));
+        http.ByteStream(DelegatingStream.typed(imageTemporary.openRead()));
     // get file length
     var length = await imageTemporary.length();
 
@@ -109,10 +110,10 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
     var uri = Uri.parse(urlPhoto);
 
     // create multipart request
-    var request = new http.MultipartRequest("POST", uri);
+    var request = http.MultipartRequest("POST", uri);
 
     // multipart that takes file
-    var multipartFile = new http.MultipartFile('foto', stream, length,
+    var multipartFile = http.MultipartFile('foto', stream, length,
         filename: basename(imageTemporary.path));
 
     // add file to multipart
@@ -133,9 +134,9 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
         color: Colors.white,
         all: 3,
         child: buildCircle(
-          color: Color(0xFF3D5A80),
+          color: const Color(0xFF3D5A80),
           all: 8,
-          child: Icon(
+          child: const Icon(
             Icons.edit,
             color: Colors.white,
             size: 20,
