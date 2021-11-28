@@ -1,11 +1,9 @@
 // ignore_for_file: no_logic_in_create_state, must_be_immutable, avoid_print, deprecated_member_use, unused_element, prefer_const_constructors, prefer_final_fields
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/ui/profile_page_edit.dart';
-
 import '../rotas.dart';
 
 class ProfilePage extends StatefulWidget {
