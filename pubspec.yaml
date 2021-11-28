@@ -19,7 +19,6 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
-
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -78,6 +77,7 @@ flutter:
      - assets/computadores.png
      - assets/idioma.png
      - assets/logo.png
+     - assets/water.png
      - assets/excluir.png
      - assets/sleepy_pirate.png
      - assets/ingles.png
@@ -96,6 +96,8 @@ flutter:
      - assets/empty-person.png
      - assets/green-dot.png
      - assets/cubo-star.png
+     - assets/historica.png
+     - assets/cubos.png
      - assets/vitoria.png
      - assets/derrota.png
   #   - images/a_dot_ham.jpeg

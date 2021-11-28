@@ -1,10 +1,10 @@
 // @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/loadgame.dart';
-
+import '../rotas.dart';
 import 'cenariosclass.dart';
+import 'loadgame.dart';
+import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class LoadCenario extends StatefulWidget {
@@ -26,10 +26,11 @@ class _LoadCenarioState extends State<LoadCenario> {
 
   _LoadCenarioState({this.idmodojogo, this.idUser});
 
-  String url2 = 'http://3.144.90.4:3333/modoJogo/find';
+  String url2 = url1 + '/modoJogo/find';
   PostDart returno;
   List<Cenarios> _returno2 = [];
   List<String> _arraydeCenarios = [];
+  List<String> _arraydeidCenarios = [];
   List<String> _arraydeFotos = [];
   String fotoAtual;
   int i = 0;
@@ -44,6 +45,7 @@ class _LoadCenarioState extends State<LoadCenario> {
         final List<Cenarios> _returno2 = returno.cenarios;
         for (int i = 0; _returno2.length > i; i++) {
           _arraydeCenarios.add(_returno2[i].nome);
+          _arraydeidCenarios.add(_returno2[i].idCenario);
           _arraydeFotos.add(_returno2[i].foto);
         }
       });
@@ -75,19 +77,13 @@ class _LoadCenarioState extends State<LoadCenario> {
               ),
             ),
             toolbarHeight: 100,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: Icon(Icons.arrow_back)),
-                Padding(padding: EdgeInsets.fromLTRB(0, 0, 100, 0)),
-                Text('ESCOLHA UM CENÁRIO')
-              ],
-            ),
+            centerTitle: true,
+            title: const Text('ESCOLHA UM CENÁRIO'),
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(Icons.arrow_back)),
             backgroundColor: Color(0xFF293241),
           ),
           body: Container(
@@ -116,7 +112,7 @@ class _LoadCenarioState extends State<LoadCenario> {
                                       gridDelegate:
                                           const SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 1,
-                                              childAspectRatio: 2.3),
+                                              childAspectRatio: 2.5),
                                       itemCount: _arraydeCenarios.length,
                                       itemBuilder: (context, index) {
                                         return SizedBox(
@@ -182,7 +178,7 @@ class _LoadCenarioState extends State<LoadCenario> {
                                                         ),
                                                         onPressed: () {
                                                           idCenario =
-                                                              _arraydeCenarios[
+                                                              _arraydeidCenarios[
                                                                   index];
                                                           Navigator.push(
                                                               context,

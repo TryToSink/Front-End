@@ -33,19 +33,13 @@ class _IdiomaState extends State<PageIdioma> {
           ),
           toolbarHeight: 100,
           backgroundColor: const Color(0xFF293241),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            //crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.arrow_back)),
-              const Padding(padding: EdgeInsets.fromLTRB(0, 0, 170, 0)),
-              const Text('IDIOMA')
-            ],
-          ),
+          centerTitle: true,
+          title: const Text('IDIOMA'),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(Icons.arrow_back)),
         ),
         body: Container(
           width: size.width,
@@ -230,8 +224,7 @@ class _IdiomaState extends State<PageIdioma> {
                           shadowColor: Colors.grey),
                       child: const Text(
                         'OK',
-                        style:
-                            TextStyle(fontSize: 25, color: Colors.white),
+                        style: TextStyle(fontSize: 25, color: Colors.white),
                         softWrap: true,
                       ),
                       onPressed: () {

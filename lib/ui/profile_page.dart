@@ -1,15 +1,10 @@
-import 'dart:io';
-import 'dart:convert';
+// ignore_for_file: no_logic_in_create_state, must_be_immutable, avoid_print, deprecated_member_use, unused_element, prefer_const_constructors, prefer_final_fields
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flag/flag.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart';
 import 'package:proj0511/ui/profile_page_edit.dart';
-import 'package:proj0511/ui/user.dart';
-import 'package:proj0511/ui/api_sign_up.dart';
+import '../rotas.dart';
 
 class ProfilePage extends StatefulWidget {
   late String idUser;
@@ -32,18 +27,21 @@ class _ProfilePageState extends State<ProfilePage> {
   late String _username = '';
   late List _amigos = [];
   late List _usernameAmigo = [];
+  late List _partidasJogadas = [];
 
-  late String urlProfile = 'http://3.144.90.4:3333/usuarios/find';
-  late String urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName;
-  late String urlFriends = 'http://3.144.90.4:3333/usuarios/amigosOnline';
-  late String urlAddFriends = 'http://3.144.90.4:3333/usuarios/adicionaAmigo';
-  late String urlUpdate = 'http://3.144.90.4:3333/usuarios';
+  late String urlProfile = url1 + '/usuarios/find';
+  late String urlPhoto = url1 + '/usuarios/foto/' + imageName;
+  late String urlFriends = url1 + '/usuarios/amigosOnline';
+  late String urlAddFriends = url1 + '/usuarios/adicionaAmigo';
+  late String urlUpdate = url1 + '/usuarios';
+  late String urlHistorico = url1 + '/usuarios/historico';
 
   @override
   void initState() {
     super.initState();
     print('Entrou no initstate');
     getUser();
+    //getPartidas();
   }
 
   getUser() async {
@@ -81,6 +79,25 @@ class _ProfilePageState extends State<ProfilePage> {
     return;
   }
 
+  /*getPartidas() async {
+    try {
+      final response =
+          await http.get(Uri.parse(urlHistorico + '?id=' + idUser));
+      print('BODY PARTIDAS: ' + response.body);
+
+      final jsonData = jsonDecode(response.body) as Map;
+      print('JSONDATA PARTIDAS: ' + jsonData.toString());
+
+      setState(() {
+        _partidasJogadas = jsonData['oponentes'];
+      });
+
+      print('PARTIDAS JOGADAS: ' + _partidasJogadas.toString());
+    } catch (error) {
+      print(error);
+    }
+  }*/
+
   @override
   Widget build(BuildContext context) {
     const String gamesPlayed = ' 25';
@@ -94,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
     const String labelWinStreak = 'Win Streak';
     const appBarBGColor = Color(0xFF293241);
     const textColor = Color(0xFF3D5A80);
-    const bGColor = Color(0xFFE0FBFC);
+    const bGColor = Color(0xFFDDDDDD);
 
     return Scaffold(
       backgroundColor: bGColor,
@@ -220,7 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 )),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -361,6 +378,85 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
+          //Lista de Partidas
+          Container(
+            child: const Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 24.0,
+              ),
+              child: Text(
+                labelMatches,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                ),
+              ),
+            ),
+            height: 40.0,
+            width: double.infinity,
+            decoration: const BoxDecoration(color: appBarBGColor),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 4,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                      top: 16, bottom: 16, left: 16, right: 16),
+                  child: Container(
+                    height: 80,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 0.5,
+                            spreadRadius: 0.5,
+                            offset: Offset(1.5, 1.5))
+                      ],
+                    ),
+                    child: Card(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 65,
+                            width: 65,
+                            child: Image.asset('assets/empty-person.png'),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              _amigos[index]['name'],
+                              style: const TextStyle(
+                                color: textColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const Spacer(
+                            flex: 2,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 24.0),
+                            child: SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: Image.asset('assets/cubo-star.png'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          //Lista de Amigos
           Container(
             child: const Padding(
               padding: EdgeInsets.symmetric(
@@ -420,7 +516,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Container(
+                                SizedBox(
                                   height: 65,
                                   width: 65,
                                   child: Image.asset('assets/empty-person.png'),
@@ -436,12 +532,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                 ),
-                                Spacer(
+                                const Spacer(
                                   flex: 2,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 24.0),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 20,
                                     width: 20,
                                     child: Image.asset('assets/green-dot.png'),
