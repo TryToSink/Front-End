@@ -28,11 +28,8 @@ class LoginApi {
     var header = {"Content-Type": "application/json"};
     Map params = {"username": username, "password": password};
     var _body = json.encode(params);
-    print("json enviado : $_body");
     var response =
         await http.post(Uri.parse(url), headers: header, body: _body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
     Map mapResponse = json.decode(response.body);
     var token = mapResponse["token"];
     final _iduser = mapResponse["id"];

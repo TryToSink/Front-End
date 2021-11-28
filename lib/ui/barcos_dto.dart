@@ -1,8 +1,9 @@
-// ignore_for_file: avoid_print
+
 
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+
 
 class BarcosDTO {
 
@@ -54,3 +55,4 @@ class BarcosDTO {
         : Image.asset(defaultImage);
   }
 }
+

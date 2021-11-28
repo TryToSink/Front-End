@@ -38,19 +38,13 @@ class _LoadEnergiaState extends State<LoadEnergia> {
               ),
               backgroundColor: Color(0xFF293241),
               toolbarHeight: 100,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                //crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(Icons.arrow_back)),
-                  Padding(padding: EdgeInsets.fromLTRB(0, 0, 150, 0)),
-                  Text('ENERGIA')
-                ],
-              ),
+              centerTitle: true,
+              title: const Text('ENERGIA'),
+              leading: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icon(Icons.arrow_back)),
             ),
             body: Container(
                 width: size.width,

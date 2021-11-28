@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 const maxSeconds = 59;
-const maxMins = 2;
+const maxMins = 1;
 int seconds = maxSeconds;
 int mins = maxMins;
 Timer? time;
@@ -21,3 +21,4 @@ Widget timer() {
     );
   }
 }
+

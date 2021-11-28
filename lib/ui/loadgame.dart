@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/ui/position_page.dart';
 import 'package:proj0511/ui/socket_connect.dart';
-
 import 'cenariosclass.dart';
+import 'socket_connect.dart';
 
 class LoadTela extends StatefulWidget {
   String idCenario;

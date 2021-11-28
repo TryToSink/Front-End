@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:proj0511/ui/login_api.dart';
-import 'package:proj0511/ui/home.dart';
-import 'package:proj0511/ui/reset_password_page.dart';
+import 'home.dart';
+import 'login_api.dart';
+import 'reset_password_page.dart';
 import 'sign_up_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -122,11 +122,7 @@ class LoginPage extends StatelessWidget {
                                             FlatButton(
                                                 child: Text("OK"),
                                                 onPressed: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              LoginPage()));
+                                                  Navigator.pop(context);
                                                 })
                                           ]);
                                     },

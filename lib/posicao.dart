@@ -1,3 +1,4 @@
+
 class Posicao {
   late String foto;
   late int eixoX;
@@ -13,8 +14,5 @@ class Posicao {
 
   int returnEixoY() {
     return eixoY;
-  }
-  void nada (){
-
   }
 }
