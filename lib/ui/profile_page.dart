@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     print('Entrou no initstate');
     getUser();
-    getPartidas();
+    //getPartidas();
   }
 
   getUser() async {
@@ -80,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return;
   }
 
-  getPartidas() async {
+  /*getPartidas() async {
     try {
       final response =
           await http.get(Uri.parse(urlHistorico + '?id=' + idUser));
@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
     } catch (error) {
       print(error);
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
     const String labelWinStreak = 'Win Streak';
     const appBarBGColor = Color(0xFF293241);
     const textColor = Color(0xFF3D5A80);
-    const bGColor = Color(0xFFE0FBFC);
+    const bGColor = Color(0xFFDDDDDD);
 
     return Scaffold(
       backgroundColor: bGColor,
@@ -238,7 +238,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 )),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
