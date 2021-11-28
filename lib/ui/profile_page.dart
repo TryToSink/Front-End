@@ -67,6 +67,8 @@ class _ProfilePageState extends State<ProfilePage> {
       print(error);
     }
 
+    getPartidas() async {}
+
     setState(() {
       urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName;
       imageCache!.clear();
