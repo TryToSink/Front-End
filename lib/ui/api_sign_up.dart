@@ -2,10 +2,12 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:proj0511/rotas.dart';
+
 class ApiSignUp {
   static Future<bool> signUp(
       String name, String user, String email, String password) async {
-    var url = 'http://3.144.90.4:3333/usuarios';
+    var url = url1 + '/usuarios';
 
     var header = {"Content-Type": "application/json"};
 
