@@ -10,6 +10,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:async/async.dart';
 
+import '../rotas.dart';
+
 class ProfilePageEdit extends StatefulWidget {
   String idUser;
 
@@ -30,10 +32,10 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   late String _name = '';
   late String _email = '';
 
-  late String urlProfile = 'http://3.144.90.4:3333/usuarios/find';
-  late String urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName!;
-  late String urlFriends = 'http://3.144.90.4:3333/usuarios/amigosOnline';
-  late String urlUpdate = 'http://3.144.90.4:3333/usuarios';
+  late String urlProfile = url1 + '/usuarios/find';
+  late String urlPhoto = url1 + '/usuarios/foto/' + imageName!;
+  late String urlFriends = url1 + '/usuarios/amigosOnline';
+  late String urlUpdate = url1 + '/usuarios';
 
   @override
   void initState() {

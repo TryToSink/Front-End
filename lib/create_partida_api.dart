@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/barco_posicao.dart';
+import 'package:proj0511/rotas.dart';
 
 class CreatePartida {
   static Future<bool> create(String idPartida, String idJogador,
       List<BarcoPosicao> barcoPosicao) async {
-    var url = 'http://3.144.90.4:3333/carregaJogo';
+    var url = url1 + '/carregaJogo';
     var header = {"Content-Type": "application/json"};
     Map params = {
       "idPartida": idPartida,
@@ -33,7 +34,7 @@ class CreatePartida {
         String aux = barcoPosicao[i].returnBarcoPosicao();
         compose = compose + aux;
       } else {
-        String aux = barcoPosicao[i].returnBarcoPosicao()+",";
+        String aux = barcoPosicao[i].returnBarcoPosicao() + ",";
         compose = compose + aux;
       }
     }

@@ -1,11 +1,10 @@
 // ignore_for_file: no_logic_in_create_state, must_be_immutable, avoid_print, deprecated_member_use, unused_element, prefer_const_constructors, prefer_final_fields
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/profile_friendlist.dart';
 import 'package:proj0511/ui/profile_page_edit.dart';
+import '../rotas.dart';
 
 class ProfilePage extends StatefulWidget {
   late String idUser;
@@ -30,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late List _usernameAmigo = [];
   late List _partidasJogadas = [];
 
+<<<<<<< HEAD
   late String urlProfile = 'http://201.42.59.203:3333/usuarios/find';
   late String urlPhoto = 'http://201.42.59.203:3333/usuarios/foto/' + imageName;
   late String urlFriends = 'http://201.42.59.203:3333/usuarios/amigosOnline';
@@ -37,6 +37,14 @@ class _ProfilePageState extends State<ProfilePage> {
       'http://201.42.59.203:3333/usuarios/adicionaAmigo';
   late String urlUpdate = 'http://201.42.59.203:3333/usuarios';
   late String urlHistorico = 'http://201.42.59.203:3333/usuarios/historico';
+=======
+  late String urlProfile = url1 + '/usuarios/find';
+  late String urlPhoto = url1 + '/usuarios/foto/' + imageName;
+  late String urlFriends = url1 + '/usuarios/amigosOnline';
+  late String urlAddFriends = url1 + '/usuarios/adicionaAmigo';
+  late String urlUpdate = url1 + '/usuarios';
+  late String urlHistorico = url1 + '/usuarios/historico';
+>>>>>>> 50167ea0c5867954160f286de8b782d9386827e1
 
   @override
   void initState() {
@@ -163,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return;
   }
 
-  getPartidas() async {
+  /*getPartidas() async {
     try {
       final response =
           await http.get(Uri.parse(urlHistorico + '?id=' + idUser));
@@ -180,7 +188,7 @@ class _ProfilePageState extends State<ProfilePage> {
     } catch (error) {
       print(error);
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -203,33 +211,6 @@ class _ProfilePageState extends State<ProfilePage> {
         leading: const BackButton(
           color: Colors.white,
         ),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0, top: 8.0),
-            child: Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-              ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfilePageEdit(
-                        idUser: idUser,
-                      ),
-                    ),
-                  );
-                },
-                child: const Icon(
-                  Icons.edit,
-                  size: 22.0,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
         elevation: 0,
         backgroundColor: appBarBGColor,
         toolbarHeight: 30,
@@ -286,6 +267,24 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Colors.grey,
                           ),
                         ),
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  print('idUser: ' + idUser);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfilePageEdit(
+                                        idUser: idUser,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.edit),
+                              )
+                            ]),
                       ],
                     ),
                     Row(
@@ -473,7 +472,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           //Lista de Partidas
           Container(
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsets.symmetric(
                 vertical: 8.0,
                 horizontal: 24.0,
@@ -591,47 +590,18 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           //Lista de Amigos
           Container(
-            child: Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 24.0,
-                  ),
-                  child: Text(
-                    labelFriend,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                    ),
-                  ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 24.0,
+              ),
+              child: Text(
+                labelFriend,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
                 ),
-                Spacer(
-                  flex: 1,
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FriendsList(
-                            idUser: idUser,
-                          ),
-                        ),
-                      );
-                    },
-                    child: const Icon(
-                      Icons.people_alt,
-                      size: 22.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
             height: 40.0,
             width: double.infinity,
