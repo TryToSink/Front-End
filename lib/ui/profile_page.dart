@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     setState(() {
-      urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName;
+      urlPhoto = 'http://201.42.59.203:3333/usuarios/foto/' + imageName;
       imageCache!.clear();
       imageCache!.clearLiveImages();
     });

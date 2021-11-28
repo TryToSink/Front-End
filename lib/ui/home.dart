@@ -28,7 +28,7 @@ class _MyHomePageState extends State<HomePage> {
 
   late String url = url1 + '/modoJogo/lista';
 
-//late String urlSocket = 'http://3.144.90.4:3334/';
+//late String urlSocket = 'http://201.42.59.203:3334/';
   var _lista = [];
 
   void getTest() async {

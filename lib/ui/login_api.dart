@@ -26,7 +26,7 @@ class LoginApi {
   }
 
   static Future<Object> get(String username, String password) async {
-    var url = 'http://3.144.90.4:3333/login';
+    var url = 'http://201.42.59.203:3333/login';
     var header = {"Content-Type": "application/json"};
     Map params = {"username": username, "password": password};
     var _body = json.encode(params);

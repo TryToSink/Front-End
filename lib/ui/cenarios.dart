@@ -128,7 +128,7 @@ class _LoadCenarioState extends State<LoadCenario> {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Image.network(
-                                                      'http://3.144.90.4:3333/files/' +
+                                                      'http://201.42.59.203:3333/files/' +
                                                           _arraydeFotos[index],
                                                       height: constraints
                                                               .maxHeight *
