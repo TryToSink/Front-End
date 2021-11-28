@@ -41,10 +41,11 @@ class _PositionBoatState extends State<PositionBoat> {
   double gridSize = 0.0;
 
   void carregarCenario() async {
-    String url = 'http://3.144.90.4:3333/cenario/find?idCenario=7a7ee764-bf9b-4fbc-916c-020568e8e032';
+    String url =
+        'http://3.144.90.4:3333/cenario/find?idCenario=7a7ee764-bf9b-4fbc-916c-020568e8e032';
     try {
       final response = await http.get(Uri.parse(url));
-      final jsonData = jsonDecode("["+response.body+"]") as List;
+      final jsonData = jsonDecode("[" + response.body + "]") as List;
       setState(() {
         _lista = jsonData;
       });
