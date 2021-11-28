@@ -1,3 +1,4 @@
+
 class Posicao {
   late String foto;
   late int eixoX;

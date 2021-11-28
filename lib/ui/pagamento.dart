@@ -1,10 +1,8 @@
 // @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/home.dart';
-
 import 'cenariosclass.dart';
+import 'home.dart';
 
 class LoadPagamento extends StatefulWidget {
   LoadPagamento({Key key}) : super(key: key);
@@ -39,19 +37,13 @@ class _LoadPagamentoState extends State<LoadPagamento> {
             ),
             backgroundColor: Color(0xFF293241),
             toolbarHeight: 100,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: Icon(Icons.arrow_back)),
-                Padding(padding: EdgeInsets.fromLTRB(0, 0, 130, 0)),
-                Text('PAGAMENTO')
-              ],
-            ),
+            centerTitle: true,
+            title: const Text('PAGAMENTO'),
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(Icons.arrow_back)),
           ),
           body: Container(
               width: size.width,
@@ -92,7 +84,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                         children: [
                                           Image(
                                             image:
-                                                NetworkImage('assets/visa.png'),
+                                                AssetImage('assets/visa.png'),
                                             height: constraints.maxHeight * .40,
                                             width: constraints.maxWidth * .13,
                                           ),
@@ -147,7 +139,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                             CrossAxisAlignment.center,
                                         children: [
                                           Image(
-                                            image: NetworkImage(
+                                            image: AssetImage(
                                                 'assets/sums-pay.png'),
                                           ),
                                           Text(
@@ -201,8 +193,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                             CrossAxisAlignment.center,
                                         children: [
                                           Image(
-                                            image:
-                                                NetworkImage('assets/pix.jpg'),
+                                            image: AssetImage('assets/pix.jpg'),
                                           ),
                                           Text(
                                             'PIX',
@@ -256,7 +247,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                         children: [
                                           Image(
                                             image:
-                                                NetworkImage('assets/plus.png'),
+                                                AssetImage('assets/plus.png'),
                                           ),
                                           Text(
                                             'Adicionar Cartão',

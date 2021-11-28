@@ -2,9 +2,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:proj0511/ui/position_page.dart';
 import 'package:proj0511/ui/socket_connect.dart';
-
 import 'cenariosclass.dart';
+import 'socket_connect.dart';
 
 class LoadTela extends StatefulWidget {
   String idCenario;
@@ -44,7 +45,7 @@ class _LoadCenarioState extends State<LoadTela> {
         home: Scaffold(
             backgroundColor: Color(0xFFDDDDDD),
             appBar: AppBar(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
                   bottom: Radius.circular(30),
                 ),
@@ -68,41 +69,38 @@ class _LoadCenarioState extends State<LoadTela> {
                         Container(
                             width: constraints.maxWidth,
                             height: constraints.maxHeight,
-                            color: Color(0xFFDDDDDD),
+                            color: const Color(0xFFDDDDDD),
                             child: Stack(children: [
                               Container(
                                   width: constraints.maxWidth,
                                   height: constraints.maxHeight,
-                                  color: Color(0xFFDDDDDD),
+                                  color: const Color(0xFFDDDDDD),
                                   child: Column(children: <Widget>[
-                                    Padding(
+                                    const Padding(
                                       padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
                                     ),
                                     Container(
-                                        width: constraints.maxWidth * .70,
-                                        height: constraints.maxHeight * .50,
-                                        //color: Colors.black,
-                                        decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10),
-                                                bottomLeft: Radius.circular(10),
-                                                bottomRight:
-                                                    Radius.circular(10)),
-                                            color: Color(0xFFDDDDDD),
-                                            image: DecorationImage(
-                                              image: NetworkImage(
-                                                  'assets/espera.png'),
-                                              fit: BoxFit.fill,
-                                            ))),
+                                      width: constraints.maxWidth * .70,
+                                      height: constraints.maxHeight * .50,
+                                      //color: Colors.black,
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                        color: Color(0xFFDDDDDD),
+                                      ),
+                                      child: Image.asset('assets/espera.png'),
+                                    ),
                                     Container(
                                       width: constraints.maxWidth * .90,
                                       height: constraints.maxHeight * .15,
                                       color: Color(0xFFDDDDDD),
-                                      child: Center(
+                                      child: const Center(
                                           child: Text(
                                         'Procurando  Oponente',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 30,
                                           color: Colors.black,
                                         ),
@@ -116,18 +114,24 @@ class _LoadCenarioState extends State<LoadTela> {
                                         style: TextButton.styleFrom(
                                             //maximumSize: size,
                                             fixedSize: size,
-                                            backgroundColor: Color(0xFF3D5AB0),
+                                            backgroundColor:
+                                                const Color(0xFF3D5AB0),
                                             elevation: 15,
                                             shadowColor: Colors.grey),
-                                        child: Text(
+                                        child: const Text(
                                           'Desistir',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               fontSize: 30,
                                               color: Colors.white),
                                           softWrap: true,
                                         ),
                                         onPressed: () {
-                                          Navigator.pop(context);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PositionBoat(),
+                                              ));
                                         },
                                       ),
                                     )

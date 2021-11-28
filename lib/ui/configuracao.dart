@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/assinatura.dart';
-import 'package:proj0511/ui/home.dart';
-import 'package:proj0511/ui/idioma.dart';
-import 'package:proj0511/ui/pagamento.dart';
+import 'assinatura.dart';
 import 'cenariosclass.dart';
+import 'idioma.dart';
+import 'pagamento.dart';
 
 class LoadConfig extends StatefulWidget {
   LoadConfig({Key? key}) : super(key: key);
@@ -35,19 +33,13 @@ class _LoadConfigState extends State<LoadConfig> {
               ),
               backgroundColor: Color(0xFF293241),
               toolbarHeight: 100,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                //crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(Icons.arrow_back)),
-                  Padding(padding: EdgeInsets.fromLTRB(0, 0, 120, 0)),
-                  Text('CONFIGURAÇÕES')
-                ],
-              ),
+              centerTitle: true,
+              title: const Text('CONFIGURAÇÕES'),
+              leading: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icon(Icons.arrow_back)),
             ),
             body: Container(
                 width: size.width,
@@ -83,7 +75,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                         child: Row(
                                           children: [
                                             Image(
-                                              image: NetworkImage(
+                                              image: AssetImage(
                                                   'assets/assinatur.png'),
                                             ),
                                             Padding(
@@ -124,7 +116,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                         child: Row(
                                           children: [
                                             Image(
-                                              image: NetworkImage(
+                                              image: AssetImage(
                                                   'assets/pagamento.png'),
                                             ),
                                             Padding(
@@ -165,7 +157,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                         child: Row(
                                           children: [
                                             Image(
-                                              image: NetworkImage(
+                                              image: AssetImage(
                                                   'assets/historica.png'),
                                             ),
                                             Padding(
@@ -200,7 +192,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                         child: Row(
                                           children: [
                                             Image(
-                                              image: NetworkImage(
+                                              image: AssetImage(
                                                   'assets/aplicativo.png'),
                                             ),
                                             Padding(
@@ -235,7 +227,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                         child: Row(
                                           children: [
                                             Image(
-                                              image: NetworkImage(
+                                              image: AssetImage(
                                                   'assets/idioma.png'),
                                             ),
                                             Padding(
@@ -276,7 +268,7 @@ class _LoadConfigState extends State<LoadConfig> {
                                         child: Row(
                                           children: [
                                             Image(
-                                              image: NetworkImage(
+                                              image: AssetImage(
                                                   'assets/excluir.png'),
                                             ),
                                             Padding(
