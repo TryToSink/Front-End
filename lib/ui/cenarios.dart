@@ -68,6 +68,8 @@ class _LoadCenarioState extends State<LoadCenario> {
         home: Scaffold(
           backgroundColor: Color(0xFFDDDDDD),
           appBar: AppBar(
+            centerTitle: true,
+
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(30),

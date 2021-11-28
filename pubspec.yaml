@@ -84,7 +84,9 @@ flutter:
      - assets/portugues.png
      - assets/espanhol.png
      - assets/pix.jpg
+     - assets/fire.png
      - assets/visa.png
+     - assets/water.png
      - assets/sums-pay.png
      - assets/pagamento.png
      - assets/plus.png
@@ -96,8 +98,6 @@ flutter:
      - assets/empty-person.png
      - assets/green-dot.png
      - assets/cubo-star.png
-     - assets/historica.png
-     - assets/cubos.png
      - assets/vitoria.png
      - assets/derrota.png
   #   - images/a_dot_ham.jpeg
