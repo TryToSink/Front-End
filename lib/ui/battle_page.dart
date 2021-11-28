@@ -3,10 +3,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:proj0511/posicao.dart';
-
+import 'package:http/http.dart' as http;
 import '../timer.dart';
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+
+
 
 class BatlePage extends StatefulWidget {
+  Posicao posicao = Posicao();
   List _aCampo = [];
   List _mCampo = [];
 
@@ -28,7 +33,7 @@ class _BatlePageState extends State<BatlePage> {
   List advUser = [];
   final degress = 90.0;
   double gridSize = 0.0;
-  double linhaColuna = 0;
+  double linhaColuna = 10;
 
   //inicio da pagina
 
@@ -50,6 +55,69 @@ class _BatlePageState extends State<BatlePage> {
       gridSize = 0.06;
     linhaColuna = sqrt(_advCampo.length);
     startTimer();
+  }
+
+  Future<String> enviarJogada(String idPartida, String idAdversario, Posicao pos) async {
+    var url = 'http://3.144.90.4:3333/jogada';
+    var header = {"Content-Type": "application/json"};
+    Map params = {"idPartida": idPartida, "idAdversario": idAdversario, "eixoX": pos.eixoX, "eixoY": pos.eixoY};
+    var _body = json.encode(params);
+    print("json enviado : $_body");
+    var response =
+    await http.post(Uri.parse(url), headers: header, body: _body);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    List jsonData = json.decode("[" + response.body + "]");
+    try{
+      return jsonData[0]["status"];
+    }catch (error){
+      try{
+        return jsonData[0]["vencedor"]["status"];
+      }catch (error){
+        print(error);
+        return "00";
+      }
+
+    }
+  }
+
+  void jogada(String idPartida, String idAdversario, Posicao pos) async {
+    Future<String> result = enviarJogada(idPartida, idAdversario, pos);
+    if (result == '00') {
+      oponenteTurno();
+    } else if (result == '01' || result == '02') {
+      meuTurno();
+    } else if (result == '03') {
+      //redireciona para a tela de resultado da Partida
+
+    }
+  }
+
+  void meuTurno() {
+    startTimer();
+    setState(() {
+      _valid = true;
+    });
+    msgSnack("Seu turno", 4);
+  }
+
+  void oponenteTurno() async {
+    startTimer();
+    setState(() {
+      _valid = false;
+    });
+    msgSnack("Turno do oponente", 4);
+    await Future.delayed(Duration(seconds: 10));
+    meuTurno();
+  }
+
+  void msgSnack(String msg, int temp) {
+    final snackBar = SnackBar(
+      content: Text(msg),
+      duration: Duration(seconds: temp),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   //auxiliar para usuário
@@ -102,8 +170,11 @@ class _BatlePageState extends State<BatlePage> {
       onTap: _valid
           ? () {
               setState(() {
+                //
                 _advCampo[index]["ataque"] = true;
                 _advCampo[index]["image"] = "assets/fire.png";
+                //
+                oponenteTurno();
               });
             }
           : null,
@@ -275,7 +346,7 @@ class _BatlePageState extends State<BatlePage> {
                           child: LayoutBuilder(
                             builder: (_, constraint3) {
                               return Padding(
-                                padding: const  EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                     top: 10, right: 20, bottom: 10),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -332,8 +403,8 @@ class _BatlePageState extends State<BatlePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("${advUser[0]["name"]}",
-                            style:
-                            const TextStyle(color: Colors.white, fontSize: 20)),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 20)),
                         const Divider(),
                         Row(
                           children: [
