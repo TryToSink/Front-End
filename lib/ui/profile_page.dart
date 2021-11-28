@@ -1,4 +1,4 @@
-// ignore_for_file: no_logic_in_create_state, must_be_immutable, avoid_print, deprecated_member_use, unused_element, prefer_const_constructors
+// ignore_for_file: no_logic_in_create_state, must_be_immutable, avoid_print, deprecated_member_use, unused_element, prefer_const_constructors, prefer_final_fields
 
 import 'dart:convert';
 
@@ -26,19 +26,23 @@ class _ProfilePageState extends State<ProfilePage> {
   late String imageName = 'foto';
   late String _username = '';
   late List _amigos = [];
-  late final List _usernameAmigo = [];
+  late List _usernameAmigo = [];
+  late List _partidasJogadas = [];
 
-  late String urlProfile = 'http://3.144.90.4:3333/usuarios/find';
-  late String urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName;
-  late String urlFriends = 'http://3.144.90.4:3333/usuarios/amigosOnline';
-  late String urlAddFriends = 'http://3.144.90.4:3333/usuarios/adicionaAmigo';
-  late String urlUpdate = 'http://3.144.90.4:3333/usuarios';
+  late String urlProfile = 'http://201.42.59.203:3333/usuarios/find';
+  late String urlPhoto = 'http://201.42.59.203:3333/usuarios/foto/' + imageName;
+  late String urlFriends = 'http://201.42.59.203:3333/usuarios/amigosOnline';
+  late String urlAddFriends =
+      'http://201.42.59.203:3333/usuarios/adicionaAmigo';
+  late String urlUpdate = 'http://201.42.59.203:3333/usuarios';
+  late String urlHistorico = 'http://201.42.59.203:3333/usuarios/historico';
 
   @override
   void initState() {
     super.initState();
     print('Entrou no initstate');
     getUser();
+    getPartidas();
   }
 
   getUser() async {
@@ -67,8 +71,6 @@ class _ProfilePageState extends State<ProfilePage> {
       print(error);
     }
 
-    getPartidas() async {}
-
     setState(() {
       urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName;
       imageCache!.clear();
@@ -76,6 +78,25 @@ class _ProfilePageState extends State<ProfilePage> {
     });
 
     return;
+  }
+
+  getPartidas() async {
+    try {
+      final response =
+          await http.get(Uri.parse(urlHistorico + '?id=' + idUser));
+      print('BODY PARTIDAS: ' + response.body);
+
+      final jsonData = jsonDecode(response.body) as Map;
+      print('JSONDATA PARTIDAS: ' + jsonData.toString());
+
+      setState(() {
+        _partidasJogadas = jsonData['oponentes'];
+      });
+
+      print('PARTIDAS JOGADAS: ' + _partidasJogadas.toString());
+    } catch (error) {
+      print(error);
+    }
   }
 
   @override
