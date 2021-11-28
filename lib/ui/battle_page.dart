@@ -95,7 +95,6 @@ class _BatlePageState extends State<BatlePage> {
   }
 
   void meuTurno() {
-    startTimer();
     setState(() {
       _valid = true;
     });
@@ -103,7 +102,6 @@ class _BatlePageState extends State<BatlePage> {
   }
 
   void oponenteTurno() async {
-    startTimer();
     setState(() {
       _valid = false;
     });
@@ -309,7 +307,7 @@ class _BatlePageState extends State<BatlePage> {
                                   children: [
                                     SizedBox(
                                       height: constraint2.maxHeight * 0.07,
-                                      width: constraint2.maxWidth * 0.25,
+                                      width: constraint2.maxWidth * 0.4,
                                       child: ElevatedButton(
                                           onPressed: () {},
                                           child: Text("Aleatório"),
@@ -318,7 +316,7 @@ class _BatlePageState extends State<BatlePage> {
                                     ),
                                     SizedBox(
                                       height: constraint2.maxHeight * 0.07,
-                                      width: constraint2.maxWidth * 0.25,
+                                      width: constraint2.maxWidth * 0.4,
                                       child: ElevatedButton(
                                           onPressed: () {},
                                           child: Text("Configurações"),
@@ -327,7 +325,7 @@ class _BatlePageState extends State<BatlePage> {
                                     ),
                                     SizedBox(
                                       height: constraint2.maxHeight * 0.07,
-                                      width: constraint2.maxWidth * 0.25,
+                                      width: constraint2.maxWidth * 0.4,
                                       child: ElevatedButton(
                                           onPressed: () {},
                                           child: Text("Desistir"),

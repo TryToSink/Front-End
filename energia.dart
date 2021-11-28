@@ -1,10 +1,8 @@
 // @dart=2.9
-import 'dart:convert';
-import 'package:flutter/material.dart';
 
-import 'assinatura.dart';
-import 'cenariosclass.dart';
-import 'pagamento.dart';
+import 'package:flutter/material.dart';
+import 'lib/ui/assinatura.dart';
+import 'lib/ui/pagamento.dart';
 
 class LoadEnergia extends StatefulWidget {
   LoadEnergia({Key key}) : super(key: key);
