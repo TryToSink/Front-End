@@ -5,13 +5,11 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:proj0511/barco_posicao.dart';
-import 'package:proj0511/posicao.dart';
-import 'package:proj0511/ui/battle_page.dart';
-import 'package:http/http.dart' as http;
-
-import 'package:proj0511/ui/barcos_dto.dart';
+import '../barco_posicao.dart';
+import '../posicao.dart';
 import '../timer.dart';
+import 'barcos_dto.dart';
+import 'battle_page.dart';
 
 class PositionBoat extends StatefulWidget {
   const PositionBoat({Key? key}) : super(key: key);

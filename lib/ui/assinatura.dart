@@ -1,13 +1,7 @@
 // @dart=2.9
 // ignore_for_file: avoid_print
-
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/home.dart';
-import 'package:proj0511/ui/pagamento.dart';
-
-import 'cenariosclass.dart';
+import 'pagamento.dart';
 
 class LoadAssinatura extends StatefulWidget {
   LoadAssinatura({Key key}) : super(key: key);
@@ -41,19 +35,13 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
               ),
               backgroundColor: Color(0xFF293241),
               toolbarHeight: 100,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                //crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(Icons.arrow_back)),
-                  Padding(padding: EdgeInsets.fromLTRB(0, 0, 130, 0)),
-                  Text('ASSINATURA')
-                ],
-              ),
+              centerTitle: true,
+              title: const Text('ASSINATURA'),
+              leading: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icon(Icons.arrow_back)),
             ),
             body: Container(
                 width: size.width,
@@ -105,7 +93,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                                       softWrap: true,
                                                     ),
                                                     Image(
-                                                        image: NetworkImage(
+                                                        image: AssetImage(
                                                             'assets/standard.png'),
                                                         width: constraints
                                                                 .maxWidth *
@@ -183,7 +171,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                                       softWrap: true,
                                                     ),
                                                     Image(
-                                                        image: NetworkImage(
+                                                        image: AssetImage(
                                                             'assets/gold.png'),
                                                         width: constraints
                                                                 .maxWidth *
@@ -264,7 +252,7 @@ class _LoadAssinaturaState extends State<LoadAssinatura> {
                                                       softWrap: true,
                                                     ),
                                                     Image(
-                                                        image: NetworkImage(
+                                                        image: AssetImage(
                                                             'assets/diamond.png'),
                                                         width: constraints
                                                                 .maxWidth *

@@ -1,10 +1,9 @@
 // @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/loadgame.dart';
-
 import 'cenariosclass.dart';
+import 'loadgame.dart';
+import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class LoadCenario extends StatefulWidget {
@@ -75,19 +74,13 @@ class _LoadCenarioState extends State<LoadCenario> {
               ),
             ),
             toolbarHeight: 100,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: Icon(Icons.arrow_back)),
-                Padding(padding: EdgeInsets.fromLTRB(0, 0, 100, 0)),
-                Text('ESCOLHA UM CENÁRIO')
-              ],
-            ),
+            centerTitle: true,
+            title: const Text('ESCOLHA UM CENÁRIO'),
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(Icons.arrow_back)),
             backgroundColor: Color(0xFF293241),
           ),
           body: Container(
@@ -116,7 +109,7 @@ class _LoadCenarioState extends State<LoadCenario> {
                                       gridDelegate:
                                           const SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 1,
-                                              childAspectRatio: 2.3),
+                                              childAspectRatio: 2.5),
                                       itemCount: _arraydeCenarios.length,
                                       itemBuilder: (context, index) {
                                         return SizedBox(

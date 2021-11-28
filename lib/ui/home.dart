@@ -2,13 +2,13 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/cenarios.dart';
-import 'package:proj0511/ui/configuracao.dart';
-import 'package:proj0511/ui/energia.dart';
 import 'package:flutter/foundation.dart';
-import 'package:proj0511/ui/profile_page.dart';
-import 'package:proj0511/ui/socket_connect.dart';
+import 'cenarios.dart';
+import 'configuracao.dart';
+import 'energia.dart';
+import 'profile_page.dart';
+import 'socket_connect.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   String idUser;
@@ -77,34 +77,32 @@ class _MyHomePageState extends State<HomePage> {
             centerTitle: true,
             title: const Text('MODO DE JOGO'),
             actions: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Container(
-                    height: 10,
-                    width: 60,
-                    color: const Color(0xFF293241),
-                    child: Center(
-                      child: TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.blueGrey[900],
-                              elevation: 5,
-                              shadowColor: Colors.grey),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LoadEnergia(),
-                                ));
-                          },
-                          child: const Text(
-                            '/20 +',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
-                          )),
-                    ),
-                  ))
+              Container(
+                height: 30,
+                width: 70,
+                color: const Color(0xFF293241),
+                child: Center(
+                  child: TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.blueGrey[900],
+                          elevation: 5,
+                          shadowColor: Colors.grey),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoadEnergia(),
+                            ));
+                      },
+                      child: const Text(
+                        '20/20 +',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.white,
+                        ),
+                      )),
+                ),
+              )
             ],
           ),
           body: Container(
@@ -259,7 +257,7 @@ class _MyHomePageState extends State<HomePage> {
                                                             color: Colors.grey,
                                                             image:
                                                                 DecorationImage(
-                                                              image: NetworkImage(
+                                                              image: AssetImage(
                                                                   'assets/Cópia de jostik.png'),
                                                               fit: BoxFit
                                                                   .contain,
@@ -357,7 +355,7 @@ class _MyHomePageState extends State<HomePage> {
                                                             color: Colors.grey,
                                                             image:
                                                                 DecorationImage(
-                                                              image: NetworkImage(
+                                                              image: AssetImage(
                                                                   'assets/cubos.png'),
                                                               fit: BoxFit
                                                                   .contain,

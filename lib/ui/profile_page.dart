@@ -2,14 +2,9 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flag/flag.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
-import 'package:proj0511/ui/profile_page_edit.dart';
-import 'package:proj0511/ui/user.dart';
-import 'package:proj0511/ui/api_sign_up.dart';
+import 'package:http/http.dart' as http;
+import 'profile_page_edit.dart';
 
 class ProfilePage extends StatefulWidget {
   late String idUser;
