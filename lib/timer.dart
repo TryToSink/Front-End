@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 const maxSeconds = 59;
-const maxMins = 1;
+const maxMins = 5;
 int seconds = maxSeconds;
 int mins = maxMins;
 Timer? time;

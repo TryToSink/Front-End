@@ -4,11 +4,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:proj0511/posicao.dart';
 import 'package:http/http.dart' as http;
+import 'package:proj0511/ui/barcos_dto.dart';
 import '../timer.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-
-
 
 class BatlePage extends StatefulWidget {
   Posicao posicao = Posicao();
@@ -28,6 +27,8 @@ class _BatlePageState extends State<BatlePage> {
 
   //  vvvvvvvvv Controle do grid
   bool _valid = true;
+
+  Color corFundo = Color(0xff75CCFE);
 
   List currentUser = [];
   List advUser = [];
@@ -57,28 +58,33 @@ class _BatlePageState extends State<BatlePage> {
     startTimer();
   }
 
-  Future<String> enviarJogada(String idPartida, String idAdversario, Posicao pos) async {
+  Future<String> enviarJogada(
+      String idPartida, String idAdversario, Posicao pos) async {
     var url = 'http://3.144.90.4:3333/jogada';
     var header = {"Content-Type": "application/json"};
-    Map params = {"idPartida": idPartida, "idAdversario": idAdversario, "eixoX": pos.eixoX, "eixoY": pos.eixoY};
+    Map params = {
+      "idPartida": idPartida,
+      "idAdversario": idAdversario,
+      "eixoX": pos.eixoX,
+      "eixoY": pos.eixoY
+    };
     var _body = json.encode(params);
     print("json enviado : $_body");
     var response =
-    await http.post(Uri.parse(url), headers: header, body: _body);
+        await http.post(Uri.parse(url), headers: header, body: _body);
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
 
     List jsonData = json.decode("[" + response.body + "]");
-    try{
+    try {
       return jsonData[0]["status"];
-    }catch (error){
-      try{
+    } catch (error) {
+      try {
         return jsonData[0]["vencedor"]["status"];
-      }catch (error){
+      } catch (error) {
         print(error);
         return "00";
       }
-
     }
   }
 
@@ -95,7 +101,6 @@ class _BatlePageState extends State<BatlePage> {
   }
 
   void meuTurno() {
-    startTimer();
     setState(() {
       _valid = true;
     });
@@ -103,7 +108,6 @@ class _BatlePageState extends State<BatlePage> {
   }
 
   void oponenteTurno() async {
-    startTimer();
     setState(() {
       _valid = false;
     });
@@ -147,20 +151,13 @@ class _BatlePageState extends State<BatlePage> {
   // montar grid usuario
   Widget buildFieldMeuCampo(BuildContext context, int index) {
     return Container(
-        color: const Color(0xff75CCFE),
+        color: corFundo,
         child: _meuCampo[index]["status"]
             ? _meuCampo[index]["rotacao"]
                 ? Transform.rotate(
                     angle: degress * pi / 180,
-                    child: Image.asset(
-                      "${_meuCampo[index]["image"]}",
-                      fit: BoxFit.fill,
-                    ),
-                  )
-                : Image.asset(
-                    "${_meuCampo[index]["image"]}",
-                    fit: BoxFit.fill,
-                  )
+                    child: BarcosDTO.getFoto(_meuCampo[index]["image"]))
+                : BarcosDTO.getFoto(_meuCampo[index]["image"])
             : null);
   }
 
@@ -309,7 +306,7 @@ class _BatlePageState extends State<BatlePage> {
                                   children: [
                                     SizedBox(
                                       height: constraint2.maxHeight * 0.07,
-                                      width: constraint2.maxWidth * 0.25,
+                                      width: constraint2.maxWidth * 0.4,
                                       child: ElevatedButton(
                                           onPressed: () {},
                                           child: Text("Aleatório"),
@@ -318,7 +315,7 @@ class _BatlePageState extends State<BatlePage> {
                                     ),
                                     SizedBox(
                                       height: constraint2.maxHeight * 0.07,
-                                      width: constraint2.maxWidth * 0.25,
+                                      width: constraint2.maxWidth * 0.4,
                                       child: ElevatedButton(
                                           onPressed: () {},
                                           child: Text("Configurações"),
@@ -327,7 +324,7 @@ class _BatlePageState extends State<BatlePage> {
                                     ),
                                     SizedBox(
                                       height: constraint2.maxHeight * 0.07,
-                                      width: constraint2.maxWidth * 0.25,
+                                      width: constraint2.maxWidth * 0.4,
                                       child: ElevatedButton(
                                           onPressed: () {},
                                           child: Text("Desistir"),
