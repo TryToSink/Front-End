@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 class BarcosDTO {
   String iDBarco = '';
   String foto1 = '';
@@ -22,3 +20,4 @@ class BarcosDTO {
     else return foto5;
   }
 }
+

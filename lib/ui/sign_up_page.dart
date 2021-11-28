@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:proj0511/ui/validador.dart';
-import 'login_page.dart';
 import 'api_sign_up.dart';
+import 'validador.dart';
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
