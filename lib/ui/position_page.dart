@@ -79,8 +79,6 @@ class _PositionBoatState extends State<PositionBoat> {
       pBuild.add(barco);
       print(pBuild.length);
     }
-    print(pBuild[0].foto1);
-    print(pBuild[1].foto1);
   }
 
   // criacao do MAP para o grid
