@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import '../rotas.dart';
 import 'cenarios.dart';
 import 'configuracao.dart';
 import 'position_page.dart';
@@ -25,7 +26,7 @@ class _MyHomePageState extends State<HomePage> {
 
   _MyHomePageState({Key? key, required this.idUser});
 
-  late String url = 'http://3.144.90.4:3333/modoJogo/lista';
+  late String url = url1 + '/modoJogo/lista';
 
 //late String urlSocket = 'http://3.144.90.4:3334/';
   var _lista = [];
@@ -474,8 +475,8 @@ class _MyHomePageState extends State<HomePage> {
           icon: const Icon(Icons.play_arrow),
           tooltip: 'Jogar',
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PositionBoat()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PositionBoat()));
           },
         ),
       ],

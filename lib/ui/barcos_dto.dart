@@ -1,12 +1,10 @@
-
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../rotas.dart';
 
 class BarcosDTO {
-
   String iDBarco = '';
   String foto1 = '';
   String foto2 = '';
@@ -35,24 +33,22 @@ class BarcosDTO {
   }
 
   static Widget getFoto(String foto) {
-    final url = "http://3.144.90.4:3333/files/";
+    final url = url1 + "/files/";
     return Image.network(
       url + foto,
       fit: BoxFit.fill,
     );
   }
 
-  static Widget getParteFoto(bool status,bool rotacao,String image,String defaultImage){
+  static Widget getParteFoto(
+      bool status, bool rotacao, String image, String defaultImage) {
     return status
         ? rotacao
-        ? Transform.rotate(
-      angle: 90.0 * pi / 180,
-      child: status
-          ?getFoto(image)
-          : Image.asset(defaultImage),
-    )
-        :getFoto(image  )
+            ? Transform.rotate(
+                angle: 90.0 * pi / 180,
+                child: status ? getFoto(image) : Image.asset(defaultImage),
+              )
+            : getFoto(image)
         : Image.asset(defaultImage);
   }
 }
-

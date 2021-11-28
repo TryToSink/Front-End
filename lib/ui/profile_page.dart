@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/ui/profile_page_edit.dart';
 
+import '../rotas.dart';
+
 class ProfilePage extends StatefulWidget {
   late String idUser;
 
@@ -29,13 +31,12 @@ class _ProfilePageState extends State<ProfilePage> {
   late List _usernameAmigo = [];
   late List _partidasJogadas = [];
 
-  late String urlProfile = 'http://201.42.59.203:3333/usuarios/find';
-  late String urlPhoto = 'http://201.42.59.203:3333/usuarios/foto/' + imageName;
-  late String urlFriends = 'http://201.42.59.203:3333/usuarios/amigosOnline';
-  late String urlAddFriends =
-      'http://201.42.59.203:3333/usuarios/adicionaAmigo';
-  late String urlUpdate = 'http://201.42.59.203:3333/usuarios';
-  late String urlHistorico = 'http://201.42.59.203:3333/usuarios/historico';
+  late String urlProfile = url1 + '/usuarios/find';
+  late String urlPhoto = url1 + '/usuarios/foto/' + imageName;
+  late String urlFriends = url1 + '/usuarios/amigosOnline';
+  late String urlAddFriends = url1 + '/usuarios/adicionaAmigo';
+  late String urlUpdate = url1 + '/usuarios';
+  late String urlHistorico = url1 + '/usuarios/historico';
 
   @override
   void initState() {
