@@ -6,11 +6,13 @@ import '../rotas.dart';
 
 class BarcosDTO {
   String iDBarco = '';
+  String foto0 = '';
   String foto1 = '';
   String foto2 = '';
   String foto3 = '';
   String foto4 = '';
   String foto5 = '';
+
   String nomeBarco = '';
   int tamanho = 0;
 

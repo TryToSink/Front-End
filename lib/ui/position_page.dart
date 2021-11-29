@@ -35,6 +35,7 @@ class _PositionBoatState extends State<PositionBoat> {
   List<BarcosDTO> pBuild = [];
   List<BarcoPosicao> barcosPosicoes = [];
   Color buttonColor = Colors.blueAccent;
+  bool _visible = true;
 
   String defaultImage = "assets/water.png";
   int aux = 0;
@@ -46,7 +47,7 @@ class _PositionBoatState extends State<PositionBoat> {
   Future<List> carregarCenario() async {
     http.Response response;
     String url =
-        url1 + '/cenario/find?idCenario=7a7ee764-bf9b-4fbc-916c-020568e8e032';
+        url1 + '/cenario/find?idCenario=0ae11ab4-48cd-4c9a-9780-f24733d275f2';
     response = await http.get(Uri.parse(url));
     print("response ${response.body}");
     return json.decode("[" + response.body + "]");
@@ -61,11 +62,13 @@ class _PositionBoatState extends State<PositionBoat> {
       barco.iDBarco = _barcos[i]["IDBarco"];
       barco.nomeBarco = _barcos[i]["nome"];
       barco.tamanho = _barcos[i]["tamanho"];
+      barco.foto0 = _barcos[i]["foto0"];
       barco.foto1 = _barcos[i]["foto1"];
       barco.foto2 = _barcos[i]["foto2"];
       barco.foto3 = _barcos[i]["foto3"];
       barco.foto4 = _barcos[i]["foto4"];
       barco.foto5 = _barcos[i]["foto5"];
+
 
       pBuild.add(barco);
     }
@@ -136,7 +139,7 @@ class _PositionBoatState extends State<PositionBoat> {
 
 // funcao para posicionar barco
   void posicionaBarco(
-      int index, String name, int n, String img, BarcosDTO barco) {
+      int index, String name, int n, BarcosDTO barco) {
     BarcoPosicao posBarco = BarcoPosicao(barco);
     bool save = true;
 
@@ -253,10 +256,10 @@ class _PositionBoatState extends State<PositionBoat> {
               _mCampo[index]["linha"] != 9) {
             setState(() {
               barcosUsados.add(data);
-              String img = pBuild[data].foto1;
+             print("parte 1: ${pBuild[data].foto1}");
               String name = pBuild[data].nomeBarco;
               int n = pBuild[data].tamanho;
-              posicionaBarco(index, name, n, img, pBuild[data]);
+              posicionaBarco(index, name, n, pBuild[data]);
               if (barcosUsados.length == _lista.length)
                 msgSnack("Barcos já posicionados... PRONTO PARA BATALHA!!");
             });
@@ -324,9 +327,9 @@ class _PositionBoatState extends State<PositionBoat> {
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
         return Draggable<int>(
-          child: buildB(snapshot.data[0]["barcos"][index]["foto1"], index,
+          child: buildB(snapshot.data[0]["barcos"][index]["foto0"], index,
               snapshot.data[0]["barcos"][index]["tamanho"]),
-          feedback: buildB(snapshot.data[0]["barcos"][index]["foto1"], index,
+          feedback: buildB(snapshot.data[0]["barcos"][index]["foto0"], index,
               snapshot.data[0]["barcos"][index]["tamanho"]),
           childWhenDragging: Container(),
           data: index,
@@ -396,150 +399,175 @@ class _PositionBoatState extends State<PositionBoat> {
         ),
         elevation: 0,
       ),
-      body: LayoutBuilder(
-        builder: (_, constraints) {
-          return Column(mainAxisAlignment: MainAxisAlignment.start, children: <
-              Widget>[
-            Container(
-              decoration: const BoxDecoration(
-                  color: Color(0xff293241),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20))),
-              height: 50,
-              width: constraints.maxWidth,
-              child: Center(
-                child: timer(),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(top: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                      height: constraints.maxHeight * 0.50,
-                      width: constraints.maxWidth * 0.76,
-                      child: LayoutBuilder(builder: (_, constraints2) {
-                        return GridView.builder(
-                            itemCount: _mCampo.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisExtent:
-                                        constraints2.maxHeight * gridSize,
-                                    mainAxisSpacing:
-                                        constraints2.maxHeight * 0.003,
-                                    crossAxisSpacing:
-                                        constraints2.maxWidth * 0.003,
-                                    crossAxisCount: linhasColunas),
-                            itemBuilder: buildTargets);
-                      })),
-                  Container(
-                    alignment: Alignment.center,
-                    height: constraints.maxHeight * 0.4,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        SizedBox(
-                          height: constraints.maxHeight * 0.08,
-                          child: ElevatedButton(
-                            onPressed: aleatorio,
-                            child: const Text("A"),
-                            style: ElevatedButton.styleFrom(
-                                primary: const Color(0xff3D5A80)),
-                          ),
-                        ),
-                        SizedBox(
-                          height: constraints.maxHeight * 0.08,
-                          child: ElevatedButton(
-                            onPressed: _rotation
-                                ? () {
-                                    setState(() {
-                                      _rotation = false;
-                                      buttonColor = const Color(0xff3D5A80);
-                                    });
-                                  }
-                                : () {
-                                    setState(() {
-                                      _rotation = true;
-                                      buttonColor = Colors.redAccent;
-                                    });
-                                  },
-                            child: const Icon(Icons.replay),
-                            style: ElevatedButton.styleFrom(
-                                primary: buttonColor,
-                                onSurface: const Color(0xff3D5A80)),
-                          ),
-                        ),
-                        SizedBox(
-                          height: constraints.maxHeight * 0.08,
-                          child: ElevatedButton(
-                            onPressed: resetGrid,
-                            child: const Icon(Icons.delete_rounded),
-                            style: ElevatedButton.styleFrom(
-                                primary: const Color(0xff3D5A80)),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              width: constraints.maxWidth,
-              height: constraints.maxHeight * 0.18,
-              child: Expanded(
-                child: FutureBuilder(
-                    future: carregarCenario(),
-                    builder: (context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                        case ConnectionState.none:
-                          return Container(
-                            width: 50,
-                            height: 50,
-                            alignment: Alignment.center,
-                            child: const CircularProgressIndicator(
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.black),
-                              strokeWidth: 5.0,
-                            ),
-                          );
-                        default:
-                          if (snapshot.hasError)
-                            return Container();
-                          else
-                            return barcosBotoes(context, snapshot);
-                      }
-                    }),
-              ),
-            ),
-            Container(
-              height: constraints.maxHeight * 0.10,
-              width: constraints.maxWidth * 0.40,
-              padding: const EdgeInsets.only(top: 30),
-              child: Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    time?.cancel();
-                    // CreatePartida.create(idPartida, idJogador, barcoPosicao);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => BatlePage(_mCampo, _aCampo)));
-                  },
-                  style: ElevatedButton.styleFrom(
-                      primary: const Color(0xff3D5A80)),
-                  child: const Text(
-                    "Pronto!",
-                    style: TextStyle(fontSize: 20),
-                  ),
+      body: Center(
+        child: Visibility(
+          visible: _visible,
+          replacement: Container(
+            width: 400,
+            height: 400,
+            alignment: Alignment.center,
+            child: Column(
+              children: const [
+                CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                  strokeWidth: 5.0,
                 ),
-              ),
+                Divider(color: Colors.transparent,),
+                Text("Aguardando o oponente")
+              ],
             ),
-          ]);
-        },
+          ),
+          child: LayoutBuilder(
+            builder: (_, constraints) {
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      decoration: const BoxDecoration(
+                          color: Color(0xff293241),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20))),
+                      height: 50,
+                      width: constraints.maxWidth,
+                      child: Center(
+                        child: timer(),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                              height: constraints.maxHeight * 0.50,
+                              width: constraints.maxWidth * 0.76,
+                              child: LayoutBuilder(builder: (_, constraints2) {
+                                return GridView.builder(
+                                    itemCount: _mCampo.length,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            mainAxisExtent:
+                                                constraints2.maxHeight * gridSize,
+                                            mainAxisSpacing:
+                                                constraints2.maxHeight * 0.003,
+                                            crossAxisSpacing:
+                                                constraints2.maxWidth * 0.003,
+                                            crossAxisCount: linhasColunas),
+                                    itemBuilder: buildTargets);
+                              })),
+                          Container(
+                            alignment: Alignment.center,
+                            height: constraints.maxHeight * 0.4,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                SizedBox(
+                                  height: constraints.maxHeight * 0.08,
+                                  child: ElevatedButton(
+                                    onPressed: aleatorio,
+                                    child: const Text("A"),
+                                    style: ElevatedButton.styleFrom(
+                                        primary: const Color(0xff3D5A80)),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: constraints.maxHeight * 0.08,
+                                  child: ElevatedButton(
+                                    onPressed: _rotation
+                                        ? () {
+                                            setState(() {
+                                              _rotation = false;
+                                              buttonColor =
+                                                  const Color(0xff3D5A80);
+                                            });
+                                          }
+                                        : () {
+                                            setState(() {
+                                              _rotation = true;
+                                              buttonColor = Colors.redAccent;
+                                            });
+                                          },
+                                    child: const Icon(Icons.replay),
+                                    style: ElevatedButton.styleFrom(
+                                        primary: buttonColor,
+                                        onSurface: const Color(0xff3D5A80)),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: constraints.maxHeight * 0.08,
+                                  child: ElevatedButton(
+                                    onPressed: resetGrid,
+                                    child: const Icon(Icons.delete_rounded),
+                                    style: ElevatedButton.styleFrom(
+                                        primary: const Color(0xff3D5A80)),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: constraints.maxWidth,
+                      height: constraints.maxHeight * 0.18,
+                      child: Expanded(
+                        child: FutureBuilder(
+                            future: carregarCenario(),
+                            builder: (context, snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.waiting:
+                                case ConnectionState.none:
+                                  return Container(
+                                    width: 50,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: const CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.black),
+                                      strokeWidth: 5.0,
+                                    ),
+                                  );
+                                default:
+                                  if (snapshot.hasError)
+                                    return Container();
+                                  else
+                                    return barcosBotoes(context, snapshot);
+                              }
+                            }),
+                      ),
+                    ),
+                    Container(
+                      height: constraints.maxHeight * 0.10,
+                      width: constraints.maxWidth * 0.40,
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            time?.cancel();
+                            // CreatePartida.create(idPartida, idJogador, barcoPosicao);
+                            /*Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BatlePage(_mCampo, _aCampo)));*/
+                            setState(() {
+                              _visible = false;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: const Color(0xff3D5A80)),
+                          child: const Text(
+                            "Pronto!",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]);
+            },
+          ),
+        ),
       ),
     );
   }
