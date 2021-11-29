@@ -470,8 +470,8 @@ class _MyHomePageState extends State<HomePage> {
       children: <Widget>[
         IconButton(
           color: Colors.white,
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          iconSize: 50,
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+          iconSize: 45,
           icon: const Icon(Icons.play_arrow),
           tooltip: 'Jogar',
           onPressed: () {
@@ -488,8 +488,8 @@ class _MyHomePageState extends State<HomePage> {
       children: <Widget>[
         IconButton(
           color: Colors.white,
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          iconSize: 50,
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+          iconSize: 45,
           icon: const Icon(Icons.person),
           tooltip: 'Perfil',
           onPressed: () {
@@ -510,8 +510,8 @@ class _MyHomePageState extends State<HomePage> {
       children: <Widget>[
         IconButton(
             color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-            iconSize: 50,
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            iconSize: 45,
             icon: const Icon(Icons.settings),
             tooltip: 'Configurações',
             onPressed: () {

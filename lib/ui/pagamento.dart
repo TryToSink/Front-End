@@ -67,7 +67,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                     padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
                                   ),
                                   Container(
-                                    width: constraints.maxWidth * .80,
+                                    width: constraints.maxWidth * .85,
                                     height: constraints.maxHeight * .12,
                                     child: TextButton(
                                       style: TextButton.styleFrom(
@@ -91,7 +91,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                           Text(
                                             'Credit Card',
                                             style: const TextStyle(
-                                                fontSize: 30,
+                                                fontSize: 25,
                                                 color: Colors.black),
                                             softWrap: true,
                                           ),
@@ -123,7 +123,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                       padding:
                                           EdgeInsets.fromLTRB(0, 0, 0, 30)),
                                   Container(
-                                    width: constraints.maxWidth * .80,
+                                    width: constraints.maxWidth * .85,
                                     height: constraints.maxHeight * .12,
                                     child: TextButton(
                                       style: TextButton.styleFrom(
@@ -145,7 +145,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                           Text(
                                             'Samsung Pay',
                                             style: const TextStyle(
-                                                fontSize: 30,
+                                                fontSize: 25,
                                                 color: Colors.black),
                                             softWrap: true,
                                           ),
@@ -177,7 +177,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                       padding:
                                           EdgeInsets.fromLTRB(0, 0, 0, 30)),
                                   Container(
-                                    width: constraints.maxWidth * .80,
+                                    width: constraints.maxWidth * .85,
                                     height: constraints.maxHeight * .12,
                                     child: TextButton(
                                       style: TextButton.styleFrom(
@@ -198,7 +198,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                           Text(
                                             'PIX',
                                             style: const TextStyle(
-                                                fontSize: 30,
+                                                fontSize: 25,
                                                 color: Colors.black),
                                             softWrap: true,
                                           ),
@@ -230,7 +230,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                       padding:
                                           EdgeInsets.fromLTRB(0, 0, 0, 30)),
                                   Container(
-                                    width: constraints.maxWidth * .80,
+                                    width: constraints.maxWidth * .85,
                                     height: constraints.maxHeight * .12,
                                     child: TextButton(
                                       style: TextButton.styleFrom(
@@ -252,7 +252,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                           Text(
                                             'Adicionar Cartão',
                                             style: const TextStyle(
-                                                fontSize: 30,
+                                                fontSize: 25,
                                                 color: Colors.black),
                                             softWrap: true,
                                           ),
@@ -282,7 +282,7 @@ class _LoadPagamentoState extends State<LoadPagamento> {
                                   ),
                                   Padding(
                                       padding:
-                                          EdgeInsets.fromLTRB(0, 0, 0, 120)),
+                                          EdgeInsets.fromLTRB(0, 0, 0, 70)),
                                   Container(
                                     width: constraints.maxWidth * .70,
                                     height: constraints.maxHeight * .12,
