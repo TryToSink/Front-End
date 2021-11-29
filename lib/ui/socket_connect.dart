@@ -13,9 +13,10 @@ import '../../DTO/jogadaFimJogoDTO.dart';
 import '../../DTO/iniciar_jogo_dados_dto.dart';
 
 class socketConnect {
+  //IO.Socket socket = IO.io('http://201.42.59.203:3334:3334', <String, dynamic>{
   IO.Socket socket = IO.io('http://201.42.59.203:3334', <String, dynamic>{
     'transport': ['websocket'],
-    'autoConnect': false,
+    'autoConnect': true,
   });
 
   static partidaAleatoriaDTO partidaAleatoriaDados = new partidaAleatoriaDTO();

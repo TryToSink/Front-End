@@ -476,7 +476,7 @@ class _MyHomePageState extends State<HomePage> {
           tooltip: 'Jogar',
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PositionBoat()));
+                MaterialPageRoute(builder: (context) => PositionBoat(idPartida: socketConnect.idPartida, idJogador: this.idUser)));
           },
         ),
       ],

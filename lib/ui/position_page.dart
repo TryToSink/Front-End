@@ -13,19 +13,46 @@ import 'package:proj0511/ui/battle_page.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:proj0511/ui/barcos_dto.dart';
+import 'package:proj0511/ui/carregar_jogo_barcos.dart';
 import 'package:proj0511/ui/socket_connect.dart';
 import '../rotas.dart';
 import '../timer.dart';
 import 'package:proj0511/DTO/iniciar_jogo_dados_dto.dart';
 
 class PositionBoat extends StatefulWidget {
-  const PositionBoat({Key? key}) : super(key: key);
+  String idPartida;
+  String idJogador;
+
+  PositionBoat({Key? key, required this.idPartida, required this.idJogador}) : super(key: key);
 
   @override
-  _PositionBoatState createState() => _PositionBoatState();
+  _PositionBoatState createState() => _PositionBoatState(idPartida: this.idPartida, idJogador: this.idJogador);
 }
 
 class _PositionBoatState extends State<PositionBoat> {
+
+  String idPartida;
+  String idJogador;
+
+  _PositionBoatState({Key? key, required this.idPartida, required this.idJogador});
+
+  static Future<bool> carregaJogo(String idPartida, String idJogador, carregar_jogo_barcos barcos) async {
+    var url = url1 + '/carregaJogo';
+    var header = {"Content-Type": "application/json"};
+    Map params = {"idPartida": idPartida, "idJogador": idJogador, 'barcosPosicoes': barcos};
+    var _body = json.encode(params);
+    print("json enviado : $_body");
+    var response =
+    await http.post(Uri.parse(url), headers: header, body: _body);
+    Map mapResponse = json.decode(response.body);
+    if (response.statusCode == 200) {
+      print('Pronto para a partida');
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // Declarações de variaveis
   final linhasColunas = 10;
   List _lista = [];
@@ -45,6 +72,8 @@ class _PositionBoatState extends State<PositionBoat> {
   int maxAlt = 6;
   double gridSize = 0.0;
   double gridSize1 = 0.0;
+
+  carregar_jogo_barcos barcos = new carregar_jogo_barcos();
 
   Future<List> carregarCenario() async {
     http.Response response;
@@ -120,10 +149,10 @@ class _PositionBoatState extends State<PositionBoat> {
 // inicio da tela
   @override
   void initState() {
-
     socketConnect().iniciarJogo((iniciarJogoDadosDTO iniciarJogoDados) {
       // quando cair aqui, significa que o outro player também carregou os barcos
       print('iniciar jogo ${iniciarJogoDados.proximoPlayer}');
+
     });
 
     super.initState();
@@ -554,6 +583,7 @@ class _PositionBoatState extends State<PositionBoat> {
                         child: ElevatedButton(
                           onPressed: () {
                             time?.cancel();
+                            carregaJogo(this.idPartida, this.idJogador, barcos);
                             // CreatePartida.create(idPartida, idJogador, barcoPosicao);
                             /*Navigator.push(
                             context,
