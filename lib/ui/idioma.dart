@@ -78,7 +78,7 @@ class _IdiomaState extends State<PageIdioma> {
                                       bottomRight: Radius.circular(10)),
                                   color: Colors.white,
                                   image: DecorationImage(
-                                    image: NetworkImage('assets/portugues.png'),
+                                    image: AssetImage('assets/portugues.png'),
                                     fit: BoxFit.cover,
                                   ))),
                           const Text(
@@ -131,7 +131,7 @@ class _IdiomaState extends State<PageIdioma> {
                                       bottomRight: Radius.circular(10)),
                                   color: Colors.white,
                                   image: DecorationImage(
-                                    image: NetworkImage('assets/ingles.png'),
+                                    image: AssetImage('assets/ingles.png'),
                                     fit: BoxFit.cover,
                                   ))),
                           const Text(
@@ -184,7 +184,7 @@ class _IdiomaState extends State<PageIdioma> {
                                       bottomRight: Radius.circular(10)),
                                   color: Colors.white,
                                   image: DecorationImage(
-                                    image: NetworkImage('assets/espanhol.png'),
+                                    image: AssetImage('assets/espanhol.png'),
                                     fit: BoxFit.cover,
                                   ))),
                           const Text(
