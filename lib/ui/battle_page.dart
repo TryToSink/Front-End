@@ -3,10 +3,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:proj0511/posicao.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:proj0511/rotas.dart';
+import 'package:proj0511/ui/barcos_dto.dart';
 import '../timer.dart';
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 
 class BatlePage extends StatefulWidget {
+  Posicao posicao = Posicao();
   List _aCampo = [];
   List _mCampo = [];
 
@@ -20,13 +25,17 @@ class _BatlePageState extends State<BatlePage> {
   // declaracao das variaveis
   List _advCampo = [];
   List _meuCampo = [];
+
+  //  vvvvvvvvv Controle do grid
   bool _valid = true;
+
+  Color corFundo = Color(0xff75CCFE);
 
   List currentUser = [];
   List advUser = [];
   final degress = 90.0;
   double gridSize = 0.0;
-  double linhaColuna = 0;
+  double linhaColuna = 10;
 
   //inicio da pagina
 
@@ -36,6 +45,7 @@ class _BatlePageState extends State<BatlePage> {
 
     _advCampo = widget._aCampo;
     _meuCampo = widget._mCampo;
+
     setCurrentUser(5649, "Ronaldo (321)", "");
     setAdvUser(5650, "Gabriel (565)", "");
 
@@ -47,6 +57,72 @@ class _BatlePageState extends State<BatlePage> {
       gridSize = 0.06;
     linhaColuna = sqrt(_advCampo.length);
     startTimer();
+  }
+
+  Future<String> enviarJogada(
+      String idPartida, String idAdversario, Posicao pos) async {
+    var url = url1 + '/jogada';
+    var header = {"Content-Type": "application/json"};
+    Map params = {
+      "idPartida": idPartida,
+      "idAdversario": idAdversario,
+      "eixoX": pos.eixoX,
+      "eixoY": pos.eixoY
+    };
+    var _body = json.encode(params);
+    print("json enviado : $_body");
+    var response =
+        await http.post(Uri.parse(url), headers: header, body: _body);
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    List jsonData = json.decode("[" + response.body + "]");
+    try {
+      return jsonData[0]["status"];
+    } catch (error) {
+      try {
+        return jsonData[0]["vencedor"]["status"];
+      } catch (error) {
+        print(error);
+        return "00";
+      }
+    }
+  }
+
+  void jogada(String idPartida, String idAdversario, Posicao pos) async {
+    Future<String> result = enviarJogada(idPartida, idAdversario, pos);
+    if (result == '00') {
+      oponenteTurno();
+    } else if (result == '01' || result == '02') {
+      meuTurno();
+    } else if (result == '03') {
+      //redireciona para a tela de resultado da Partida
+
+    }
+  }
+
+  void meuTurno() {
+    setState(() {
+      _valid = true;
+    });
+    msgSnack("Seu turno", 4);
+  }
+
+  void oponenteTurno() async {
+    setState(() {
+      _valid = false;
+    });
+    msgSnack("Turno do oponente", 4);
+    await Future.delayed(Duration(seconds: 10));
+    meuTurno();
+  }
+
+  void msgSnack(String msg, int temp) {
+    final snackBar = SnackBar(
+      content: Text(msg),
+      duration: Duration(seconds: temp),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   //auxiliar para usuário
@@ -76,20 +152,13 @@ class _BatlePageState extends State<BatlePage> {
   // montar grid usuario
   Widget buildFieldMeuCampo(BuildContext context, int index) {
     return Container(
-        color: Color(0xff75CCFE),
+        color: corFundo,
         child: _meuCampo[index]["status"]
             ? _meuCampo[index]["rotacao"]
                 ? Transform.rotate(
                     angle: degress * pi / 180,
-                    child: Image.asset(
-                      "${_meuCampo[index]["image"]}",
-                      fit: BoxFit.fill,
-                    ),
-                  )
-                : Image.asset(
-                    "${_meuCampo[index]["image"]}",
-                    fit: BoxFit.fill,
-                  )
+                    child: BarcosDTO.getFoto(_meuCampo[index]["image"]))
+                : BarcosDTO.getFoto(_meuCampo[index]["image"])
             : null);
   }
 
@@ -99,13 +168,16 @@ class _BatlePageState extends State<BatlePage> {
       onTap: _valid
           ? () {
               setState(() {
+                //
                 _advCampo[index]["ataque"] = true;
-                _advCampo[index]["image"] = "images/fire.png";
+                _advCampo[index]["image"] = "assets/fire.png";
+                //
+                oponenteTurno();
               });
             }
           : null,
       child: Container(
-          color: Color(0xff75CCFE),
+          color: const Color(0xff75CCFE),
           child: _advCampo[index]["ataque"]
               ? _advCampo[index]["rotacao"]
                   ? Transform.rotate(
@@ -125,7 +197,7 @@ class _BatlePageState extends State<BatlePage> {
 
   //cronometro
   void startTimer() {
-    time = Timer.periodic(Duration(seconds: 1), (_) {
+    time = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
         if (mins == 0 && seconds == 0)
           time?.cancel();
@@ -142,8 +214,8 @@ class _BatlePageState extends State<BatlePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff293241),
-        title: Text("Batle Page"),
+        backgroundColor: const Color(0xff293241),
+        title: const Text("Batle Page"),
         centerTitle: true,
         elevation: 0,
       ),
@@ -154,7 +226,7 @@ class _BatlePageState extends State<BatlePage> {
               Container(
                 height: constraint.maxHeight * 0.15,
                 width: constraint.maxWidth,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     color: Color(0xff293241),
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(20),
@@ -164,7 +236,7 @@ class _BatlePageState extends State<BatlePage> {
                   children: [
                     Container(
                       height: constraint.maxHeight * 0.1,
-                      width: constraint.maxHeight * 0.1,
+                      width: constraint.maxWidth * 0.1,
                       color: Colors.black,
                     ),
                     Column(
@@ -173,7 +245,7 @@ class _BatlePageState extends State<BatlePage> {
                         Text("${advUser[0]["name"]}",
                             style:
                                 TextStyle(color: Colors.white, fontSize: 20)),
-                        Divider(),
+                        const Divider(),
                         Row(
                           children: [
                             Container(
@@ -181,7 +253,8 @@ class _BatlePageState extends State<BatlePage> {
                               width: 30,
                               color: Colors.green,
                             ),
-                            Text("     Brasil",
+                            const VerticalDivider(),
+                            const Text("Brasil",
                                 style: TextStyle(
                                     color: Colors.white54, fontSize: 16))
                           ],
@@ -192,22 +265,22 @@ class _BatlePageState extends State<BatlePage> {
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 height: constraint.maxHeight * 0.7,
                 width: constraint.maxWidth,
                 child: LayoutBuilder(
                   builder: (_, constraint2) {
                     return Column(
                       children: [
-                        Container(
+                        SizedBox(
                           width: constraint2.maxWidth * 0.95,
                           height: constraint2.maxHeight * 0.4,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Container(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: SizedBox(
                                     height: constraint2.maxHeight * 0.6,
                                     width: constraint2.maxWidth * 0.4,
                                     child: GridView.builder(
@@ -216,43 +289,43 @@ class _BatlePageState extends State<BatlePage> {
                                           SliverGridDelegateWithFixedCrossAxisCount(
                                               mainAxisExtent:
                                                   constraint2.maxHeight *
-                                                      (gridSize / 2.25),
+                                                      (gridSize / 2.7),
                                               mainAxisSpacing:
-                                                  constraint2.maxHeight * 0.001,
+                                                  constraint2.maxHeight * 0.003,
                                               crossAxisSpacing:
-                                                  constraint2.maxHeight * 0.001,
+                                                  constraint2.maxHeight * 0.003,
                                               crossAxisCount:
                                                   linhaColuna.toInt()),
                                       itemBuilder: buildFieldMeuCampo,
                                     )),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(right: 20),
+                                padding: const EdgeInsets.only(right: 20),
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       height: constraint2.maxHeight * 0.07,
-                                      width: constraint2.maxWidth * 0.25,
+                                      width: constraint2.maxWidth * 0.4,
                                       child: ElevatedButton(
                                           onPressed: () {},
                                           child: Text("Aleatório"),
                                           style: ElevatedButton.styleFrom(
                                               primary: Color(0xff3D5A80))),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       height: constraint2.maxHeight * 0.07,
-                                      width: constraint2.maxWidth * 0.25,
+                                      width: constraint2.maxWidth * 0.4,
                                       child: ElevatedButton(
                                           onPressed: () {},
                                           child: Text("Configurações"),
                                           style: ElevatedButton.styleFrom(
                                               primary: Color(0xff3D5A80))),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       height: constraint2.maxHeight * 0.07,
-                                      width: constraint2.maxWidth * 0.25,
+                                      width: constraint2.maxWidth * 0.4,
                                       child: ElevatedButton(
                                           onPressed: () {},
                                           child: Text("Desistir"),
@@ -265,18 +338,18 @@ class _BatlePageState extends State<BatlePage> {
                             ],
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: constraint2.maxWidth,
                           height: constraint2.maxHeight * 0.6,
                           child: LayoutBuilder(
                             builder: (_, constraint3) {
                               return Padding(
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                     top: 10, right: 20, bottom: 10),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       height: constraint3.maxHeight,
                                       width: constraint3.maxWidth * 0.75,
                                       child: GridView.builder(
@@ -288,10 +361,10 @@ class _BatlePageState extends State<BatlePage> {
                                                         gridSize,
                                                 mainAxisSpacing: constraint3
                                                         .maxHeight *
-                                                    0.004,
+                                                    0.005,
                                                 crossAxisSpacing:
                                                     constraint3.maxHeight *
-                                                        0.004,
+                                                        0.005,
                                                 crossAxisCount:
                                                     linhaColuna.toInt()),
                                         itemBuilder: buildFieldAdvCampo,
@@ -311,7 +384,7 @@ class _BatlePageState extends State<BatlePage> {
               Container(
                 height: constraint.maxHeight * 0.15,
                 width: constraint.maxWidth,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     color: Color(0xff293241),
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
@@ -328,9 +401,9 @@ class _BatlePageState extends State<BatlePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("${advUser[0]["name"]}",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 20)),
-                        Divider(),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 20)),
+                        const Divider(),
                         Row(
                           children: [
                             Container(
@@ -338,14 +411,15 @@ class _BatlePageState extends State<BatlePage> {
                               width: 30,
                               color: Colors.green,
                             ),
-                            Text("     Brasil",
+                            const VerticalDivider(),
+                            const Text("Brasil",
                                 style: TextStyle(
                                     color: Colors.white54, fontSize: 16))
                           ],
                         ),
                       ],
                     ),
-                    Container(
+                    const SizedBox(
                       height: 45,
                       width: 45,
                     )

@@ -2,13 +2,15 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/cenarios.dart';
-import 'package:proj0511/ui/configuracao.dart';
-import 'package:proj0511/ui/energia.dart';
 import 'package:flutter/foundation.dart';
-import 'package:proj0511/ui/profile_page.dart';
-import 'package:proj0511/ui/socket_connect.dart';
+import '../rotas.dart';
+import 'cenarios.dart';
+import 'configuracao.dart';
+import 'position_page.dart';
+import 'energia.dart';
+import 'profile_page.dart';
+import 'socket_connect.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   String idUser;
@@ -24,9 +26,9 @@ class _MyHomePageState extends State<HomePage> {
 
   _MyHomePageState({Key? key, required this.idUser});
 
-  late String url = 'http://3.144.90.4:3333/modoJogo/lista';
+  late String url = url1 + '/modoJogo/lista';
 
-//late String urlSocket = 'http://3.144.90.4:3334/';
+//late String urlSocket = 'http://201.42.59.203:3334/';
   var _lista = [];
 
   void getTest() async {
@@ -77,34 +79,32 @@ class _MyHomePageState extends State<HomePage> {
             centerTitle: true,
             title: const Text('MODO DE JOGO'),
             actions: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Container(
-                    height: 10,
-                    width: 60,
-                    color: const Color(0xFF293241),
-                    child: Center(
-                      child: TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.blueGrey[900],
-                              elevation: 5,
-                              shadowColor: Colors.grey),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LoadEnergia(),
-                                ));
-                          },
-                          child: const Text(
-                            '/20 +',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
-                          )),
-                    ),
-                  ))
+              Container(
+                height: 30,
+                width: 70,
+                color: const Color(0xFF293241),
+                child: Center(
+                  child: TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: Colors.blueGrey[900],
+                          elevation: 5,
+                          shadowColor: Colors.grey),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoadEnergia(),
+                            ));
+                      },
+                      child: const Text(
+                        '20/20 +',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.white,
+                        ),
+                      )),
+                ),
+              )
             ],
           ),
           body: Container(
@@ -259,7 +259,7 @@ class _MyHomePageState extends State<HomePage> {
                                                             color: Colors.grey,
                                                             image:
                                                                 DecorationImage(
-                                                              image: NetworkImage(
+                                                              image: AssetImage(
                                                                   'assets/Cópia de jostik.png'),
                                                               fit: BoxFit
                                                                   .contain,
@@ -357,7 +357,7 @@ class _MyHomePageState extends State<HomePage> {
                                                             color: Colors.grey,
                                                             image:
                                                                 DecorationImage(
-                                                              image: NetworkImage(
+                                                              image: AssetImage(
                                                                   'assets/cubos.png'),
                                                               fit: BoxFit
                                                                   .contain,
@@ -470,17 +470,13 @@ class _MyHomePageState extends State<HomePage> {
       children: <Widget>[
         IconButton(
           color: Colors.white,
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          iconSize: 50,
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+          iconSize: 45,
           icon: const Icon(Icons.play_arrow),
           tooltip: 'Jogar',
           onPressed: () {
-            //  Navigator.push(
-            //    context,
-            //    MaterialPageRoute(
-            //      builder: (context) => LoadPage(),
-            //    ),
-            //  );
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PositionBoat(idPartida: socketConnect.idPartida, idJogador: this.idUser)));
           },
         ),
       ],
@@ -492,8 +488,8 @@ class _MyHomePageState extends State<HomePage> {
       children: <Widget>[
         IconButton(
           color: Colors.white,
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          iconSize: 50,
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+          iconSize: 45,
           icon: const Icon(Icons.person),
           tooltip: 'Perfil',
           onPressed: () {
@@ -514,8 +510,8 @@ class _MyHomePageState extends State<HomePage> {
       children: <Widget>[
         IconButton(
             color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-            iconSize: 50,
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            iconSize: 45,
             icon: const Icon(Icons.settings),
             tooltip: 'Configurações',
             onPressed: () {

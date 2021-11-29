@@ -1,15 +1,10 @@
-import 'dart:io';
-import 'dart:convert';
+// ignore_for_file: no_logic_in_create_state, must_be_immutable, avoid_print, deprecated_member_use, unused_element, prefer_const_constructors, prefer_final_fields
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flag/flag.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart';
 import 'package:proj0511/ui/profile_page_edit.dart';
-import 'package:proj0511/ui/user.dart';
-import 'package:proj0511/ui/api_sign_up.dart';
+import '../rotas.dart';
 
 class ProfilePage extends StatefulWidget {
   late String idUser;
@@ -32,69 +27,271 @@ class _ProfilePageState extends State<ProfilePage> {
   late String _username = '';
   late List _amigos = [];
   late List _usernameAmigo = [];
+  late List _partidasJogadas = [];
+  late List _usernamePartidas = [];
+  late Map _amigosMap = {};
+  late int numeroPartidas = 0;
+  late List _partidasVencidas = [];
+  late int venceu = 0;
 
-  late String urlProfile = 'http://3.144.90.4:3333/usuarios/find';
-  late String urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName;
-  late String urlFriends = 'http://3.144.90.4:3333/usuarios/amigosOnline';
-  late String urlAddFriends = 'http://3.144.90.4:3333/usuarios/adicionaAmigo';
-  late String urlUpdate = 'http://3.144.90.4:3333/usuarios';
+  late String urlProfile = url1 + '/usuarios/find';
+  late String urlPhoto = url1 + '/usuarios/foto/' + imageName;
+  late String urlFriends = url1 + '/usuarios/amigosOnline';
+  late String urlAddFriends = url1 + '/usuarios/adicionaAmigo';
+  late String urlUpdate = url1 + '/usuarios';
+  late String urlHistorico = url1 + '/usuarios/historico';
 
   @override
   void initState() {
     super.initState();
-    print('Entrou no initstate');
+    print('Entrou no initstate ' + idUser);
     getUser();
+    getPartidas();
   }
 
   getUser() async {
-    print('object');
-    print(urlProfile + "?id=" + idUser);
     try {
       final response = await http.get(
         Uri.parse(urlProfile + "?id=" + idUser),
       );
-      print('BODY: ' + response.body);
 
-      final jsonData = jsonDecode(response.body) as Map;
-      print('JSONDATA:' + jsonData.toString());
+      var jsonData = jsonDecode(response.body);
       setState(() {
         _username = jsonData['username'];
         _amigos = jsonData['amigos'];
-
-        print('amigos: ' + _amigos.toString());
-        for (int i = 0; i <= jsonData['amigos'].length; i++) {
-          _amigos[i] = jsonData['amigos'][i];
-          _usernameAmigo[i] = jsonData['amigos'][i]['name'];
+        for (var element in _amigosMap.entries) {
+          _amigos.add(element);
         }
-        print('amigo[0]: ' + _amigos[0]);
+        int counter = (_amigos.length.toInt());
+        for (var i = 0; i < counter; i++) {
+          _usernameAmigo.add(_amigos[i]['name']);
+        }
       });
     } catch (error) {
       print(error);
     }
 
     setState(() {
-      urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName;
+      urlPhoto = 'http://201.42.59.203:3333/usuarios/foto/' + imageName;
       imageCache!.clear();
       imageCache!.clearLiveImages();
     });
-
     return;
+  }
+
+  getPartidas() async {
+    try {
+      final response =
+          await http.get(Uri.parse(urlHistorico + '?id=' + idUser));
+      print('BODY PARTIDAS: ' + response.body);
+
+      final jsonData = jsonDecode(response.body) as Map;
+      print('JSONDATA PARTIDAS: ' + jsonData.toString() + '\n');
+
+      setState(() {
+        _partidasJogadas = jsonData['oponentes'];
+        print('PARTIDASJOGADAS: ' + _partidasJogadas.toString() + '\n');
+        numeroPartidas = jsonData['oponentes'].length;
+        print('NUMEROPARTIDAS: ' + numeroPartidas.toString() + '\n');
+        int counter = (_partidasJogadas.length.toInt());
+        print('COUNTER: ' + counter.toString() + '\n');
+        for (var i = 0; i < counter; i++) {
+          _usernamePartidas.add(_partidasJogadas[i]['nome']);
+          if (_partidasJogadas[i]['venceu']) {
+            print(
+                'PARTIDASJOGADAS[i]: ' + _partidasJogadas[i].toString() + '\n');
+            _partidasVencidas.add(_partidasJogadas[i]);
+          }
+        }
+        venceu = _partidasVencidas.length;
+      });
+
+      //print('PARTIDAS JOGADAS: ' + _partidasJogadas.toString());
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  buildList(nPartidas, textColor, index) {
+    Widget lista;
+    if (nPartidas == 0) {
+      index = 1;
+      lista = Center(
+        child: Column(
+          children: [
+            Image.asset(
+              'sleepy_pirate.png',
+              height: 100,
+              width: 100,
+            ),
+            Text(
+              'Tá meio vazio por aqui!',
+              style: TextStyle(color: textColor),
+            ),
+          ],
+        ),
+      );
+    } else {
+      lista = Padding(
+        padding:
+            const EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 16),
+        child: Container(
+          height: 80,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 0.5,
+                  spreadRadius: 0.5,
+                  offset: Offset(1.5, 1.5))
+            ],
+          ),
+          child: Card(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 65,
+                  width: 65,
+                  child: Image.asset('assets/empty-person.png'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    _usernamePartidas[index],
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                const Spacer(
+                  flex: 2,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 24.0),
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: Image.asset(getAssetResult(
+                        _partidasJogadas[index]['venceu'], index)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return lista;
+  }
+
+  buildFriendList(nPartidas, textColor, index) {
+    Widget lista;
+    bool vitoria = false;
+    if (nPartidas == 0) {
+      index = 1;
+      lista = Center(
+        child: Column(
+          children: [
+            Image.asset(
+              'sleepy_pirate.png',
+              height: 100,
+              width: 100,
+            ),
+            Text(
+              'Tá meio vazio por aqui!',
+              style: TextStyle(color: textColor),
+            ),
+          ],
+        ),
+      );
+    } else {
+      lista = Padding(
+        padding:
+            const EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 16),
+        child: Container(
+          height: 80,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 0.5,
+                  spreadRadius: 0.5,
+                  offset: Offset(1.5, 1.5))
+            ],
+          ),
+          child: Card(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 65,
+                  width: 65,
+                  child: Image.asset('assets/empty-person.png'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    _usernamePartidas[index],
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                const Spacer(
+                  flex: 2,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 24.0),
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: Image.asset('assets/green-dot.png'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return lista;
+  }
+
+  getAssetResult(
+    result,
+    index,
+  ) {
+    if (result) {
+      return 'assets/cubo-star.png';
+    } else {
+      return 'lib/assets/lose.png';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    const String gamesPlayed = ' 25';
+    late String gamesPlayed = numeroPartidas.toString();
     const String gamesWon = ' 45%';
-    const String winStreak = '5';
+    late String wins = venceu.toString();
     const String country = 'Brasil';
     const String labelMatches = 'Partidas Recentes';
     const String labelFriend = 'Amigos Online';
-    const String labelGamesPlayed = 'Games Played';
-    const String labelGamesWon = 'Games Won';
-    const String labelWinStreak = 'Win Streak';
+    const String labelGamesPlayed = 'Partidas Jogadas';
+    const String labelGamesWon = 'Partidas Vencidas';
+    const String labelWinStreak = 'Vitórias';
+    //bool temPartidas = _partidasJogadas.isEmpty;
     const appBarBGColor = Color(0xFF293241);
     const textColor = Color(0xFF3D5A80);
-    const bGColor = Color(0xFFE0FBFC);
+    const bGColor = Color(0xFFDDDDDD);
 
     return Scaffold(
       backgroundColor: bGColor,
@@ -220,7 +417,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 )),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -262,7 +459,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                          const Text(
+                          Text(
                             gamesPlayed,
                             style: TextStyle(
                               fontSize: 24.0,
@@ -313,7 +510,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           const Text(
-                            gamesWon,
+                            ' ' + gamesWon,
                             style: TextStyle(
                               fontSize: 24.0,
                               fontWeight: FontWeight.bold,
@@ -340,7 +537,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
                         labelWinStreak,
                         style: TextStyle(
@@ -349,7 +546,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       Text(
-                        '\u{1F525} $winStreak',
+                        '\u{1F525} $wins',
                         style: TextStyle(
                           fontSize: 24.0,
                           fontWeight: FontWeight.bold,
@@ -361,6 +558,34 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
+          //Lista de Partidas
+          Container(
+            child: const Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 24.0,
+              ),
+              child: Text(
+                labelMatches,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                ),
+              ),
+            ),
+            height: 40.0,
+            width: double.infinity,
+            decoration: const BoxDecoration(color: appBarBGColor),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: numeroPartidas,
+              itemBuilder: (BuildContext context, int index) {
+                return buildList(numeroPartidas, textColor, index);
+              },
+            ),
+          ),
+          //Lista de Amigos
           Container(
             child: const Padding(
               padding: EdgeInsets.symmetric(
@@ -383,75 +608,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: ListView.builder(
               itemCount: _amigos.length,
               itemBuilder: (BuildContext context, int index) {
-                print(_amigos.isEmpty);
-                return _amigos.isEmpty
-                    ? Center(
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              'sleepy_pirate.png',
-                              height: 100,
-                              width: 100,
-                            ),
-                            const Text(
-                              'Tá meio vazio por aqui!',
-                              style: TextStyle(color: textColor),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(
-                            top: 16, bottom: 16, left: 16, right: 16),
-                        child: Container(
-                          height: 80,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 0.5,
-                                  spreadRadius: 0.5,
-                                  offset: Offset(1.5, 1.5))
-                            ],
-                          ),
-                          child: Card(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  height: 65,
-                                  width: 65,
-                                  child: Image.asset('assets/empty-person.png'),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Text(
-                                    _amigos[index]['name'],
-                                    style: const TextStyle(
-                                      color: textColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                Spacer(
-                                  flex: 2,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 24.0),
-                                  child: Container(
-                                    height: 20,
-                                    width: 20,
-                                    child: Image.asset('assets/green-dot.png'),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
+                return buildFriendList(_amigos.length, textColor, index);
               },
             ),
           ),

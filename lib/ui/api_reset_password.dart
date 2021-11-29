@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class ResetApi {
   static Future<bool> reset(String username) async {
-    var url = 'http://3.144.90.4:3333/password/forgot';
+    var url = 'http://201.42.59.203:3333/password/forgot';
 
     var header = {"Content-Type": "application/json"};
 

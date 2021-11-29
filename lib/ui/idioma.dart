@@ -33,19 +33,13 @@ class _IdiomaState extends State<PageIdioma> {
           ),
           toolbarHeight: 100,
           backgroundColor: const Color(0xFF293241),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            //crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.arrow_back)),
-              const Padding(padding: EdgeInsets.fromLTRB(0, 0, 170, 0)),
-              const Text('IDIOMA')
-            ],
-          ),
+          centerTitle: true,
+          title: const Text('IDIOMA'),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(Icons.arrow_back)),
         ),
         body: Container(
           width: size.width,
@@ -84,7 +78,7 @@ class _IdiomaState extends State<PageIdioma> {
                                       bottomRight: Radius.circular(10)),
                                   color: Colors.white,
                                   image: DecorationImage(
-                                    image: NetworkImage('assets/portugues.png'),
+                                    image: AssetImage('assets/portugues.png'),
                                     fit: BoxFit.cover,
                                   ))),
                           const Text(
@@ -137,7 +131,7 @@ class _IdiomaState extends State<PageIdioma> {
                                       bottomRight: Radius.circular(10)),
                                   color: Colors.white,
                                   image: DecorationImage(
-                                    image: NetworkImage('assets/ingles.png'),
+                                    image: AssetImage('assets/ingles.png'),
                                     fit: BoxFit.cover,
                                   ))),
                           const Text(
@@ -190,7 +184,7 @@ class _IdiomaState extends State<PageIdioma> {
                                       bottomRight: Radius.circular(10)),
                                   color: Colors.white,
                                   image: DecorationImage(
-                                    image: NetworkImage('assets/espanhol.png'),
+                                    image: AssetImage('assets/espanhol.png'),
                                     fit: BoxFit.cover,
                                   ))),
                           const Text(
@@ -230,8 +224,7 @@ class _IdiomaState extends State<PageIdioma> {
                           shadowColor: Colors.grey),
                       child: const Text(
                         'OK',
-                        style:
-                            TextStyle(fontSize: 25, color: Colors.white),
+                        style: TextStyle(fontSize: 25, color: Colors.white),
                         softWrap: true,
                       ),
                       onPressed: () {

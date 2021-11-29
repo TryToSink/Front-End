@@ -1,10 +1,11 @@
 // @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:proj0511/ui/socket_connect.dart';
+import 'package:proj0511/DTO/partidaAleatoriaDTO.dart';
 
 import 'cenariosclass.dart';
+import 'position_page.dart';
+import 'socket_connect.dart';
 
 class LoadTela extends StatefulWidget {
   String idCenario;
@@ -28,8 +29,16 @@ class _LoadCenarioState extends State<LoadTela> {
   void initState() {
     super.initState();
     socketConnect().partidaAleatoria(idCenario, idUser);
-    socketConnect()
-        .partidaAleatoria(idCenario, '04be7cad-70aa-4921-98da-3b3c2b806b61');
+    socketConnect().partidaL((partidaAleatoriaDTO partidaAleatoriaDados) {
+      print('id da partida: ' + partidaAleatoriaDados.idPartida);
+      if (partidaAleatoriaDados.idPartida != null) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => PositionBoat(idPartida: partidaAleatoriaDados.idPartida, idJogador: idUser)));
+      }
+    });
+    print(idCenario);
+    print(idUser);
+    print('aqui passei');
   }
 
   @override
@@ -91,7 +100,7 @@ class _LoadCenarioState extends State<LoadTela> {
                                                     Radius.circular(10)),
                                             color: Color(0xFFDDDDDD),
                                             image: DecorationImage(
-                                              image: NetworkImage(
+                                              image: AssetImage(
                                                   'assets/espera.png'),
                                               fit: BoxFit.fill,
                                             ))),

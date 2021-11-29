@@ -1,46 +1,114 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proj0511/barco_posicao.dart';
+import 'package:proj0511/create_partida_api.dart';
 import 'package:proj0511/posicao.dart';
 import 'package:proj0511/ui/battle_page.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:proj0511/ui/barcos_dto.dart';
+import 'package:proj0511/ui/carregar_jogo_barcos.dart';
+import 'package:proj0511/ui/socket_connect.dart';
+import '../rotas.dart';
 import '../timer.dart';
+import 'package:proj0511/DTO/iniciar_jogo_dados_dto.dart';
 
 class PositionBoat extends StatefulWidget {
-  const PositionBoat({Key? key}) : super(key: key);
+  String idPartida;
+  String idJogador;
+
+  PositionBoat({Key? key, required this.idPartida, required this.idJogador}) : super(key: key);
 
   @override
-  _PositionBoatState createState() => _PositionBoatState();
+  _PositionBoatState createState() => _PositionBoatState(idPartida: this.idPartida, idJogador: this.idJogador);
 }
 
 class _PositionBoatState extends State<PositionBoat> {
+
+  String idPartida;
+  String idJogador;
+
+  _PositionBoatState({Key? key, required this.idPartida, required this.idJogador});
+
+  static Future<bool> carregaJogo(String idPartida, String idJogador, carregar_jogo_barcos barcos) async {
+    var url = url1 + '/carregaJogo';
+    var header = {"Content-Type": "application/json"};
+    Map params = {"idPartida": idPartida, "idJogador": idJogador, 'barcosPosicoes': barcos};
+    var _body = json.encode(params);
+    print("json enviado : $_body");
+    var response =
+    await http.post(Uri.parse(url), headers: header, body: _body);
+    Map mapResponse = json.decode(response.body);
+    if (response.statusCode == 200) {
+      print('Pronto para a partida');
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // Declarações de variaveis
   final linhasColunas = 10;
+  List _lista = [];
   List _mCampo = [];
-  List _aCampo = [];
+  final List _aCampo = [];
+  List<int> barcosUsados = [];
+  bool usado = false;
   bool _rotation = false;
   List<BarcosDTO> pBuild = [];
   List<BarcoPosicao> barcosPosicoes = [];
   Color buttonColor = Colors.blueAccent;
-  final degress = 90.0;
-  String defaultImage = "images/water.png";
+  bool _visible = true;
+
+  String defaultImage = "assets/water.png";
   int aux = 0;
-  Random random = new Random();
+  Random random = Random();
   int maxAlt = 6;
-  var _jogo = [];
   double gridSize = 0.0;
+  double gridSize1 = 0.0;
+
+  carregar_jogo_barcos barcos = new carregar_jogo_barcos();
+
+  Future<List> carregarCenario() async {
+    http.Response response;
+    String url =
+        url1 + '/cenario/find?idCenario=0ae11ab4-48cd-4c9a-9780-f24733d275f2';
+    response = await http.get(Uri.parse(url));
+    //("response ${response.body}");
+    return json.decode("[" + response.body + "]");
+  }
+
+  void setBarcos() {
+    pBuild = [];
+    List<dynamic> _barcos = _lista;
+
+    for (int i = 0; i < _barcos.length; i++) {
+      BarcosDTO barco = BarcosDTO();
+      barco.iDBarco = _barcos[i]["IDBarco"];
+      barco.nomeBarco = _barcos[i]["nome"];
+      barco.tamanho = _barcos[i]["tamanho"];
+      barco.foto0 = _barcos[i]["foto0"];
+      barco.foto1 = _barcos[i]["foto1"];
+      barco.foto2 = _barcos[i]["foto2"];
+      barco.foto3 = _barcos[i]["foto3"];
+      barco.foto4 = _barcos[i]["foto4"];
+      barco.foto5 = _barcos[i]["foto5"];
+
+
+      pBuild.add(barco);
+    }
+  }
 
   // criacao do MAP para o grid
   void _addPosition(int x, int y) {
     setState(() {
-      Map<String, dynamic> newPos = Map();
+      Map<String, dynamic> newPos = {};
       newPos["linha"] = x;
       newPos["coluna"] = y;
       newPos["status"] = false;
@@ -49,7 +117,7 @@ class _PositionBoatState extends State<PositionBoat> {
       newPos["image"] = "";
 
       _mCampo.add(newPos);
-      Map<String, dynamic> newPos1 = Map();
+      Map<String, dynamic> newPos1 = {};
       newPos1["linha"] = x;
       newPos1["coluna"] = y;
       newPos1["status"] = false;
@@ -69,53 +137,11 @@ class _PositionBoatState extends State<PositionBoat> {
     }
   }
 
-  // funcao auxiliar de laco simplez
-  void _laco2(int x, var func) {
-    for (int i = 0; i < x; i++) {
-      func(i);
-    }
-  }
-
-  // funcao para receber jogo
-  void getBoat() {
-    /*final response = await http.get(Uri.parse(urlCriaJogo));
-      print(response.body);*/
-    final json =
-        '{"jogadorPartida1":{"idPartida":"9af70417-3f0e-479d-8ec4-25579c5ed5b4","cenario":{"idCenario":"7a7ee764-bf9b-4fbc-916c-020568e8e032","nome":"Pearl Harbor","descricao":"Jogue neste cenário histórico.","barcos":[{"IDBarco":"d5a98f49-79de-4e8b-87f8-61ca9e806f9d","nome":"Destroier 2","tamanho":2,"foto1":"images/boat.png","foto2":null,"foto3":null,"foto4":null,"foto5":null},{"IDBarco":"c3d9e16c-33b2-420f-a3a5-ac8157b50d9d","nome":"Corveta","tamanho":3,"foto1":"images/baco.png","foto2":null,"foto3":null,"foto4":null,"foto5":null}],"foto":"573522fbfc3a0be11ef6-pearlharbor200000000000003393_widelg.jpg"},"adversario":{"id":"013291fa-dabc-4a9d-abdb-76d66521cde1","name":"Magaiver Braga","nacionalidade":null,"elo":null}}}';
-    Map<String, dynamic> jsonData = jsonDecode(json);
-    jsonData["jogadorPartida1"];
-    setState(() {
-      _jogo.add(jsonData);
-      print(_jogo);
-    });
-    print(_jogo);
-  }
-
-  // funcao para enviar para o back os barcos posicionados
-  void sendBoats(int index) async {
-    /*try {
-      final response = await http.post(
-        Uri.parse(urlPost),
-        headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
-        },
-        body: jsonEncode({
-          'nome': name,
-          'foto': '1234',
-          'tamanho': size,
-        }),
-      );
-      print(response.body);
-    } catch (error) {
-      print(error);
-    }*/
-  }
-
 // mensagem de snackbar
   void msgSnack(String msg) {
     final snackBar = SnackBar(
       content: Text(msg),
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 3),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -123,15 +149,21 @@ class _PositionBoatState extends State<PositionBoat> {
 // inicio da tela
   @override
   void initState() {
+    socketConnect().iniciarJogo((iniciarJogoDadosDTO iniciarJogoDados) {
+      // quando cair aqui, significa que o outro player também carregou os barcos
+      print('iniciar jogo ${iniciarJogoDados.proximoPlayer}');
+
+    });
+
     super.initState();
+    carregarCenario().then((map) {});
 
     _laco(linhasColunas, linhasColunas, _addPosition);
-    startTimer();
-    getBoat();
-    setBarcos();
+    // startTimer();
     switch (linhasColunas) {
       case 8:
         gridSize = 0.10;
+        gridSize1 = 0.0;
         break;
       case 10:
         gridSize = 0.08;
@@ -144,21 +176,19 @@ class _PositionBoatState extends State<PositionBoat> {
 
 // funcao para posicionar barco
   void posicionaBarco(
-      int index, String name, int n, String img, BarcosDTO barco) {
-    String imgUse = img.substring(0, 11);
-    BarcoPosicao posBarco = new BarcoPosicao(barco);
+      int index, String name, int n, BarcosDTO barco) {
+    BarcoPosicao posBarco = BarcoPosicao(barco);
     bool save = true;
 
     if (_rotation == false) {
       for (int i = 0; i < n; i++) {
         if (_mCampo[index + i]["status"] == false &&
-            _mCampo[index + i]["coluna"] != 9) {
-          _mCampo[index + i]["image"] = imgUse + i.toString() + ".png";
+            _mCampo[index + i]["coluna"] != linhasColunas - 1) {
+          _mCampo[index + i]["image"] = barco.returnFoto(i);
           _mCampo[index + i]["status"] = true;
           aux = i;
-          Posicao eixos = new Posicao();
-          print("i: $i");
-          print("coluna: ${_mCampo[index + i]["coluna"]}");
+          Posicao eixos = Posicao();
+          eixos.foto = _mCampo[index + i]["image"];
           eixos.eixoX = _mCampo[index]["linha"];
           eixos.eixoY = _mCampo[index + i]["coluna"];
 
@@ -171,18 +201,24 @@ class _PositionBoatState extends State<PositionBoat> {
             i = n;
           }
           msgSnack("Erro ao posicionar Barco, tente novamente");
-          if (save == false) barcosPosicoes.removeLast();
+          if (save == false) {
+            barcosPosicoes.removeLast();
+            barcosUsados.removeLast();
+          }
         }
       }
     } else
       for (int i = 0; i < n; i++) {
         if (_mCampo[index + i * linhasColunas]["status"] == false &&
             _mCampo[index + i]["linha"] != 9) {
-          _mCampo[index + i * linhasColunas]["image"] =
-              imgUse + i.toString() + ".png";
+          _mCampo[index + i * linhasColunas]["image"] = barco.returnFoto(i);
           _mCampo[index + i * linhasColunas]["status"] = true;
           _mCampo[index + i * linhasColunas]["rotacao"] = true;
           aux = i;
+          Posicao eixos = Posicao();
+          eixos.foto = _mCampo[index + i * linhasColunas]["image"];
+          eixos.eixoX = _mCampo[index]["linha"];
+          eixos.eixoY = _mCampo[index + i * linhasColunas]["coluna"];
         } else {
           bool save = false;
           for (int j = aux; j >= 0; j--) {
@@ -192,6 +228,10 @@ class _PositionBoatState extends State<PositionBoat> {
             i = n;
           }
           msgSnack("Erro ao posicionar Barco, tente novamente");
+          if (save == false) {
+            barcosPosicoes.removeLast();
+            barcosUsados.removeLast();
+          }
         }
       }
     barcosPosicoes.add(posBarco);
@@ -241,33 +281,24 @@ class _PositionBoatState extends State<PositionBoat> {
   Widget buildTargets(BuildContext context, int index) {
     return DragTarget<int>(
         builder: (context, data, rejectData) => Container(
-              child: _mCampo[index]["status"]
-                  ? _mCampo[index]["rotacao"]
-                      ? Transform.rotate(
-                          angle: degress * pi / 180,
-                          child: _mCampo[index]["status"]
-                              ? Image.asset(
-                                  "${_mCampo[index]["image"]}",
-                                  fit: BoxFit.fill,
-                                )
-                              : Image.asset(defaultImage),
-                        )
-                      : Image.asset(
-                          "${_mCampo[index]["image"]}",
-                          fit: BoxFit.fill,
-                        )
-                  : Image.asset(defaultImage),
+              child: BarcosDTO.getParteFoto(
+                  _mCampo[index]["status"],
+                  _mCampo[index]["rotacao"],
+                  _mCampo[index]["image"],
+                  defaultImage),
               color: Colors.blueAccent,
             ),
         onAccept: (data) {
           if (_mCampo[index]["status"] == false &&
               _mCampo[index]["linha"] != 9) {
             setState(() {
-              print("data: $data");
-              String img = pBuild[data].foto1;
+              barcosUsados.add(data);
+             //("parte 1: ${pBuild[data].foto1}");
               String name = pBuild[data].nomeBarco;
               int n = pBuild[data].tamanho;
-              posicionaBarco(index, name, n, img, pBuild[data]);
+              posicionaBarco(index, name, n, pBuild[data]);
+              if (barcosUsados.length == _lista.length)
+                msgSnack("Barcos já posicionados... PRONTO PARA BATALHA!!");
             });
           } else {
             msgSnack("Erro ao posicionar Barco, tente novamente");
@@ -277,58 +308,75 @@ class _PositionBoatState extends State<PositionBoat> {
   }
 
 // funcao para criar quadrados do grid
-  Widget buildB(String a) {
-    return Container(
-      height: 50,
-      width: 90,
-      decoration: BoxDecoration(
-          color: Color(0xff3D5A80),
-          borderRadius: BorderRadius.all(Radius.circular(10))),
-      alignment: Alignment.center,
-      child: Image.asset(
-        a,
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-
-// funcao para criar Bota Drag
-  Widget buildB2(int index, String a) {
-    return Draggable<int>(
-      child: buildB(a),
-      feedback: buildB(a),
-      data: index,
-    );
+  Widget buildB(String foto, int index, int tamanho) {
+    usado = false;
+    if (barcosUsados.isNotEmpty) {
+      int i = 0;
+      do {
+        if (index == barcosUsados[i]) usado = true;
+        i++;
+      } while (i < barcosUsados.length && usado == false);
+    }
+    return usado
+        ? Container()
+        : Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 80,
+              width: 180,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: const Color(0xff3D5A80)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  BarcosDTO.getFoto(foto),
+                  Text(
+                    "$tamanho",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+            ),
+          );
   }
 
 // funcao para limpar grid
   void resetGrid() {
     setState(() {
       _mCampo = [];
+      barcosPosicoes = [];
+      barcosUsados = [];
       _laco(linhasColunas, linhasColunas, _addPosition);
     });
   }
 
-// funcao para inciar barcos na pagina
-  void setBarcos() {
-    List<dynamic> _Barcos = _jogo[0]["jogadorPartida1"]["cenario"]["barcos"];
+// funcoes para inciar barcos na pagina
 
-    for (int i = 0; i < _Barcos.length; i++) {
-      BarcosDTO barco = new BarcosDTO();
-      barco.iDBarco = _Barcos[i]["idBarco"];
-      barco.nomeBarco = _Barcos[i]["nome"];
-      barco.tamanho = _Barcos[i]["tamanho"];
-      barco.foto1 = _Barcos[i]["foto1"];
-      barco.foto2 = _Barcos[i]["foto2"];
-      barco.foto3 = _Barcos[i]["foto3"];
-      barco.foto4 = _Barcos[i]["foto4"];
-      barco.foto5 = _Barcos[i]["foto5"];
+  Widget barcosBotoes(BuildContext context, AsyncSnapshot snapshot) {
+    _lista = snapshot.data[0]["barcos"];
+    setBarcos();
+    return ListView.builder(
+      padding: const EdgeInsets.all(20),
+      itemCount: _getCount(snapshot.data[0]["barcos"]),
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) {
+        return Draggable<int>(
+          child: buildB(snapshot.data[0]["barcos"][index]["foto0"], index,
+              snapshot.data[0]["barcos"][index]["tamanho"]),
+          feedback: buildB(snapshot.data[0]["barcos"][index]["foto0"], index,
+              snapshot.data[0]["barcos"][index]["tamanho"]),
+          childWhenDragging: Container(),
+          data: index,
+        );
+      },
+    );
+  }
 
-      pBuild.add(barco);
-      print(pBuild.length);
-    }
-    print(pBuild[0].foto1);
-    print(pBuild[1].foto1);
+  int _getCount(List data) {
+    return data.length;
   }
 
 // funcao aleatorio
@@ -351,11 +399,14 @@ class _PositionBoatState extends State<PositionBoat> {
 
 //funcao para o Timer
   void startTimer() {
-    time = Timer.periodic(Duration(seconds: 1), (_) {
+    time = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
         if (mins == 0 && seconds == 0) {
           time?.cancel();
-          print(barcosPosicoes);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BatlePage(_mCampo, _aCampo)));
           if (barcosPosicoes.isEmpty || barcosPosicoes.length < 5) aleatorio();
         } else if (seconds == 0) {
           mins--;
@@ -370,12 +421,12 @@ class _PositionBoatState extends State<PositionBoat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Batalha Naval, building tab"),
+        title: const Text("Batalha Naval, building tab"),
         centerTitle: true,
-        backgroundColor: Color(0xff293241),
+        backgroundColor: const Color(0xff293241),
         automaticallyImplyLeading: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_sharp),
+          icon: const Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {
             time?.cancel();
             Navigator.pop(context, false);
@@ -385,145 +436,176 @@ class _PositionBoatState extends State<PositionBoat> {
         ),
         elevation: 0,
       ),
-      body: LayoutBuilder(
-        builder: (_, constraints) {
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xff293241),
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20))),
-                  height: 50,
-                  width: constraints.maxWidth,
-                  child: Center(
-                    child: timer(),
-                  ),
+      body: Center(
+        child: Visibility(
+          visible: _visible,
+          replacement: Container(
+            width: 400,
+            height: 400,
+            alignment: Alignment.center,
+            child: Column(
+              children: const [
+                CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                  strokeWidth: 5.0,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                          height: constraints.maxHeight * 0.50,
-                          width: constraints.maxWidth * 0.7,
-                          child: LayoutBuilder(builder: (_, constraints2) {
-                            return GridView.builder(
-                                itemCount: _mCampo.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        mainAxisExtent:
-                                            constraints2.maxHeight * gridSize,
-                                        mainAxisSpacing:
-                                            constraints2.maxHeight * 0.001,
-                                        crossAxisSpacing:
-                                            constraints2.maxWidth * 0.001,
-                                        crossAxisCount: linhasColunas),
-                                itemBuilder: buildTargets);
-                          })),
-                      Container(
-                        alignment: Alignment.center,
-                        height: constraints.maxHeight * 0.5,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              height: constraints.maxHeight * 0.08,
-                              child: ElevatedButton(
-                                onPressed: aleatorio,
-                                child: Text("A"),
-                                style: ElevatedButton.styleFrom(
-                                    primary: Color(0xff3D5A80)),
-                              ),
-                            ),
-                            Container(
-                              height: constraints.maxHeight * 0.08,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  print(barcosPosicoes.length);
-                                  print(barcosPosicoes[0].barco.nomeBarco);
-                                  print(barcosPosicoes[1].barco.nomeBarco);
-                                  print(barcosPosicoes.length);
-                                  print(
-                                      barcosPosicoes[0].posicoes[1].retorno());
-                                },
-                                child: Icon(Icons.replay),
-                                style: ElevatedButton.styleFrom(
-                                    primary: Color(0xff3D5A80)),
-                              ),
-                            ),
-                            Container(
-                              height: constraints.maxHeight * 0.08,
-                              child: ElevatedButton(
-                                onPressed: resetGrid,
-                                child: Icon(Icons.delete_rounded),
-                                style: ElevatedButton.styleFrom(
-                                    primary: Color(0xff3D5A80)),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20, bottom: 80),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      buildB2(0, pBuild[0].foto1),
-                      buildB2(1, pBuild[1].foto1),
-                      buildB2(1, pBuild[1].foto1),
-                      IconButton(
-                        onPressed: _rotation
-                            ? () {
-                                setState(() {
-                                  _rotation = false;
-                                  buttonColor = Colors.blueAccent;
-                                });
-                              }
-                            : () {
-                                setState(() {
-                                  _rotation = true;
-                                  buttonColor = Colors.redAccent;
-                                });
-                              },
-                        icon: Icon(Icons.refresh),
-                        color: buttonColor,
-                        hoverColor: Color(0xff3D5A80),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: Container(
-                    height: constraints.maxHeight * 0.08,
-                    width: constraints.maxWidth * 0.25,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        time?.cancel();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    BatlePage(_mCampo, _aCampo)));
-                      },
-                      style:
-                          ElevatedButton.styleFrom(primary: Color(0xff3D5A80)),
-                      child: Text(
-                        "Pronto!",
-                        style: TextStyle(fontSize: 20),
+                Divider(color: Colors.transparent,),
+                Text("Aguardando o oponente")
+              ],
+            ),
+          ),
+          child: LayoutBuilder(
+            builder: (_, constraints) {
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      decoration: const BoxDecoration(
+                          color: Color(0xff293241),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20))),
+                      height: 50,
+                      width: constraints.maxWidth,
+                      child: Center(
+                        child: timer(),
                       ),
                     ),
-                  ),
-                )
-              ]);
-        },
+                    Container(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                              height: constraints.maxHeight * 0.50,
+                              width: constraints.maxWidth * 0.76,
+                              child: LayoutBuilder(builder: (_, constraints2) {
+                                return GridView.builder(
+                                    itemCount: _mCampo.length,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                            mainAxisExtent:
+                                                constraints2.maxHeight * gridSize,
+                                            mainAxisSpacing:
+                                                constraints2.maxHeight * 0.003,
+                                            crossAxisSpacing:
+                                                constraints2.maxWidth * 0.003,
+                                            crossAxisCount: linhasColunas),
+                                    itemBuilder: buildTargets);
+                              })),
+                          Container(
+                            alignment: Alignment.center,
+                            height: constraints.maxHeight * 0.4,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                SizedBox(
+                                  height: constraints.maxHeight * 0.08,
+                                  child: ElevatedButton(
+                                    onPressed: aleatorio,
+                                    child: const Text("A"),
+                                    style: ElevatedButton.styleFrom(
+                                        primary: const Color(0xff3D5A80)),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: constraints.maxHeight * 0.08,
+                                  child: ElevatedButton(
+                                    onPressed: _rotation
+                                        ? () {
+                                            setState(() {
+                                              _rotation = false;
+                                              buttonColor =
+                                                  const Color(0xff3D5A80);
+                                            });
+                                          }
+                                        : () {
+                                            setState(() {
+                                              _rotation = true;
+                                              buttonColor = Colors.redAccent;
+                                            });
+                                          },
+                                    child: const Icon(Icons.replay),
+                                    style: ElevatedButton.styleFrom(
+                                        primary: buttonColor,
+                                        onSurface: const Color(0xff3D5A80)),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: constraints.maxHeight * 0.08,
+                                  child: ElevatedButton(
+                                    onPressed: resetGrid,
+                                    child: const Icon(Icons.delete_rounded),
+                                    style: ElevatedButton.styleFrom(
+                                        primary: const Color(0xff3D5A80)),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: constraints.maxWidth,
+                      height: constraints.maxHeight * 0.18,
+                      child: Expanded(
+                        child: FutureBuilder(
+                            future: carregarCenario(),
+                            builder: (context, snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.waiting:
+                                case ConnectionState.none:
+                                  return Container(
+                                    width: 50,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    child: const CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.black),
+                                      strokeWidth: 5.0,
+                                    ),
+                                  );
+                                default:
+                                  if (snapshot.hasError)
+                                    return Container();
+                                  else
+                                    return barcosBotoes(context, snapshot);
+                              }
+                            }),
+                      ),
+                    ),
+                    Container(
+                      height: constraints.maxHeight * 0.10,
+                      width: constraints.maxWidth * 0.40,
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            time?.cancel();
+                            carregaJogo(this.idPartida, this.idJogador, barcos);
+                            // CreatePartida.create(idPartida, idJogador, barcoPosicao);
+                            /*Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BatlePage(_mCampo, _aCampo)));*/
+                            setState(() {
+                              _visible = false;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: const Color(0xff3D5A80)),
+                          child: const Text(
+                            "Pronto!",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]);
+            },
+          ),
+        ),
       ),
     );
   }
