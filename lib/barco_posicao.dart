@@ -30,6 +30,6 @@ class BarcoPosicao {
   }
 
   String returnBarcoPosicao() {
-    return '{"idBarco": "${this.barco.iDBarco}", "posicoes: [${setPosicoes()}]}';
+    return '{"idBarco": "${this.barco.iDBarco}", "posicoes": [${setPosicoes()}]}';
   }
 }
