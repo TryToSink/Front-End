@@ -163,7 +163,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   Widget build(BuildContext context) {
     const appBarBGColor = Color(0xFF293241);
     const textColor = Color(0xFF3D5A80);
-    const bGColor = Color(0xFFE0FBFC);
+    const bGColor = Color(0xFFDDDDDD);
     late TextEditingController usernameController =
         TextEditingController(text: _username);
     late TextEditingController nameController =
