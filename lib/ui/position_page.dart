@@ -36,22 +36,6 @@ class _PositionBoatState extends State<PositionBoat> {
 
   _PositionBoatState({Key? key, required this.idPartida, required this.idJogador});
 
-  static Future<bool> carregaJogo(String idPartida, String idJogador, carregar_jogo_barcos barcos) async {
-    var url = url1 + '/carregaJogo';
-    var header = {"Content-Type": "application/json"};
-    Map params = {"idPartida": idPartida, "idJogador": idJogador, 'barcosPosicoes': barcos};
-    var _body = json.encode(params);
-    print("json enviado : $_body");
-    var response =
-    await http.post(Uri.parse(url), headers: header, body: _body);
-    Map mapResponse = json.decode(response.body);
-    if (response.statusCode == 200) {
-      print('Pronto para a partida');
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   // Declarações de variaveis
   final linhasColunas = 10;
@@ -152,6 +136,10 @@ class _PositionBoatState extends State<PositionBoat> {
     socketConnect().iniciarJogo((iniciarJogoDadosDTO iniciarJogoDados) {
       // quando cair aqui, significa que o outro player também carregou os barcos
       print('iniciar jogo ${iniciarJogoDados.proximoPlayer}');
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BatlePage(_mCampo, _aCampo)));
 
     });
 
@@ -583,12 +571,7 @@ class _PositionBoatState extends State<PositionBoat> {
                         child: ElevatedButton(
                           onPressed: () {
                             time?.cancel();
-                            carregaJogo(this.idPartida, this.idJogador, barcos);
-                            // CreatePartida.create(idPartida, idJogador, barcoPosicao);
-                            /*Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BatlePage(_mCampo, _aCampo)));*/
+                            CreatePartida.create(idPartida, idJogador, barcosPosicoes);
                             setState(() {
                               _visible = false;
                             });

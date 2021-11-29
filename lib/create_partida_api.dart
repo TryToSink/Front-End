@@ -11,7 +11,7 @@ class CreatePartida {
     Map params = {
       "idPartida": idPartida,
       "idJogador": idJogador,
-      "barcosPosicoes": "[${composeEnvio(barcoPosicao)}]"
+      "barcosPosicoes": "["+composeEnvio(barcoPosicao)+"]"
     };
     var _body = json.encode(params);
     print("json enviado : $_body");
