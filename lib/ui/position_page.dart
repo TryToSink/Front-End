@@ -13,8 +13,10 @@ import 'package:proj0511/ui/battle_page.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:proj0511/ui/barcos_dto.dart';
+import 'package:proj0511/ui/socket_connect.dart';
 import '../rotas.dart';
 import '../timer.dart';
+import 'package:proj0511/DTO/iniciar_jogo_dados_dto.dart';
 
 class PositionBoat extends StatefulWidget {
   const PositionBoat({Key? key}) : super(key: key);
@@ -49,7 +51,7 @@ class _PositionBoatState extends State<PositionBoat> {
     String url =
         url1 + '/cenario/find?idCenario=0ae11ab4-48cd-4c9a-9780-f24733d275f2';
     response = await http.get(Uri.parse(url));
-    print("response ${response.body}");
+    //("response ${response.body}");
     return json.decode("[" + response.body + "]");
   }
 
@@ -118,6 +120,12 @@ class _PositionBoatState extends State<PositionBoat> {
 // inicio da tela
   @override
   void initState() {
+
+    socketConnect().iniciarJogo((iniciarJogoDadosDTO iniciarJogoDados) {
+      // quando cair aqui, significa que o outro player também carregou os barcos
+      print('iniciar jogo ${iniciarJogoDados.proximoPlayer}');
+    });
+
     super.initState();
     carregarCenario().then((map) {});
 
@@ -256,7 +264,7 @@ class _PositionBoatState extends State<PositionBoat> {
               _mCampo[index]["linha"] != 9) {
             setState(() {
               barcosUsados.add(data);
-             print("parte 1: ${pBuild[data].foto1}");
+             //("parte 1: ${pBuild[data].foto1}");
               String name = pBuild[data].nomeBarco;
               int n = pBuild[data].tamanho;
               posicionaBarco(index, name, n, pBuild[data]);

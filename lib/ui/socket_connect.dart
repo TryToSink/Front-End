@@ -10,6 +10,7 @@ import '../../DTO/exceptionDTO.dart';
 import '../../DTO/jogadaTiroDTO.dart';
 import '../../DTO/jogadaDestruidoDTO.dart';
 import '../../DTO/jogadaFimJogoDTO.dart';
+import '../../DTO/iniciar_jogo_dados_dto.dart';
 
 class socketConnect {
   IO.Socket socket = IO.io('http://201.42.59.203:3334', <String, dynamic>{
@@ -25,7 +26,7 @@ class socketConnect {
   static String idPartida = '';
   static partidaRecusadaDTO partidaLRecusadaDados = new partidaRecusadaDTO();
   static partidaAleatoriaDTO partidaLAceitaDados = new partidaAleatoriaDTO();
-  static String iniciarJogoDados = '';
+  static iniciarJogoDadosDTO iniciarJogoDados = new iniciarJogoDadosDTO();
   static jogadaTiroDTO jogadaTiroDados = jogadaTiroDTO();
   static jogadaDestruidoDTO jogadaDestruidoDados = jogadaDestruidoDTO();
   static jogadaFimJogoDTO jogadaFimDados = jogadaFimJogoDTO();
@@ -69,15 +70,15 @@ class socketConnect {
         idPartida = partidaAleatoriaDados.idPartida = d['data']['idPartida'];
       }
     });
-    partidaAleatoriaDados?.idAdversario = adversario['id'];
-    partidaAleatoriaDados?.elo = adversario['elo'].toString();
-    partidaAleatoriaDados?.nacionalidade = adversario['nacionalidade'];
-    partidaAleatoriaDados?.nomeAdversario = adversario['name'];
-    partidaAleatoriaDados?.idCenario = cenario['idCenario'];
-    partidaAleatoriaDados?.foto = cenario['foto'];
-    partidaAleatoriaDados?.nomeCenario = cenario['nome'];
-    partidaAleatoriaDados?.descricaoCenario = cenario['descricao'];
-    idCenario = partidaAleatoriaDados?.idCenario = cenario['idCenario'];
+    partidaAleatoriaDados.idAdversario = adversario['id'];
+    partidaAleatoriaDados.elo = adversario['elo'].toString();
+    partidaAleatoriaDados.nacionalidade = adversario['nacionalidade'];
+    partidaAleatoriaDados.nomeAdversario = adversario['name'];
+    partidaAleatoriaDados.idCenario = cenario['idCenario'];
+    partidaAleatoriaDados.foto = cenario['foto'];
+    partidaAleatoriaDados.nomeCenario = cenario['nome'];
+    partidaAleatoriaDados.descricaoCenario = cenario['descricao'];
+    idCenario = partidaAleatoriaDados.idCenario = cenario['idCenario'];
     cenario['barcos'].forEach((barco2) {
       barcosDTO barco = new barcosDTO();
       barco.IDBarco = barco2['IDBarco'];
@@ -96,8 +97,9 @@ class socketConnect {
     return partidaLAceitaDados;
   }
 
-  static void setiniciarJogoDados(Map d){
-    //iniciarJogoDados = d;
+  static void setiniciarJogoDados(Map d, iniciarJogoCallBack){
+    iniciarJogoDados.proximoPlayer = d['proximoPlayer'];
+    iniciarJogoCallBack(iniciarJogoDados);
   }
 
   void getiniciarJogoDados(){
@@ -214,15 +216,15 @@ class socketConnect {
         idPartida = partidaAleatoriaDados.idPartida = d['data']['idPartida'];
       }
     });
-    partidaAleatoriaDados?.idAdversario = adversario['id'];
-    partidaAleatoriaDados?.elo = adversario['elo'].toString();
-    partidaAleatoriaDados?.nacionalidade = adversario['nacionalidade'];
-    partidaAleatoriaDados?.nomeAdversario = adversario['name'];
-    partidaAleatoriaDados?.idCenario = cenario['idCenario'];
-    partidaAleatoriaDados?.foto = cenario['foto'];
-    partidaAleatoriaDados?.nomeCenario = cenario['nome'];
-    partidaAleatoriaDados?.descricaoCenario = cenario['descricao'];
-    idCenario = partidaAleatoriaDados?.idCenario = cenario['idCenario'];
+    partidaAleatoriaDados.idAdversario = adversario['id'];
+    partidaAleatoriaDados.elo = adversario['elo'].toString();
+    partidaAleatoriaDados.nacionalidade = adversario['nacionalidade'];
+    partidaAleatoriaDados.nomeAdversario = adversario['name'];
+    partidaAleatoriaDados.idCenario = cenario['idCenario'];
+    partidaAleatoriaDados.foto = cenario['foto'];
+    partidaAleatoriaDados.nomeCenario = cenario['nome'];
+    partidaAleatoriaDados.descricaoCenario = cenario['descricao'];
+    idCenario = partidaAleatoriaDados.idCenario = cenario['idCenario'];
     cenario['barcos'].forEach((barco2) {
       barcosDTO barco = new barcosDTO();
       barco.IDBarco = barco2['IDBarco'];
@@ -300,8 +302,8 @@ class socketConnect {
     socket.on('partida aceita', (dados)=> setpartidaLAceitaDados(dados));
   }
 
-  void iniciarJogo(){
-    socket.on('iniciar jogo', (dados)=> setiniciarJogoDados(dados));
+  void iniciarJogo(iniciarJogoCallBack){
+    socket.on('iniciar jogo', (dados)=> setiniciarJogoDados(dados, iniciarJogoCallBack));
   }
 
   void jogada(){
@@ -325,7 +327,6 @@ class socketConnect {
     partidaLRecusada();
     partidaLAceita();
     conviteL();
-    iniciarJogo();
     reconnect();
     exception();
   }

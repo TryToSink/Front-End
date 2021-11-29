@@ -1,0 +1,3 @@
+class iniciarJogoDadosDTO {
+  String proximoPlayer = '';
+}
