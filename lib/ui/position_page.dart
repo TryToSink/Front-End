@@ -13,45 +13,28 @@ import 'package:proj0511/ui/battle_page.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:proj0511/ui/barcos_dto.dart';
-import 'package:proj0511/ui/carregar_jogo_barcos.dart';
 import 'package:proj0511/ui/socket_connect.dart';
 import '../rotas.dart';
-import '../timer.dart';
 import 'package:proj0511/DTO/iniciar_jogo_dados_dto.dart';
 
 class PositionBoat extends StatefulWidget {
   String idPartida;
   String idJogador;
 
-  PositionBoat({Key? key, required this.idPartida, required this.idJogador}) : super(key: key);
+  PositionBoat({Key? key, required this.idPartida, required this.idJogador})
+      : super(key: key);
 
   @override
-  _PositionBoatState createState() => _PositionBoatState(idPartida: this.idPartida, idJogador: this.idJogador);
+  _PositionBoatState createState() =>
+      _PositionBoatState(idPartida: this.idPartida, idJogador: this.idJogador);
 }
 
 class _PositionBoatState extends State<PositionBoat> {
-
   String idPartida;
   String idJogador;
 
-  _PositionBoatState({Key? key, required this.idPartida, required this.idJogador});
-
-  static Future<bool> carregaJogo(String idPartida, String idJogador, carregar_jogo_barcos barcos) async {
-    var url = url1 + '/carregaJogo';
-    var header = {"Content-Type": "application/json"};
-    Map params = {"idPartida": idPartida, "idJogador": idJogador, 'barcosPosicoes': barcos};
-    var _body = json.encode(params);
-    print("json enviado : $_body");
-    var response =
-    await http.post(Uri.parse(url), headers: header, body: _body);
-    Map mapResponse = json.decode(response.body);
-    if (response.statusCode == 200) {
-      print('Pronto para a partida');
-      return true;
-    } else {
-      return false;
-    }
-  }
+  _PositionBoatState(
+      {Key? key, required this.idPartida, required this.idJogador});
 
   // Declarações de variaveis
   final linhasColunas = 10;
@@ -65,20 +48,16 @@ class _PositionBoatState extends State<PositionBoat> {
   List<BarcoPosicao> barcosPosicoes = [];
   Color buttonColor = Colors.blueAccent;
   bool _visible = true;
+  String titlePage = "";
 
   String defaultImage = "assets/water.png";
   int aux = 0;
-  Random random = Random();
-  int maxAlt = 6;
   double gridSize = 0.0;
   double gridSize1 = 0.0;
 
-  carregar_jogo_barcos barcos = new carregar_jogo_barcos();
-
   Future<List> carregarCenario() async {
     http.Response response;
-    String url =
-        url1 + '/cenario/find?idCenario=0ae11ab4-48cd-4c9a-9780-f24733d275f2';
+    String url = url1 + '/cenario/find?idCenario=' + socketConnect.idCenario;
     response = await http.get(Uri.parse(url));
     //("response ${response.body}");
     return json.decode("[" + response.body + "]");
@@ -99,7 +78,6 @@ class _PositionBoatState extends State<PositionBoat> {
       barco.foto3 = _barcos[i]["foto3"];
       barco.foto4 = _barcos[i]["foto4"];
       barco.foto5 = _barcos[i]["foto5"];
-
 
       pBuild.add(barco);
     }
@@ -152,14 +130,14 @@ class _PositionBoatState extends State<PositionBoat> {
     socketConnect().iniciarJogo((iniciarJogoDadosDTO iniciarJogoDados) {
       // quando cair aqui, significa que o outro player também carregou os barcos
       print('iniciar jogo ${iniciarJogoDados.proximoPlayer}');
-
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => BatlePage(_mCampo, _aCampo)));
     });
 
     super.initState();
     carregarCenario().then((map) {});
 
     _laco(linhasColunas, linhasColunas, _addPosition);
-    // startTimer();
     switch (linhasColunas) {
       case 8:
         gridSize = 0.10;
@@ -175,8 +153,7 @@ class _PositionBoatState extends State<PositionBoat> {
   }
 
 // funcao para posicionar barco
-  void posicionaBarco(
-      int index, String name, int n, BarcosDTO barco) {
+  void posicionaBarco(int index, String name, int n, BarcosDTO barco) {
     BarcoPosicao posBarco = BarcoPosicao(barco);
     bool save = true;
 
@@ -238,44 +215,7 @@ class _PositionBoatState extends State<PositionBoat> {
     if (save == false) barcosPosicoes.removeLast();
   }
 
-  // funcao para posicionar barco aleatorio
-  void posicionaBarcoAlt(int index, int n, String img) {
-    if (_rotation == false) {
-      for (int i = 0; i < n; i++) {
-        if (_mCampo[index + i]["status"] == false &&
-            _mCampo[index + i]["coluna"] != 9) {
-          _mCampo[index + i]["image"] = img + i.toString() + ".png";
-          _mCampo[index + i]["status"] = true;
-          aux = i;
-        } else {
-          for (int j = aux; j >= 0; j--) {
-            _mCampo[index + j]["image"] = "";
-            _mCampo[index + j]["status"] = false;
-            i = n;
-          }
-          maxAlt++;
-        }
-      }
-    } else
-      for (int i = 0; i <= n; i++) {
-        if (_mCampo[index + i * linhasColunas]["status"] == false &&
-            _mCampo[index + i]["linha"] != 9) {
-          _mCampo[index + i * linhasColunas]["image"] =
-              img + i.toString() + ".png";
-          _mCampo[index + i * linhasColunas]["status"] = true;
-          _mCampo[index + i * linhasColunas]["rotacao"] = true;
-          aux = i;
-        } else {
-          for (int j = aux; j >= 0; j--) {
-            _mCampo[index + j * linhasColunas]["image"] = "";
-            _mCampo[index + j * linhasColunas]["status"] = false;
-            _mCampo[index + j * linhasColunas]["rotacao"] = false;
-            i = n;
-          }
-          maxAlt++;
-        }
-      }
-  }
+
 
   // funcao cria targets para o grid
   Widget buildTargets(BuildContext context, int index) {
@@ -293,7 +233,7 @@ class _PositionBoatState extends State<PositionBoat> {
               _mCampo[index]["linha"] != 9) {
             setState(() {
               barcosUsados.add(data);
-             //("parte 1: ${pBuild[data].foto1}");
+              //("parte 1: ${pBuild[data].foto1}");
               String name = pBuild[data].nomeBarco;
               int n = pBuild[data].tamanho;
               posicionaBarco(index, name, n, pBuild[data]);
@@ -332,7 +272,8 @@ class _PositionBoatState extends State<PositionBoat> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  BarcosDTO.getFoto(foto),
+                  Container(
+                      height: 80, width: 120, child: BarcosDTO.getFoto(foto)),
                   Text(
                     "$tamanho",
                     style: const TextStyle(fontWeight: FontWeight.bold),
@@ -357,6 +298,7 @@ class _PositionBoatState extends State<PositionBoat> {
 
   Widget barcosBotoes(BuildContext context, AsyncSnapshot snapshot) {
     _lista = snapshot.data[0]["barcos"];
+    titlePage = snapshot.data[0]["descricao"];
     setBarcos();
     return ListView.builder(
       padding: const EdgeInsets.all(20),
@@ -379,56 +321,19 @@ class _PositionBoatState extends State<PositionBoat> {
     return data.length;
   }
 
-// funcao aleatorio
-  void aleatorio() {
-    int rndIndex = 0;
-    int rndBarco = 0;
-    for (int i = 0; i <= maxAlt; i++) {
-      rndIndex = random.nextInt(_mCampo.length);
-      rndBarco = random.nextInt(2);
-      posicionaBarcoAlt(
-          rndIndex, pBuild[rndBarco].tamanho, pBuild[rndBarco].foto1);
-      if (i / 2 == 0)
-        _rotation = true;
-      else
-        _rotation = false;
-    }
-    maxAlt = 6;
-    _rotation = false;
-  }
 
-//funcao para o Timer
-  void startTimer() {
-    time = Timer.periodic(const Duration(seconds: 1), (_) {
-      setState(() {
-        if (mins == 0 && seconds == 0) {
-          time?.cancel();
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BatlePage(_mCampo, _aCampo)));
-          if (barcosPosicoes.isEmpty || barcosPosicoes.length < 5) aleatorio();
-        } else if (seconds == 0) {
-          mins--;
-          seconds = maxSeconds;
-        } else
-          seconds--;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Batalha Naval, building tab"),
+        title: Text(titlePage),
         centerTitle: true,
         backgroundColor: const Color(0xff293241),
         automaticallyImplyLeading: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {
-            time?.cancel();
             Navigator.pop(context, false);
             _mCampo = [];
             pBuild = [];
@@ -449,7 +354,9 @@ class _PositionBoatState extends State<PositionBoat> {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
                   strokeWidth: 5.0,
                 ),
-                Divider(color: Colors.transparent,),
+                Divider(
+                  color: Colors.transparent,
+                ),
                 Text("Aguardando o oponente")
               ],
             ),
@@ -459,18 +366,6 @@ class _PositionBoatState extends State<PositionBoat> {
               return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Container(
-                      decoration: const BoxDecoration(
-                          color: Color(0xff293241),
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20))),
-                      height: 50,
-                      width: constraints.maxWidth,
-                      child: Center(
-                        child: timer(),
-                      ),
-                    ),
                     Container(
                       padding: const EdgeInsets.only(top: 15),
                       child: Row(
@@ -485,7 +380,8 @@ class _PositionBoatState extends State<PositionBoat> {
                                     gridDelegate:
                                         SliverGridDelegateWithFixedCrossAxisCount(
                                             mainAxisExtent:
-                                                constraints2.maxHeight * gridSize,
+                                                constraints2.maxHeight *
+                                                    gridSize,
                                             mainAxisSpacing:
                                                 constraints2.maxHeight * 0.003,
                                             crossAxisSpacing:
@@ -499,15 +395,6 @@ class _PositionBoatState extends State<PositionBoat> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                SizedBox(
-                                  height: constraints.maxHeight * 0.08,
-                                  child: ElevatedButton(
-                                    onPressed: aleatorio,
-                                    child: const Text("A"),
-                                    style: ElevatedButton.styleFrom(
-                                        primary: const Color(0xff3D5A80)),
-                                  ),
-                                ),
                                 SizedBox(
                                   height: constraints.maxHeight * 0.08,
                                   child: ElevatedButton(
@@ -582,13 +469,8 @@ class _PositionBoatState extends State<PositionBoat> {
                       child: Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            time?.cancel();
-                            carregaJogo(this.idPartida, this.idJogador, barcos);
-                            // CreatePartida.create(idPartida, idJogador, barcoPosicao);
-                            /*Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BatlePage(_mCampo, _aCampo)));*/
+                            CreatePartida.create(
+                                idPartida, idJogador, barcosPosicoes);
                             setState(() {
                               _visible = false;
                             });
