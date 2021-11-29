@@ -28,7 +28,7 @@ class _MyHomePageState extends State<HomePage> {
 
   late String url = url1 + '/modoJogo/lista';
 
-//late String urlSocket = 'http://3.144.90.4:3334/';
+//late String urlSocket = 'http://201.42.59.203:3334/';
   var _lista = [];
 
   void getTest() async {
@@ -470,13 +470,13 @@ class _MyHomePageState extends State<HomePage> {
       children: <Widget>[
         IconButton(
           color: Colors.white,
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          iconSize: 50,
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+          iconSize: 45,
           icon: const Icon(Icons.play_arrow),
           tooltip: 'Jogar',
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PositionBoat()));
+                MaterialPageRoute(builder: (context) => PositionBoat(idPartida: socketConnect.idPartida, idJogador: this.idUser)));
           },
         ),
       ],
@@ -488,8 +488,8 @@ class _MyHomePageState extends State<HomePage> {
       children: <Widget>[
         IconButton(
           color: Colors.white,
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          iconSize: 50,
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+          iconSize: 45,
           icon: const Icon(Icons.person),
           tooltip: 'Perfil',
           onPressed: () {
@@ -510,8 +510,8 @@ class _MyHomePageState extends State<HomePage> {
       children: <Widget>[
         IconButton(
             color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-            iconSize: 50,
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            iconSize: 45,
             icon: const Icon(Icons.settings),
             tooltip: 'Configurações',
             onPressed: () {

@@ -147,7 +147,11 @@ class LoginPage extends StatelessWidget {
 }
 
 _navegaHomepage(BuildContext context, String userId) {
-  socketConnect().initSocket();
-  Navigator.push(context,
-      MaterialPageRoute(builder: (context) => HomePage(idUser: userId)));
+  try {
+    socketConnect().initSocket();
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => HomePage(idUser: userId)));
+  } catch (e){
+    print(e.toString());
+  }
 }

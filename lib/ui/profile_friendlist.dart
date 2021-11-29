@@ -21,8 +21,8 @@ class _FriendsListState extends State<FriendsList> {
   late List _amigos = [];
   late List _usernameAmigo = [];
 
-  late String urlProfile = 'http://3.144.90.4:3333/usuarios/find';
-  late String urlFriends = 'http://3.144.90.4:3333/usuarios/amigosOnline';
+  late String urlProfile = 'http://201.42.59.203:3333/usuarios/find';
+  late String urlFriends = 'http://201.42.59.203:3333/usuarios/amigosOnline';
 
   @override
   void initState() {
