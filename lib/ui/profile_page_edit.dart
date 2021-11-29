@@ -10,6 +10,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:async/async.dart';
 
+import '../rotas.dart';
+
 class ProfilePageEdit extends StatefulWidget {
   String idUser;
 
@@ -30,10 +32,10 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   late String _name = '';
   late String _email = '';
 
-  late String urlProfile = 'http://3.144.90.4:3333/usuarios/find';
-  late String urlPhoto = 'http://3.144.90.4:3333/usuarios/foto/' + imageName!;
-  late String urlFriends = 'http://3.144.90.4:3333/usuarios/amigosOnline';
-  late String urlUpdate = 'http://3.144.90.4:3333/usuarios';
+  late String urlProfile = url1 + '/usuarios/find';
+  late String urlPhoto = url1 + '/usuarios/foto/' + imageName!;
+  late String urlFriends = url1 + '/usuarios/amigosOnline';
+  late String urlUpdate = url1 + '/usuarios';
 
   @override
   void initState() {
@@ -161,7 +163,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   Widget build(BuildContext context) {
     const appBarBGColor = Color(0xFF293241);
     const textColor = Color(0xFF3D5A80);
-    const bGColor = Color(0xFFE0FBFC);
+    const bGColor = Color(0xFFDDDDDD);
     late TextEditingController usernameController =
         TextEditingController(text: _username);
     late TextEditingController nameController =

@@ -1,6 +1,7 @@
 // @dart=2.9
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import '../rotas.dart';
 import 'cenariosclass.dart';
 import 'loadgame.dart';
 import 'package:http/http.dart' as http;
@@ -25,7 +26,7 @@ class _LoadCenarioState extends State<LoadCenario> {
 
   _LoadCenarioState({this.idmodojogo, this.idUser});
 
-  String url2 = 'http://3.144.90.4:3333/modoJogo/find';
+  String url2 = url1 + '/modoJogo/find';
   PostDart returno;
   List<Cenarios> _returno2 = [];
   List<String> _arraydeCenarios = [];

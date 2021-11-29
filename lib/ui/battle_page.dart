@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:proj0511/posicao.dart';
 import 'package:http/http.dart' as http;
+import 'package:proj0511/rotas.dart';
 import 'package:proj0511/ui/barcos_dto.dart';
 import '../timer.dart';
 import 'dart:convert';
@@ -60,7 +61,7 @@ class _BatlePageState extends State<BatlePage> {
 
   Future<String> enviarJogada(
       String idPartida, String idAdversario, Posicao pos) async {
-    var url = 'http://3.144.90.4:3333/jogada';
+    var url = url1 + '/jogada';
     var header = {"Content-Type": "application/json"};
     Map params = {
       "idPartida": idPartida,

@@ -16,9 +16,10 @@ import '../DTO/exceptionDTO.dart';
 import '../DTO/jogadaTiroDTO.dart';
 import '../DTO/jogadaDestruidoDTO.dart';
 import '../DTO/jogadaFimJogoDTO.dart';
+import '../rotas.dart';
 
 class socketConnect {
-  IO.Socket socket = IO.io('http://3.144.90.4:3334', <String, dynamic>{
+  IO.Socket socket = IO.io(url2, <String, dynamic>{
     //IO.Socket socket = IO.io('http://localhost:3334', <String, dynamic>{
     'transport': ['websocket'],
     'autoConnect': false,

@@ -13,6 +13,7 @@ import 'package:proj0511/ui/battle_page.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:proj0511/ui/barcos_dto.dart';
+import '../rotas.dart';
 import '../timer.dart';
 
 class PositionBoat extends StatefulWidget {
@@ -45,7 +46,7 @@ class _PositionBoatState extends State<PositionBoat> {
   Future<List> carregarCenario() async {
     http.Response response;
     String url =
-        'http://3.144.90.4:3333/cenario/find?idCenario=7a7ee764-bf9b-4fbc-916c-020568e8e032';
+        url1 + '/cenario/find?idCenario=7a7ee764-bf9b-4fbc-916c-020568e8e032';
     response = await http.get(Uri.parse(url));
     print("response ${response.body}");
     return json.decode("[" + response.body + "]");
@@ -528,7 +529,8 @@ class _PositionBoatState extends State<PositionBoat> {
                         MaterialPageRoute(
                             builder: (context) => BatlePage(_mCampo, _aCampo)));
                   },
-                  style: ElevatedButton.styleFrom(primary: const Color(0xff3D5A80)),
+                  style: ElevatedButton.styleFrom(
+                      primary: const Color(0xff3D5A80)),
                   child: const Text(
                     "Pronto!",
                     style: TextStyle(fontSize: 20),
