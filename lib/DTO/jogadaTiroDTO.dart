@@ -3,4 +3,5 @@ class jogadaTiroDTO {
   String? message;
   int? eixox;
   int? eixoy;
+  String teste = 'test';
 }

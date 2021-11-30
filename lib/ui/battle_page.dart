@@ -3,11 +3,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:proj0511/DTO/jogadaFimJogoDTO.dart';
+import 'package:proj0511/DTO/posicoesDTO.dart';
 import 'package:proj0511/posicao.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/rotas.dart';
+import 'package:proj0511/ui/home.dart';
+import 'package:proj0511/ui/derrota_page.dart';
 import 'package:proj0511/ui/barcos_dto.dart';
 import 'package:proj0511/ui/socket_connect.dart';
+import 'package:proj0511/ui/vitoria_page.dart';
 import '../timer.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -28,6 +32,7 @@ class _BatlePageState extends State<BatlePage> {
   // declaracao das variaveis
   List _advCampo = [];
   List _meuCampo = [];
+  String meuNome = "Meu nome";
 
   //  vvvvvvvvv Controle do grid
   bool _valid = false;
@@ -49,8 +54,16 @@ class _BatlePageState extends State<BatlePage> {
     _advCampo = widget._aCampo;
     _meuCampo = widget._mCampo;
 
-    setCurrentUser(5649, "Ronaldo (321)", "");
-    setAdvUser(5650, "Gabriel (565)", "");
+    getName().then((nome) {
+      meuNome = nome;
+    });
+
+    print("meu nome: ${meuNome}");
+    setCurrentUser(5649, "${meuNome} (321)", "");
+    setAdvUser(
+        5650,
+        "${socketConnect.partidaAleatoriaDados.nomeAdversario} (${socketConnect.partidaAleatoriaDados.elo})",
+        "");
 
     if (sqrt(_advCampo.length) == 8)
       gridSize = 0.10;
@@ -61,28 +74,89 @@ class _BatlePageState extends State<BatlePage> {
     linhaColuna = sqrt(_advCampo.length);
     startTimer();
 
-    if(socketConnect.userId == widget.idProximoPlayer){_valid = true;}
+    _valid = false;
 
-    socketConnect().jogada((dynamic jogadaOponente) {
+    if (socketConnect.userId == widget.idProximoPlayer) {
+      Future<Null>.delayed(Duration.zero, () {
+        msgSnack("Você começa", 4);
+      });
+
+      _valid = true;
+    }
+
+    socketConnect().jogada((jogadaOponente) {
+      int eixox;
+      int eixoy;
+      if (jogadaOponente is jogadaFimJogoDTO) {
+        print("Fim de jogo");
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Derrota(),
+            ));
+      } else if (jogadaOponente.status == '00' ||
+          jogadaOponente.status == '01') {
+        eixox = jogadaOponente.eixox;
+        eixoy = jogadaOponente.eixoy;
+        receberAtaque(eixox, eixoy, jogadaOponente.status);
+      } else if (jogadaOponente.status == '02') {
+        for (posicoesDTO x in jogadaOponente.barcoDestruido.posicoes) {
+          msgSnack("Você Afundou Um Navio", 4);
+          eixox = x.eixoX;
+          eixoy = x.eixoY;
+          receberAtaque(eixox, eixoy, jogadaOponente.status);
+        }
+      }
+
       print("oponente jogou");
-      meuTurno();
+      if (jogadaOponente.status == "00") meuTurno();
     });
   }
 
-  Future<String> enviarJogada(
-      String idPartida, String idAdversario, Posicao pos) async {
+  void receberAtaque(int eixoX, int eixoY, String ataque) {
+    for (int i = 0; i < _meuCampo.length; i++) {
+      if (_meuCampo[i]["linha"] == eixoX && _meuCampo[i]["coluna"] == eixoY) {
+        print("receber ataque: $ataque");
+        print("eixox: $eixoX");
+        print(_meuCampo[i]["status"]);
+        if (ataque == "00") {
+          setState(() {
+            _meuCampo[i]["image"] = "assets/water.png";
+            _meuCampo[i]["ataque"] = ataque;
+          });
+        } else if (ataque == "01" || ataque == "02") {
+          setState(() {
+            _meuCampo[i]["image"] = "assets/explosion.png";
+            _meuCampo[i]["ataque"] = ataque;
+          });
+        }
+      }
+    }
+  }
+
+  Future<String> getName() async {
+    var url = url1 + '/usuarios/find?id=' + socketConnect.userId;
+    var header = {"Content-Type": "application/json"};
+    var response = await http.get(Uri.parse(url), headers: header);
+    List jsonData = json.decode("[" + response.body + "]");
+    print("Retorno getNema: ${jsonData[0]["name"]}");
+    return jsonData[0]["name"];
+  }
+
+  Future<String> enviarJogada(String idPart, String idAdv, Posicao pos) async {
     var url = url1 + '/jogada';
     var header = {"Content-Type": "application/json"};
     Map params = {
-      "idPartida": idPartida,
-      "idAdversario": idAdversario,
+      "idPartida": idPart,
+      "idAdversario": idAdv,
       "eixoX": pos.eixoX,
       "eixoY": pos.eixoY
     };
+
     var _body = json.encode(params);
-    var response =
-        await http.post(Uri.parse(url), headers: header, body: _body);
-    List jsonData = json.decode("[" + response.body + "]");
+    var respon = await http.post(Uri.parse(url), headers: header, body: _body);
+    print(respon);
+    List jsonData = json.decode("[" + respon.body + "]");
     print('Response: ');
     print(jsonData);
     try {
@@ -103,7 +177,7 @@ class _BatlePageState extends State<BatlePage> {
     print("Result 2p:" + result);
     if (result == '00') {
       setState(() {
-        _advCampo[index]["image"] = "assets/carra.png";
+        _advCampo[index]["image"] = "assets/water.png";
       });
       oponenteTurno();
     } else if (result == '01' || result == '02') {
@@ -111,9 +185,12 @@ class _BatlePageState extends State<BatlePage> {
         _advCampo[index]["image"] = "assets/fire.png";
       });
       meuTurno();
-    } else if (result == '03') {
-      //redireciona para a tela de resultado da Partida
-
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Vitoria(),
+          ));
     }
   }
 
@@ -121,15 +198,15 @@ class _BatlePageState extends State<BatlePage> {
     setState(() {
       _valid = true;
     });
-    msgSnack("Seu turno", 4);
+    msgSnack("Seu turno", 1);
   }
 
   void oponenteTurno() async {
     setState(() {
       _valid = false;
     });
-    msgSnack("Turno do oponente", 4);
 
+    msgSnack("Turno do oponente", 1);
   }
 
   void msgSnack(String msg, int temp) {
@@ -168,13 +245,13 @@ class _BatlePageState extends State<BatlePage> {
   Widget buildFieldMeuCampo(BuildContext context, int index) {
     return Container(
         color: corFundo,
-        child: _meuCampo[index]["status"]
-            ? _meuCampo[index]["rotacao"]
-                ? Transform.rotate(
-                    angle: degress * pi / 180,
-                    child: BarcosDTO.getFoto(_meuCampo[index]["image"]))
-                : BarcosDTO.getFoto(_meuCampo[index]["image"])
-            : null);
+        child: _meuCampo[index]["rotacao"]
+            ? Transform.rotate(
+                angle: degress * pi / 180,
+                child: BarcosDTO.getFotoBattle(
+                    _meuCampo[index]["ataque"], _meuCampo[index]["image"]))
+            : BarcosDTO.getFotoBattle(
+                _meuCampo[index]["ataque"], _meuCampo[index]["image"]));
   }
 
   // montar grid de ataque
@@ -184,11 +261,10 @@ class _BatlePageState extends State<BatlePage> {
           ? () {
               setState(() {
                 //
-                _advCampo[index]["ataque"] = true;
-                //
                 Posicao ataq = Posicao();
                 ataq.eixoY = _advCampo[index]["coluna"];
                 ataq.eixoX = _advCampo[index]["linha"];
+                _advCampo[index]["status"] = true;
                 print(
                     "Cordenadas a enviar: Eixo x = ${ataq.eixoX} e Eixo Y = ${ataq.eixoY}");
                 jogada(index, socketConnect.idPartida,
@@ -198,7 +274,7 @@ class _BatlePageState extends State<BatlePage> {
           : null,
       child: Container(
           color: const Color(0xff75CCFE),
-          child: _advCampo[index]["ataque"]
+          child: _advCampo[index]["status"]
               ? _advCampo[index]["rotacao"]
                   ? Transform.rotate(
                       angle: degress * pi / 180,
@@ -262,7 +338,7 @@ class _BatlePageState extends State<BatlePage> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("${advUser[0]["name"]}",
+                        Text(meuNome,
                             style:
                                 TextStyle(color: Colors.white, fontSize: 20)),
                         const Divider(),

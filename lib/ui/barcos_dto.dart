@@ -42,6 +42,21 @@ class BarcosDTO {
     );
   }
 
+  static Widget getImageAsset(String foto) {
+    return Image.asset(
+      foto,
+      fit: BoxFit.fill,
+    );
+  }
+
+  static Widget getFotoBattle(String ataque, String foto) {
+    //print("barcos dto $ataque $foto");
+    if (foto == '')return Text('');
+    if (ataque == "00" || ataque == "01" || ataque == "02")
+      return getImageAsset(foto);
+    return getFoto(foto);
+  }
+
   static Widget getParteFoto(
       bool status, bool rotacao, String image, String defaultImage) {
     return status
