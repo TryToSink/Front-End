@@ -8,6 +8,7 @@ import 'package:proj0511/posicao.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/rotas.dart';
 import 'package:proj0511/ui/home.dart';
+import 'package:proj0511/ui/derrota_page.dart';
 import 'package:proj0511/ui/barcos_dto.dart';
 import 'package:proj0511/ui/socket_connect.dart';
 import '../timer.dart';
@@ -99,7 +100,7 @@ class _BatlePageState extends State<BatlePage> {
         receberAtaque(eixox, eixoy, jogadaOponente.status);
       } else if (jogadaOponente.status == '02') {
         for (posicoesDTO x in jogadaOponente.barcoDestruido.posicoes) {
-          print("entrou no for");
+          msgSnack("Você Afundou Um Navio", 4);
           eixox = x.eixoX;
           eixoy = x.eixoY;
           receberAtaque(eixox, eixoy, jogadaOponente.status);
