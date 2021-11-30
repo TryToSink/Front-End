@@ -28,6 +28,7 @@ class _BatlePageState extends State<BatlePage> {
   // declaracao das variaveis
   List _advCampo = [];
   List _meuCampo = [];
+  String meuNome = "Meu nome";
 
   //  vvvvvvvvv Controle do grid
   bool _valid = false;
@@ -49,8 +50,15 @@ class _BatlePageState extends State<BatlePage> {
     _advCampo = widget._aCampo;
     _meuCampo = widget._mCampo;
 
-    setCurrentUser(5649, "Ronaldo (321)", "");
-    setAdvUser(5650, "Gabriel (565)", "");
+
+    getName().then((nome){meuNome = nome;});
+
+    print("meu nome: ${meuNome}");
+    setCurrentUser(5649, "${meuNome} (321)", "");
+    setAdvUser(
+        5650,
+        "${socketConnect.partidaAleatoriaDados.nomeAdversario} (${socketConnect.partidaAleatoriaDados.elo})",
+        "");
 
     if (sqrt(_advCampo.length) == 8)
       gridSize = 0.10;
@@ -61,28 +69,41 @@ class _BatlePageState extends State<BatlePage> {
     linhaColuna = sqrt(_advCampo.length);
     startTimer();
 
-    if(socketConnect.userId == widget.idProximoPlayer){_valid = true;}
+    _valid = false;
+    if (socketConnect.userId == widget.idProximoPlayer) {
+      _valid = true;
+    }
 
     socketConnect().jogada((dynamic jogadaOponente) {
-      print("oponente jogou");
+      //receber se o oponente acertou a agua, se sim, executar
+      //o meuTurno()
       meuTurno();
     });
   }
 
-  Future<String> enviarJogada(
-      String idPartida, String idAdversario, Posicao pos) async {
+  Future<String> getName() async {
+    var url = url1 + '/usuarios/find?id=' + socketConnect.userId;
+    var header = {"Content-Type": "application/json"};
+    var response = await http.get(Uri.parse(url), headers: header);
+    List jsonData = json.decode("[" + response.body + "]");
+    print("Retorno getNema: ${jsonData[0]["name"]}");
+    return jsonData[0]["name"];
+  }
+
+  Future<String> enviarJogada(String idPart, String idAdv, Posicao pos) async {
     var url = url1 + '/jogada';
     var header = {"Content-Type": "application/json"};
     Map params = {
-      "idPartida": idPartida,
-      "idAdversario": idAdversario,
+      "idPartida": idPart,
+      "idAdversario": idAdv,
       "eixoX": pos.eixoX,
       "eixoY": pos.eixoY
     };
+
     var _body = json.encode(params);
-    var response =
-        await http.post(Uri.parse(url), headers: header, body: _body);
-    List jsonData = json.decode("[" + response.body + "]");
+    var respon = await http.post(Uri.parse(url), headers: header, body: _body);
+    print(respon);
+    List jsonData = json.decode("[" + respon.body + "]");
     print('Response: ');
     print(jsonData);
     try {
@@ -129,7 +150,6 @@ class _BatlePageState extends State<BatlePage> {
       _valid = false;
     });
     msgSnack("Turno do oponente", 4);
-
   }
 
   void msgSnack(String msg, int temp) {
@@ -262,7 +282,7 @@ class _BatlePageState extends State<BatlePage> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("${advUser[0]["name"]}",
+                        Text(meuNome,
                             style:
                                 TextStyle(color: Colors.white, fontSize: 20)),
                         const Divider(),
