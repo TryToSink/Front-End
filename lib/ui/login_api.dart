@@ -9,11 +9,8 @@ class LoginApi {
     var header = {"Content-Type": "application/json"};
     Map params = {"username": username, "password": password};
     var _body = json.encode(params);
-    print("json enviado : $_body");
     var response =
         await http.post(Uri.parse(url), headers: header, body: _body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
     Map mapResponse = json.decode(response.body);
     var token = mapResponse["token"];
     final _iduser = mapResponse["id"];
@@ -36,7 +33,6 @@ class LoginApi {
     var token = mapResponse["token"];
     final _iduser = mapResponse["id"];
     if (response.statusCode == 200) {
-      print(_iduser);
       return _iduser;
     } else {
       return false;
