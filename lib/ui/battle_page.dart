@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:proj0511/DTO/jogadaFimJogoDTO.dart';
 import 'package:proj0511/posicao.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/rotas.dart';
 import 'package:proj0511/ui/barcos_dto.dart';
+import 'package:proj0511/ui/socket_connect.dart';
 import '../timer.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -14,8 +16,9 @@ class BatlePage extends StatefulWidget {
   Posicao posicao = Posicao();
   List _aCampo = [];
   List _mCampo = [];
+  String idProximoPlayer;
 
-  BatlePage(this._mCampo, this._aCampo);
+  BatlePage(this._mCampo, this._aCampo, this.idProximoPlayer);
 
   @override
   _BatlePageState createState() => _BatlePageState();
@@ -27,7 +30,7 @@ class _BatlePageState extends State<BatlePage> {
   List _meuCampo = [];
 
   //  vvvvvvvvv Controle do grid
-  bool _valid = true;
+  bool _valid = false;
 
   Color corFundo = Color(0xff75CCFE);
 
@@ -57,6 +60,13 @@ class _BatlePageState extends State<BatlePage> {
       gridSize = 0.06;
     linhaColuna = sqrt(_advCampo.length);
     startTimer();
+
+    if(socketConnect.userId == widget.idProximoPlayer){_valid = true;}
+
+    socketConnect().jogada((dynamic jogadaOponente) {
+      print("oponente jogou");
+      meuTurno();
+    });
   }
 
   Future<String> enviarJogada(
@@ -70,30 +80,36 @@ class _BatlePageState extends State<BatlePage> {
       "eixoY": pos.eixoY
     };
     var _body = json.encode(params);
-    print("json enviado : $_body");
     var response =
         await http.post(Uri.parse(url), headers: header, body: _body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
     List jsonData = json.decode("[" + response.body + "]");
+    print('Response: ');
+    print(jsonData);
     try {
-      return jsonData[0]["status"];
-    } catch (error) {
-      try {
+      if (jsonData[0].containsKey('status') == true) {
+        return jsonData[0]["status"];
+      } else {
         return jsonData[0]["vencedor"]["status"];
-      } catch (error) {
-        print(error);
-        return "00";
       }
+    } catch (error) {
+      print(error);
+      return "00";
     }
   }
 
-  void jogada(String idPartida, String idAdversario, Posicao pos) async {
-    Future<String> result = enviarJogada(idPartida, idAdversario, pos);
+  void jogada(
+      int index, String idPartida, String idAdversario, Posicao pos) async {
+    String result = await enviarJogada(idPartida, idAdversario, pos);
+    print("Result 2p:" + result);
     if (result == '00') {
+      setState(() {
+        _advCampo[index]["image"] = "assets/carra.png";
+      });
       oponenteTurno();
     } else if (result == '01' || result == '02') {
+      setState(() {
+        _advCampo[index]["image"] = "assets/fire.png";
+      });
       meuTurno();
     } else if (result == '03') {
       //redireciona para a tela de resultado da Partida
@@ -113,8 +129,7 @@ class _BatlePageState extends State<BatlePage> {
       _valid = false;
     });
     msgSnack("Turno do oponente", 4);
-    await Future.delayed(Duration(seconds: 10));
-    meuTurno();
+
   }
 
   void msgSnack(String msg, int temp) {
@@ -170,9 +185,14 @@ class _BatlePageState extends State<BatlePage> {
               setState(() {
                 //
                 _advCampo[index]["ataque"] = true;
-                _advCampo[index]["image"] = "assets/fire.png";
                 //
-                oponenteTurno();
+                Posicao ataq = Posicao();
+                ataq.eixoY = _advCampo[index]["coluna"];
+                ataq.eixoX = _advCampo[index]["linha"];
+                print(
+                    "Cordenadas a enviar: Eixo x = ${ataq.eixoX} e Eixo Y = ${ataq.eixoY}");
+                jogada(index, socketConnect.idPartida,
+                    socketConnect.partidaAleatoriaDados.idAdversario, ataq);
               });
             }
           : null,

@@ -8,12 +8,10 @@ class CreatePartida {
       List<BarcoPosicao> barcoPosicao) async {
     var url = url1 + '/carregaJogo';
     var header = {"Content-Type": "application/json"};
-    Map params = {
-      "idPartida": idPartida,
-      "idJogador": idJogador,
-      "barcosPosicoes": "[${composeEnvio(barcoPosicao)}]"
-    };
-    var _body = json.encode(params);
+    String params =
+        '{"idPartida": "$idPartida","idJogador": "$idJogador","barcosPosicoes": [${composeEnvio(barcoPosicao)}]}';
+    var _body = params;
+    print("Params: $params");
     print("json enviado : $_body");
     var response =
         await http.post(Uri.parse(url), headers: header, body: _body);
@@ -30,7 +28,7 @@ class CreatePartida {
   static String composeEnvio(List<BarcoPosicao> barcoPosicao) {
     String compose = "";
     for (int i = 0; i < barcoPosicao.length; i++) {
-      if (i == barcoPosicao.length) {
+      if (i == barcoPosicao.length - 1) {
         String aux = barcoPosicao[i].returnBarcoPosicao();
         compose = compose + aux;
       } else {
