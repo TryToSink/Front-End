@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:proj0511/DTO/jogadaFimJogoDTO.dart';
+import 'package:proj0511/DTO/posicoesDTO.dart';
 import 'package:proj0511/posicao.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/rotas.dart';
@@ -50,8 +51,9 @@ class _BatlePageState extends State<BatlePage> {
     _advCampo = widget._aCampo;
     _meuCampo = widget._mCampo;
 
-
-    getName().then((nome){meuNome = nome;});
+    getName().then((nome) {
+      meuNome = nome;
+    });
 
     print("meu nome: ${meuNome}");
     setCurrentUser(5649, "${meuNome} (321)", "");
@@ -69,7 +71,6 @@ class _BatlePageState extends State<BatlePage> {
     linhaColuna = sqrt(_advCampo.length);
     startTimer();
 
-
     _valid = false;
 
     if (socketConnect.userId == widget.idProximoPlayer) {
@@ -81,12 +82,20 @@ class _BatlePageState extends State<BatlePage> {
       int eixoy;
       if (jogadaOponente is jogadaFimJogoDTO) {
         print("Fim de jogo");
-      } else {
+      } else if (jogadaOponente.status == '00' ||
+          jogadaOponente.status == '01') {
         eixox = jogadaOponente.eixox;
         eixoy = jogadaOponente.eixoy;
         receberAtaque(eixox, eixoy, jogadaOponente.status);
+      } else if (jogadaOponente.status == '02') {
+        for (posicoesDTO x in jogadaOponente.barcoDestruido.posicoes) {
+          print("entrou no for");
+          eixox = x.eixoX;
+          eixoy = x.eixoY;
+          receberAtaque(eixox, eixoy, jogadaOponente.status);
+        }
       }
-      ;
+
       print("oponente jogou");
       if (jogadaOponente.status == "00") meuTurno();
     });
@@ -112,8 +121,6 @@ class _BatlePageState extends State<BatlePage> {
       }
     }
   }
-
-
 
   Future<String> getName() async {
     var url = url1 + '/usuarios/find?id=' + socketConnect.userId;
@@ -185,7 +192,6 @@ class _BatlePageState extends State<BatlePage> {
     });
 
     msgSnack("Turno do oponente", 1);
-
   }
 
   void msgSnack(String msg, int temp) {
