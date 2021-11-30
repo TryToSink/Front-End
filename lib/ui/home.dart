@@ -39,7 +39,6 @@ class _MyHomePageState extends State<HomePage> {
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         _lista = jsonData;
-        print(_lista.toString());
       });
     } catch (error) {
       print(error);
@@ -74,20 +73,18 @@ class _MyHomePageState extends State<HomePage> {
             ),
             backgroundColor: const Color(0xFF293241),
             toolbarHeight: 100,
-            actionsIconTheme:
-                const IconThemeData(size: 30.0, color: Color(0xFFDDDDDD)),
+            //actionsIconTheme:
+            //   const IconThemeData(size: 30.0, color: Color(0xFFDDDDDD)),
             centerTitle: true,
             title: const Text('MODO DE JOGO'),
             actions: <Widget>[
               Container(
-                height: 30,
+                height: 15,
                 width: 70,
-                color: const Color(0xFF293241),
                 child: Center(
                   child: TextButton(
                       style: TextButton.styleFrom(
-                          backgroundColor: Colors.blueGrey[900],
-                          elevation: 5,
+                          backgroundColor: Color(0xFF293241),
                           shadowColor: Colors.grey),
                       onPressed: () {
                         Navigator.push(
@@ -192,9 +189,11 @@ class _MyHomePageState extends State<HomePage> {
                                                         Text(
                                                           'Jogar vs IA',
                                                           style: TextStyle(
-                                                              fontSize: 20,
-                                                              color:
-                                                                  Colors.black),
+                                                            fontSize: 20,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                           softWrap: true,
                                                         ),
                                                         Padding(
@@ -204,9 +203,9 @@ class _MyHomePageState extends State<HomePage> {
                                                         Text(
                                                           "    Em manutenção",
                                                           style: TextStyle(
-                                                              fontSize: 10,
-                                                              color:
-                                                                  Colors.red),
+                                                            fontSize: 10,
+                                                            color: Colors.red,
+                                                          ),
                                                           softWrap: true,
                                                         ),
                                                       ],
@@ -290,9 +289,11 @@ class _MyHomePageState extends State<HomePage> {
                                                         Text(
                                                           'Jogar vs Amigo',
                                                           style: TextStyle(
-                                                              fontSize: 20,
-                                                              color:
-                                                                  Colors.black),
+                                                            fontSize: 20,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                           softWrap: true,
                                                         ),
                                                         Padding(
@@ -388,9 +389,11 @@ class _MyHomePageState extends State<HomePage> {
                                                         Text(
                                                           'Jogar vs Aleátorio',
                                                           style: TextStyle(
-                                                              fontSize: 20,
-                                                              color:
-                                                                  Colors.black),
+                                                            fontSize: 20,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                           softWrap: true,
                                                         ),
                                                         Padding(
@@ -475,8 +478,12 @@ class _MyHomePageState extends State<HomePage> {
           icon: const Icon(Icons.play_arrow),
           tooltip: 'Jogar',
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => PositionBoat(idPartida: socketConnect.idPartida, idJogador: this.idUser)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PositionBoat(
+                        idPartida: socketConnect.idPartida,
+                        idJogador: this.idUser)));
           },
         ),
       ],

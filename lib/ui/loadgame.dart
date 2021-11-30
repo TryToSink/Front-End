@@ -33,12 +33,13 @@ class _LoadCenarioState extends State<LoadTela> {
       print('id da partida: ' + partidaAleatoriaDados.idPartida);
       if (partidaAleatoriaDados.idPartida != null) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => PositionBoat(idPartida: partidaAleatoriaDados.idPartida, idJogador: idUser)));
+            context,
+            MaterialPageRoute(
+                builder: (context) => PositionBoat(
+                    idPartida: partidaAleatoriaDados.idPartida,
+                    idJogador: idUser)));
       }
     });
-    print(idCenario);
-    print(idUser);
-    print('aqui passei');
   }
 
   @override
