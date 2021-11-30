@@ -50,7 +50,7 @@ class BarcosDTO {
   }
 
   static Widget getFotoBattle(String ataque, String foto) {
-    print("barcos dto $ataque $foto");
+    //print("barcos dto $ataque $foto");
     if (foto == '')return Text('');
     if (ataque == "00" || ataque == "01" || ataque == "02")
       return getImageAsset(foto);
