@@ -121,6 +121,7 @@ class _BatlePageState extends State<BatlePage> {
       _valid = false;
     });
     msgSnack("Turno do oponente", 4);
+
     await Future.delayed(Duration(seconds: 5));
     meuTurno();
   }
