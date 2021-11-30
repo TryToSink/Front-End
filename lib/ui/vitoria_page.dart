@@ -104,7 +104,7 @@ class _VitoriaState extends State<Vitoria> {
                             child: new Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("+13",
+                                Text("+11",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 25,
