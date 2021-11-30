@@ -167,6 +167,9 @@ class socketConnect {
           jogadaTiroDados.message = d['message'];
           jogadaTiroDados.eixox = d['eixoX'];
           jogadaTiroDados.eixoy = d['eixoY'];
+          print("Socket setJogada dados 01");
+          func(jogadaTiroDados);
+          return ;
         }
         if(d['status'] == '02'){
           jogadaDestruidoDados.status = d['status'];
@@ -190,11 +193,12 @@ class socketConnect {
             position.atingido = posic['atingido'];
             jogadaDestruidoDados.barcoDestruido.posicoes.add(position);
           });
+          print("Socket setJogada dados 02");
+          func(jogadaDestruidoDados);
+          return ;
         }
       }
     });
-    print("Socket setJogada dados 2");
-    func(jogadaFimDados);
   }
 
   static void setexceptionDados(Map d){
@@ -312,7 +316,7 @@ class socketConnect {
   }
 
   void jogada(func){
-    print("sochet jogada");
+    print("socket jogada");
     socket.on('jogada', (dados)=> setjogadaDados(dados, func));
   }
 

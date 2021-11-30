@@ -90,7 +90,7 @@ class _PositionBoatState extends State<PositionBoat> {
       newPos["linha"] = x;
       newPos["coluna"] = y;
       newPos["status"] = false;
-      newPos["ataque"] = false;
+      newPos["ataque"] = '';
       newPos["rotacao"] = false;
       newPos["image"] = "";
 
@@ -99,7 +99,7 @@ class _PositionBoatState extends State<PositionBoat> {
       newPos1["linha"] = x;
       newPos1["coluna"] = y;
       newPos1["status"] = false;
-      newPos1["ataque"] = false;
+      newPos1["ataque"] = '';
       newPos1["rotacao"] = false;
       newPos1["image"] = "";
       _aCampo.add(newPos1);
