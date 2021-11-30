@@ -32,6 +32,7 @@ class _LoadCenarioState extends State<LoadCenario> {
   List<String> _arraydeCenarios = [];
   List<String> _arraydeidCenarios = [];
   List<String> _arraydeFotos = [];
+  List<String> _arraydeDescricao = [];
   String fotoAtual;
   int i = 0;
   int a = 0;
@@ -47,6 +48,7 @@ class _LoadCenarioState extends State<LoadCenario> {
           _arraydeCenarios.add(_returno2[i].nome);
           _arraydeidCenarios.add(_returno2[i].idCenario);
           _arraydeFotos.add(_returno2[i].foto);
+          _arraydeDescricao.add(_returno2[i].descricao);
         }
       });
     } catch (error) {
@@ -161,19 +163,65 @@ class _LoadCenarioState extends State<LoadCenario> {
                                                                   .center,
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
+                                                                  .center,
+                                                          //mainAxisSize:
+                                                          //   MainAxisSize.max,
                                                           children: [
-                                                            Text(
+                                                            Center(
+                                                                child: Text(
                                                               _arraydeCenarios[
                                                                   index],
-                                                              style: const TextStyle(
-                                                                  fontSize: 20,
-                                                                  color: Colors
-                                                                      .black),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 20,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
                                                               softWrap: true,
+                                                            )),
+                                                            Divider(
+                                                              height: constraints
+                                                                      .maxHeight *
+                                                                  .05,
                                                             ),
+                                                            Container(
+                                                                width: constraints
+                                                                        .maxWidth *
+                                                                    .42,
+                                                                height: constraints
+                                                                        .maxHeight *
+                                                                    .10,
+                                                                decoration: BoxDecoration(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    border: Border.all(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        width:
+                                                                            3),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            12)),
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child: Text(
+                                                                    _arraydeDescricao[
+                                                                        index],
+                                                                    style: const TextStyle(
+                                                                        fontSize:
+                                                                            15,
+                                                                        color: Colors
+                                                                            .black),
+                                                                    softWrap:
+                                                                        true,
+                                                                  ),
+                                                                )),
                                                           ],
                                                         ),
                                                         onPressed: () {
