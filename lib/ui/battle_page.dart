@@ -133,6 +133,7 @@ class _BatlePageState extends State<BatlePage> {
     }
   }
 
+
   Future<String> getName() async {
     var url = url1 + '/usuarios/find?id=' + socketConnect.userId;
     var header = {"Content-Type": "application/json"};
@@ -140,6 +141,26 @@ class _BatlePageState extends State<BatlePage> {
     List jsonData = json.decode("[" + response.body + "]");
     print("Retorno getNema: ${jsonData[0]["name"]}");
     return jsonData[0]["name"];
+  }
+  Widget _abrirDialog(
+      BuildContext context, String msg) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+                },
+              child: AlertDialog(
+                content: Container(
+                  color: Colors.transparent,
+                  child: Text(msg),
+                ),
+              ),
+            ));
+        });
+    return Text("");
   }
 
   Future<String> enviarJogada(String idPart, String idAdv, Posicao pos) async {
@@ -160,6 +181,7 @@ class _BatlePageState extends State<BatlePage> {
     print(jsonData);
     try {
       if (jsonData[0].containsKey('status') == true) {
+        _abrirDialog(context, jsonData[0]["message"]);
         return jsonData[0]["status"];
       } else {
         return jsonData[0]["vencedor"]["status"];
