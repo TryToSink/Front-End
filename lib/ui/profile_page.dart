@@ -3,6 +3,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:proj0511/ui/home.dart';
+import 'package:proj0511/ui/profile_friendlist.dart';
 import 'package:proj0511/ui/profile_page_edit.dart';
 import '../rotas.dart';
 
@@ -23,19 +25,25 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _ProfilePageState({Key? key, required this.idUser});
 
-  late String imageName = 'foto';
+  late String? imageName = 'null';
+  late String? imageNamePartida = 'null';
   late String _username = '';
   late List _amigos = [];
   late List _usernameAmigo = [];
+  late List _amigosOnline = [];
+  late List _usernameAmigoOnline = [];
+  late List _fotoOnline = [];
   late List _partidasJogadas = [];
   late List _usernamePartidas = [];
+  late List _fotoPartidas = [];
   late Map _amigosMap = {};
   late int numeroPartidas = 0;
   late List _partidasVencidas = [];
   late int venceu = 0;
 
   late String urlProfile = url1 + '/usuarios/find';
-  late String urlPhoto = url1 + '/usuarios/foto/' + imageName;
+  late String urlPhoto = url1 + '/files/' + imageName!;
+  late String urlPhotoPartida = url1 + '/files/';
   late String urlFriends = url1 + '/usuarios/amigosOnline';
   late String urlAddFriends = url1 + '/usuarios/adicionaAmigo';
   late String urlUpdate = url1 + '/usuarios';
@@ -44,9 +52,13 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    print('Entrou no initstate ' + idUser);
     getUser();
+    getAmigosOnline();
     getPartidas();
+  }
+
+  getFotoLink(imageName) {
+    return url1 + '/files/' + imageName!;
   }
 
   getUser() async {
@@ -55,10 +67,12 @@ class _ProfilePageState extends State<ProfilePage> {
         Uri.parse(urlProfile + "?id=" + idUser),
       );
 
-      var jsonData = jsonDecode(response.body);
+      var jsonData = await jsonDecode(response.body);
       setState(() {
         _username = jsonData['username'];
         _amigos = jsonData['amigos'];
+        imageName = jsonData['foto'];
+        imageName ??= 'null';
         for (var element in _amigosMap.entries) {
           _amigos.add(element);
         }
@@ -72,34 +86,54 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     setState(() {
-      urlPhoto = 'http://201.42.59.203:3333/usuarios/foto/' + imageName;
+      urlPhoto;
       imageCache!.clear();
       imageCache!.clearLiveImages();
     });
     return;
   }
 
+  getAmigosOnline() async {
+    try {
+      final response = await http.get(
+        Uri.parse(urlFriends + "?id=" + idUser),
+      );
+
+      var jsonData = await jsonDecode(response.body);
+      setState(() {
+        _amigosOnline = jsonData;
+        int counter = _amigosOnline.length.toInt();
+        for (var i = 0; i < counter; i++) {
+          if (_amigosOnline[i]['foto'] == null) {
+            _amigosOnline[i]['foto'] = 'null';
+          }
+          _fotoOnline.add(_amigosOnline[i]['foto']);
+          _usernameAmigoOnline.add(_amigosOnline[i]['name']);
+        }
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
   getPartidas() async {
     try {
       final response =
           await http.get(Uri.parse(urlHistorico + '?id=' + idUser));
-      print('BODY PARTIDAS: ' + response.body);
 
       final jsonData = jsonDecode(response.body) as Map;
-      print('JSONDATA PARTIDAS: ' + jsonData.toString() + '\n');
 
       setState(() {
         _partidasJogadas = jsonData['oponentes'];
-        print('PARTIDASJOGADAS: ' + _partidasJogadas.toString() + '\n');
         numeroPartidas = jsonData['oponentes'].length;
-        print('NUMEROPARTIDAS: ' + numeroPartidas.toString() + '\n');
         int counter = (_partidasJogadas.length.toInt());
-        print('COUNTER: ' + counter.toString() + '\n');
         for (var i = 0; i < counter; i++) {
+          if (_partidasJogadas[i]['foto'] == null) {
+            _partidasJogadas[i]['foto'] = 'null';
+          }
+          _fotoPartidas.add(_partidasJogadas[i]['foto']);
           _usernamePartidas.add(_partidasJogadas[i]['nome']);
           if (_partidasJogadas[i]['venceu']) {
-            print(
-                'PARTIDASJOGADAS[i]: ' + _partidasJogadas[i].toString() + '\n');
             _partidasVencidas.add(_partidasJogadas[i]);
           }
         }
@@ -133,8 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     } else {
       lista = Padding(
-        padding:
-            const EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 16),
+        padding: const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
         child: Container(
           height: 80,
           decoration: const BoxDecoration(
@@ -152,11 +185,29 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  height: 65,
-                  width: 65,
-                  child: Image.asset('assets/empty-person.png'),
-                ),
+                if (_fotoPartidas[index] == 'null')
+                  SizedBox(
+                    height: 65,
+                    width: 65,
+                    child: Image.asset('assets/empty-person.png'),
+                  )
+                else
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Container(
+                      width: 65.0,
+                      height: 65.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            getFotoLink(_fotoPartidas[index]),
+                          ),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
@@ -189,9 +240,8 @@ class _ProfilePageState extends State<ProfilePage> {
     return lista;
   }
 
-  buildFriendList(nPartidas, textColor, index) {
+  buildOnlineFriendList(nPartidas, textColor, index) {
     Widget lista;
-    bool vitoria = false;
     if (nPartidas == 0) {
       index = 1;
       lista = Center(
@@ -211,8 +261,7 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     } else {
       lista = Padding(
-        padding:
-            const EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 16),
+        padding: const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
         child: Container(
           height: 80,
           decoration: const BoxDecoration(
@@ -230,15 +279,33 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  height: 65,
-                  width: 65,
-                  child: Image.asset('assets/empty-person.png'),
-                ),
+                if (_fotoOnline[index] == 'null')
+                  SizedBox(
+                    height: 65,
+                    width: 65,
+                    child: Image.asset('assets/empty-person.png'),
+                  )
+                else
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Container(
+                      width: 65.0,
+                      height: 65.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            getFotoLink(_fotoOnline[index]),
+                          ),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    _usernamePartidas[index],
+                    _usernameAmigoOnline[index],
                     style: TextStyle(
                       color: textColor,
                       fontSize: 16,
@@ -280,7 +347,12 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     late String gamesPlayed = numeroPartidas.toString();
-    const String gamesWon = ' 45%';
+    late int gamesWon;
+    if (numeroPartidas == 0) {
+      gamesWon = 0;
+    } else {
+      gamesWon = (venceu / numeroPartidas * 100).toInt();
+    }
     late String wins = venceu.toString();
     const String country = 'Brasil';
     const String labelMatches = 'Partidas Recentes';
@@ -296,23 +368,58 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: bGColor,
       appBar: AppBar(
-        leading: const BackButton(
+        leading: BackButton(
           color: Colors.white,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(idUser: idUser),
+              ),
+            );
+          },
         ),
         elevation: 0,
         backgroundColor: appBarBGColor,
         toolbarHeight: 30,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0, top: 8.0),
+            child: Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfilePageEdit(
+                        idUser: idUser,
+                      ),
+                    ),
+                  );
+                },
+                child: const Icon(
+                  Icons.edit,
+                  size: 22.0,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [
           Container(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (imageName == 'foto')
+                if (imageName == 'null')
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(32.0, 0.0, 24.0, 16.0),
+                    padding: const EdgeInsets.fromLTRB(16.0, 0.0, 48.0, 16.0),
                     child: Container(
                       width: 140.0,
                       height: 140.0,
@@ -326,12 +433,23 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   )
                 else
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      urlPhoto,
-                      width: 120.0,
-                      height: 120.0,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(32.0, 0.0, 24.0, 16.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Container(
+                        width: 120.0,
+                        height: 120.0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              urlPhoto,
+                            ),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 Column(
@@ -355,24 +473,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Colors.grey,
                           ),
                         ),
-                        Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  print('idUser: ' + idUser);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProfilePageEdit(
-                                        idUser: idUser,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.edit),
-                              )
-                            ]),
                       ],
                     ),
                     Row(
@@ -459,11 +559,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                          Text(
-                            gamesPlayed,
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              gamesPlayed,
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           )
                         ],
@@ -509,11 +612,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                          const Text(
-                            ' ' + gamesWon,
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              gamesWon.toString() + '%',
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           )
                         ],
@@ -587,18 +693,36 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           //Lista de Amigos
           Container(
-            child: const Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 8.0,
-                horizontal: 24.0,
-              ),
-              child: Text(
-                labelFriend,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.0,
+            child: Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 24.0,
+                  ),
+                  child: Text(
+                    labelFriend,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                    ),
+                  ),
                 ),
-              ),
+                Spacer(flex: 1),
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FriendsList(idUser: idUser),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.people_alt,
+                      color: Colors.white,
+                    ))
+              ],
             ),
             height: 40.0,
             width: double.infinity,
@@ -606,9 +730,10 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: _amigos.length,
+              itemCount: _amigosOnline.length,
               itemBuilder: (BuildContext context, int index) {
-                return buildFriendList(_amigos.length, textColor, index);
+                return buildOnlineFriendList(
+                    _amigosOnline.length, textColor, index);
               },
             ),
           ),
