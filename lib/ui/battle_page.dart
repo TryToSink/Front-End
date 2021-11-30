@@ -7,8 +7,11 @@ import 'package:proj0511/DTO/posicoesDTO.dart';
 import 'package:proj0511/posicao.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/rotas.dart';
+import 'package:proj0511/ui/home.dart';
+import 'package:proj0511/ui/derrota_page.dart';
 import 'package:proj0511/ui/barcos_dto.dart';
 import 'package:proj0511/ui/socket_connect.dart';
+import 'package:proj0511/ui/vitoria_page.dart';
 import '../timer.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -74,6 +77,10 @@ class _BatlePageState extends State<BatlePage> {
     _valid = false;
 
     if (socketConnect.userId == widget.idProximoPlayer) {
+      Future<Null>.delayed(Duration.zero, () {
+        msgSnack("Você começa", 4);
+      });
+
       _valid = true;
     }
 
@@ -82,6 +89,11 @@ class _BatlePageState extends State<BatlePage> {
       int eixoy;
       if (jogadaOponente is jogadaFimJogoDTO) {
         print("Fim de jogo");
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Derrota(),
+            ));
       } else if (jogadaOponente.status == '00' ||
           jogadaOponente.status == '01') {
         eixox = jogadaOponente.eixox;
@@ -89,7 +101,7 @@ class _BatlePageState extends State<BatlePage> {
         receberAtaque(eixox, eixoy, jogadaOponente.status);
       } else if (jogadaOponente.status == '02') {
         for (posicoesDTO x in jogadaOponente.barcoDestruido.posicoes) {
-          print("entrou no for");
+          msgSnack("Você Afundou Um Navio", 4);
           eixox = x.eixoX;
           eixoy = x.eixoY;
           receberAtaque(eixox, eixoy, jogadaOponente.status);
@@ -173,9 +185,12 @@ class _BatlePageState extends State<BatlePage> {
         _advCampo[index]["image"] = "assets/fire.png";
       });
       meuTurno();
-    } else if (result == '03') {
-      //redireciona para a tela de resultado da Partida
-
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Vitoria(),
+          ));
     }
   }
 
