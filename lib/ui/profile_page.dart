@@ -125,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
       setState(() {
         _partidasJogadas = jsonData['oponentes'];
-        numeroPartidas = jsonData['oponentes'].length;
+        numeroPartidas = jsonData['oponentes'].length.toInt();
         int counter = (_partidasJogadas.length.toInt());
         for (var i = 0; i < counter; i++) {
           if (_partidasJogadas[i]['foto'] == null) {
@@ -220,7 +220,20 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 const Spacer(
-                  flex: 2,
+                  flex: 1,
+                ),
+                if (_partidasJogadas[index]['venceu'])
+                  Text(
+                    '+11',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
+                else
+                  Text(
+                    '-10',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                const Spacer(
+                  flex: 1,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 24.0),
