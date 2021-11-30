@@ -106,7 +106,7 @@ class _DerrotaState extends State<Derrota> {
                             child: new Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("-9",
+                                Text("-10",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 25,
