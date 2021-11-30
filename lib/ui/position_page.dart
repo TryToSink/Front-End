@@ -196,6 +196,8 @@ class _PositionBoatState extends State<PositionBoat> {
           eixos.foto = _mCampo[index + i * linhasColunas]["image"];
           eixos.eixoX = _mCampo[index]["linha"];
           eixos.eixoY = _mCampo[index + i * linhasColunas]["coluna"];
+
+          posBarco.posicoes.add(eixos);
         } else {
           bool save = false;
           for (int j = aux; j >= 0; j--) {
@@ -214,8 +216,6 @@ class _PositionBoatState extends State<PositionBoat> {
     barcosPosicoes.add(posBarco);
     if (save == false) barcosPosicoes.removeLast();
   }
-
-
 
   // funcao cria targets para o grid
   Widget buildTargets(BuildContext context, int index) {
@@ -320,8 +320,6 @@ class _PositionBoatState extends State<PositionBoat> {
   int _getCount(List data) {
     return data.length;
   }
-
-
 
   @override
   Widget build(BuildContext context) {

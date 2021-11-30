@@ -6,6 +6,7 @@ import 'package:proj0511/posicao.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj0511/rotas.dart';
 import 'package:proj0511/ui/barcos_dto.dart';
+import 'package:proj0511/ui/socket_connect.dart';
 import '../timer.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -70,14 +71,13 @@ class _BatlePageState extends State<BatlePage> {
       "eixoY": pos.eixoY
     };
     var _body = json.encode(params);
-    print("json enviado : $_body");
     var response =
         await http.post(Uri.parse(url), headers: header, body: _body);
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
     List jsonData = json.decode("[" + response.body + "]");
+    print('Response: ');
+    print(jsonData);
     try {
+      print("response jogada: " + jsonData[0]["status"]);
       return jsonData[0]["status"];
     } catch (error) {
       try {
@@ -89,11 +89,19 @@ class _BatlePageState extends State<BatlePage> {
     }
   }
 
-  void jogada(String idPartida, String idAdversario, Posicao pos) async {
-    Future<String> result = enviarJogada(idPartida, idAdversario, pos);
+  void jogada(
+      int index, String idPartida, String idAdversario, Posicao pos) async {
+    String result = await enviarJogada(idPartida, idAdversario, pos);
+    print("Result 2p:" + result);
     if (result == '00') {
+      setState(() {
+        _advCampo[index]["image"] = "assets/carra.png";
+      });
       oponenteTurno();
     } else if (result == '01' || result == '02') {
+      setState(() {
+        _advCampo[index]["image"] = "assets/fire.png";
+      });
       meuTurno();
     } else if (result == '03') {
       //redireciona para a tela de resultado da Partida
@@ -113,7 +121,7 @@ class _BatlePageState extends State<BatlePage> {
       _valid = false;
     });
     msgSnack("Turno do oponente", 4);
-    await Future.delayed(Duration(seconds: 10));
+    await Future.delayed(Duration(seconds: 5));
     meuTurno();
   }
 
@@ -170,8 +178,13 @@ class _BatlePageState extends State<BatlePage> {
               setState(() {
                 //
                 _advCampo[index]["ataque"] = true;
-                _advCampo[index]["image"] = "assets/fire.png";
                 //
+                Posicao ataq = Posicao();
+                ataq.eixoY = _advCampo[index]["coluna"];
+                ataq.eixoX = _advCampo[index]["linha"];
+                print("Cordenadas a enviar: Eixo x = ${ataq.eixoX} e Eixo Y = ${ataq.eixoY}");
+                jogada(index, socketConnect.idPartida,
+                    socketConnect.partidaAleatoriaDados.idAdversario, ataq);
                 oponenteTurno();
               });
             }
