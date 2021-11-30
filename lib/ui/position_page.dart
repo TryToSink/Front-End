@@ -131,7 +131,7 @@ class _PositionBoatState extends State<PositionBoat> {
       // quando cair aqui, significa que o outro player também carregou os barcos
       print('iniciar jogo ${iniciarJogoDados.proximoPlayer}');
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BatlePage(_mCampo, _aCampo)));
+          MaterialPageRoute(builder: (context) => BatlePage(_mCampo, _aCampo, iniciarJogoDados.proximoPlayer)));
     });
 
     super.initState();
