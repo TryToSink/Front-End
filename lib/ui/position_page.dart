@@ -131,7 +131,7 @@ class _PositionBoatState extends State<PositionBoat> {
       // quando cair aqui, significa que o outro player também carregou os barcos
       print('iniciar jogo ${iniciarJogoDados.proximoPlayer}');
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => BatlePage(_mCampo, _aCampo)));
+          MaterialPageRoute(builder: (context) => BatlePage(_mCampo, _aCampo, iniciarJogoDados.proximoPlayer)));
     });
 
     super.initState();
@@ -194,8 +194,8 @@ class _PositionBoatState extends State<PositionBoat> {
           aux = i;
           Posicao eixos = Posicao();
           eixos.foto = _mCampo[index + i * linhasColunas]["image"];
-          eixos.eixoX = _mCampo[index]["linha"];
-          eixos.eixoY = _mCampo[index + i * linhasColunas]["coluna"];
+          eixos.eixoX = _mCampo[index + i * linhasColunas]["linha"];
+          eixos.eixoY = _mCampo[index]["coluna"];
 
           posBarco.posicoes.add(eixos);
         } else {
