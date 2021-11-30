@@ -103,7 +103,6 @@ class LoginPage extends StatelessWidget {
                               if (formKey.currentState!.validate()) {
                                 String username = emailController.text;
                                 String password = passController.text;
-                                print("Login: $username , Senha: $password ");
 
                                 var User =
                                     await LoginApi.login(username, password);
@@ -151,7 +150,7 @@ _navegaHomepage(BuildContext context, String userId) {
     socketConnect().initSocket();
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => HomePage(idUser: userId)));
-  } catch (e){
+  } catch (e) {
     print(e.toString());
   }
 }
