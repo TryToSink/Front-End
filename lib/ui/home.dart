@@ -39,7 +39,6 @@ class _MyHomePageState extends State<HomePage> {
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         _lista = jsonData;
-        print(_lista.toString());
       });
     } catch (error) {
       print(error);

@@ -193,15 +193,10 @@ class _LoadCenarioState extends State<LoadCenario> {
                                                                     .42,
                                                                 height: constraints
                                                                         .maxHeight *
-                                                                    .10,
+                                                                    .07,
                                                                 decoration: BoxDecoration(
                                                                     color: Colors
                                                                         .white,
-                                                                    border: Border.all(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        width:
-                                                                            3),
                                                                     borderRadius:
                                                                         BorderRadius.circular(
                                                                             12)),
@@ -209,17 +204,19 @@ class _LoadCenarioState extends State<LoadCenario> {
                                                                   padding:
                                                                       const EdgeInsets
                                                                               .all(
-                                                                          8.0),
-                                                                  child: Text(
-                                                                    _arraydeDescricao[
-                                                                        index],
-                                                                    style: const TextStyle(
-                                                                        fontSize:
-                                                                            15,
-                                                                        color: Colors
-                                                                            .black),
-                                                                    softWrap:
-                                                                        true,
+                                                                          10.0),
+                                                                  child: Center(
+                                                                    child: Text(
+                                                                      _arraydeDescricao[
+                                                                          index],
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          color:
+                                                                              Colors.black),
+                                                                      softWrap:
+                                                                          true,
+                                                                    ),
                                                                   ),
                                                                 )),
                                                           ],

@@ -120,8 +120,6 @@ class SignUpPage extends StatelessWidget {
                                 String password = _passwordController.text;
                                 String password2 = _password2Controller.text;
 
-                                print("User: $name");
-
                                 var User = await ApiSignUp.signUp(
                                     name, username, email, password);
 
