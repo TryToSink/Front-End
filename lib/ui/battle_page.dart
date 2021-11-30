@@ -11,6 +11,7 @@ import 'package:proj0511/ui/home.dart';
 import 'package:proj0511/ui/derrota_page.dart';
 import 'package:proj0511/ui/barcos_dto.dart';
 import 'package:proj0511/ui/socket_connect.dart';
+import 'package:proj0511/ui/vitoria_page.dart';
 import '../timer.dart';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -91,7 +92,7 @@ class _BatlePageState extends State<BatlePage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(idUser: socketConnect.userId),
+              builder: (context) => Derrota(),
             ));
       } else if (jogadaOponente.status == '00' ||
           jogadaOponente.status == '01') {
@@ -188,7 +189,7 @@ class _BatlePageState extends State<BatlePage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePage(idUser: socketConnect.userId),
+            builder: (context) => Vitoria(),
           ));
     }
   }
