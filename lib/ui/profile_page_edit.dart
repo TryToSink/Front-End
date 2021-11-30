@@ -11,6 +11,7 @@ import 'package:path/path.dart';
 import 'package:async/async.dart';
 
 import '../rotas.dart';
+import 'profile_page.dart';
 
 class ProfilePageEdit extends StatefulWidget {
   String idUser;
@@ -27,13 +28,13 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   _ProfilePageEditState({Key? key, required this.idUser});
 
   File? image;
-  String? imageName;
+  String? imageName = 'null';
   late String _username = '';
   late String _name = '';
   late String _email = '';
 
   late String urlProfile = url1 + '/usuarios/find';
-  late String urlPhoto = url1 + '/usuarios/foto/' + imageName!;
+  late String urlPhoto = url1 + '/files/' + imageName!;
   late String urlFriends = url1 + '/usuarios/amigosOnline';
   late String urlUpdate = url1 + '/usuarios';
 
@@ -45,20 +46,18 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   }
 
   getUser() async {
-    print('object');
-    print(urlProfile + "?id=" + idUser);
     try {
       final response = await http.get(
         Uri.parse(urlProfile + "?id=" + idUser),
       );
-      print('BODY: ' + response.body);
 
-      final jsonData = jsonDecode(response.body) as Map;
-      print('JSONDATA:' + jsonData.toString());
+      final jsonData = await jsonDecode(response.body) as Map;
       setState(() {
         _name = jsonData['name'];
         _username = jsonData['username'];
         _email = jsonData['email'];
+        imageName = jsonData['foto'];
+        imageName ??= 'null';
       });
     } catch (error) {
       print(error);
@@ -174,8 +173,16 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
     return Scaffold(
       backgroundColor: bGColor,
       appBar: AppBar(
-        leading: const BackButton(
+        leading: BackButton(
           color: Colors.white,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(idUser: idUser),
+              ),
+            );
+          },
         ),
         elevation: 0,
         backgroundColor: appBarBGColor,
@@ -213,22 +220,47 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                 top: 110,
                 child: Stack(
                   children: [
-                    Container(
-                      clipBehavior: Clip.none,
-                      width: 140.0,
-                      height: 140.0,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: AssetImage('assets/carra.png'),
-                          fit: BoxFit.fill,
+                    if (imageName == 'null')
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(16.0, 0.0, 48.0, 16.0),
+                        child: Container(
+                          width: 140.0,
+                          height: 140.0,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: AssetImage('assets/carra.png'),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      Padding(
+                        padding:
+                            const EdgeInsets.fromLTRB(32.0, 0.0, 24.0, 16.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Container(
+                            width: 120.0,
+                            height: 120.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  urlPhoto,
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
                     InkWell(
                       onTap: uploadFile,
                       child: Positioned(
-                        bottom: 0,
+                        bottom: 4,
                         right: 4,
                         child: buildEditButton(textColor),
                       ),
