@@ -85,11 +85,11 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
 
   selecionarImagemGaleria() async {
     try {
-      final imagemBarcoGaleria =
+      final imagemUser =
           await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (imagemBarcoGaleria == null) return;
+      if (imagemUser == null) return;
 
-      final imageTemporary = File(imagemBarcoGaleria.path);
+      final imageTemporary = File(imagemUser.path);
       setState(() => image = imageTemporary);
     } catch (e) {
       print(e);
@@ -97,10 +97,10 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   }
 
   uploadFile() async {
-    final imagemBarcoGaleria =
+    final imagemUser =
         await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (imagemBarcoGaleria == null) return;
-    final imageTemporary = File(imagemBarcoGaleria.path);
+    if (imagemUser == null) return;
+    final imageTemporary = File(imagemUser.path);
 
     var stream =
         http.ByteStream(DelegatingStream.typed(imageTemporary.openRead()));
