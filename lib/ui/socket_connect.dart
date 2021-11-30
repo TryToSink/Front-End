@@ -111,7 +111,7 @@ class socketConnect {
 
   }
 
-  static void setjogadaDados(Map d){
+  static void setjogadaDados(Map d, func){
     Map posicoes = new Map();
 
     d.forEach((key, value) {
@@ -158,6 +158,8 @@ class socketConnect {
               barcoPerdedor.posicoes.add(posic);
             });
           });
+          print("Socket setJogada dados 1");
+          func(jogadaFimDados);
           return;
         }
         if(d['status'] == '00' || d['status'] == '01'){
@@ -191,6 +193,8 @@ class socketConnect {
         }
       }
     });
+    print("Socket setJogada dados 2");
+    func(jogadaFimDados);
   }
 
   static void setexceptionDados(Map d){
@@ -307,8 +311,9 @@ class socketConnect {
     socket.on('iniciar jogo', (dados)=> setiniciarJogoDados(dados, iniciarJogoCallBack));
   }
 
-  void jogada(){
-    socket.on('jogada', (dados)=> setjogadaDados(dados));
+  void jogada(func){
+    print("sochet jogada");
+    socket.on('jogada', (dados)=> setjogadaDados(dados, func));
   }
 
   void exception(){
